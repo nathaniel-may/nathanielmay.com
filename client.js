@@ -2,11 +2,9 @@
 init();
 
 function initBoard(n) {
-	board = new Object();
-	board.n = n;
-	board.spaces = new Array(n*n);
+	board = new Array(n*n);
 	for (var i = 0; i < n*n; i++) {
-		board.spaces[i] = new Array(n*n);
+		board[i] = new Array(n*n);
 	}
 
 	return board;
@@ -30,9 +28,9 @@ function fillBoard(str){
 	//input values into board
 	var k=0;
 	var column;
-	for (var i = 0; i < board.spaces.length; i++) {
+	for (var i = 0; i < board.length; i++) {
 		column = [];
-		for(var j = 0; j < board.spaces.length; j++){
+		for(var j = 0; j < board.length; j++){
 			if(str.charAt(k) == '0' || str.charAt(k) == 'x' || str.charAt(k) == 'X'){
 				column.push('.');
 				k++;
@@ -40,7 +38,7 @@ function fillBoard(str){
 				column.push(str.charAt(k++));
 			}
 		}
-		board.spaces[i] = column;
+		board[i] = column;
 	}
 
 	return board;
@@ -49,10 +47,10 @@ function fillBoard(str){
 function printBoard(board){
 	console.log("printing board")
 	var str;
-	for (var i = 0; i < board.spaces.length; i++) {
+	for (var i = 0; i < board.length; i++) {
 		str = "";
-		for(var j = 0; j < board.spaces.length; j++){
-			str = str.concat(board.spaces[i][j]);
+		for(var j = 0; j < board.length; j++){
+			str = str.concat(board[i][j]);
 		}
 		console.log(str);
 	}
