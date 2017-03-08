@@ -1,0 +1,10 @@
+body {
+  background: url(background.svg);
+  background-size: cover;
+}
+
+p  {
+    color: white;
+    font-family: courier;
+    font-size: 100%;
+}
