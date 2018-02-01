@@ -1,13 +1,27 @@
-body {
-  background: url(background-bw.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;
 
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+html {
+	padding: 0;
+	margin: 0;
+}
+
+body { 
+	padding: 0;
+	margin: 0;
+	height: 100%;
+
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.fixed-bg {
+	background-image: url(background-bw-small.jpg);
+	position: fixed;
+	background-size: cover;
+	background-position: center;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
 }
 
 @font-face {
@@ -26,15 +40,15 @@ body {
 }
 
 .circle {
-	height: 350px;
-    width: 350px;
+	height: 375px;
+    width: 375px;
     border-radius: 50%;
-	background-color: #123b5b;
+	background-color: #0e4c3d; 
 	position:absolute;
    	top:50%;
    	left:50%;
    	transform: translate(-50%, -50%);
-   	opacity:.95;
+   	opacity:.92;
 }
 
 .center-container {
@@ -92,15 +106,16 @@ body {
 	margin: auto;
 }
 
-.icon div {
-	font-family: dinotblack;
-	color: #eaeaea;
-	font-size: 125%;
-}
-
 .icon img {
 	position: relative;
 	bottom: 0px;
 	width: auto;
 	height: 36px;
+}
+
+.icon-twitter img {
+	position: relative;
+	bottom: 8px;
+	width: auto;
+	height: 56px;
 }
