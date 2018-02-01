@@ -20,6 +20,11 @@ body {
     src: url(fonts/geosanslight.ttf);
 }
 
+@font-face {
+    font-family: dinotblack;
+    src: url(fonts/dinot_black.otf);
+}
+
 .circle {
 	height: 350px;
     width: 350px;
@@ -41,14 +46,14 @@ body {
 
 .name {
 	text-align: center;
-	color: white;
+	color: #eaeaea;
     font-family: vipernora;
     font-size: 300%;
 }
 
 .text {
 	text-align: center;
-	color: white;
+	color: #eaeaea;
     font-family: geosanslight;
     font-size: 150%;
     display: inline-block;
@@ -60,13 +65,41 @@ body {
 	bottom: 30px;
 	width: 100%;
 	text-align: center;
-	color: white;
+	color: #eaeaea;
     font-family: geosanslight;
     font-size: 125%;
 }
 
 .email a {
-	color: white;
+	color: #eaeaea;
     text-decoration: none;
 	bottom: 0;
+}
+
+.flex-icons {
+	display: flex;
+	flex-direction: row;
+	position: fixed;
+	bottom: 70px;
+	width: 25%;
+	height: 36px;
+	left: 37.5%;
+}
+
+.icon {
+	bottom: 70px;
+	margin: auto;
+}
+
+.icon div {
+	font-family: dinotblack;
+	color: #eaeaea;
+	font-size: 125%;
+}
+
+.icon img {
+	position: relative;
+	bottom: 0px;
+	width: auto;
+	height: 36px;
 }
