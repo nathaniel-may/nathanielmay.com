@@ -1,10 +1,76 @@
 body {
-  background: url(background.svg);
+  background: url(background-bw.jpg);
   background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-p  {
-    color: white;
-    font-family: courier;
-    font-size: 100%;
+@font-face {
+    font-family: vipernora;
+    src: url(viper_nora.otf);
+}
+
+@font-face {
+    font-family: geosanslight;
+    src: url(geosanslight.ttf);
+}
+
+.circle {
+	height: 350px;
+    width: 350px;
+    border-radius: 50%;
+	background-color: #123b5b;
+	position:absolute;
+   	top:50%;
+   	left:50%;
+   	transform: translate(-50%, -50%);
+   	opacity:.95;
+}
+
+.center-container {
+	position: absolute;
+   	top: 50%;
+   	left: 50%;
+   	transform: translate(-50%, -50%);
+   	border: 3px solid #8AC007;
+}
+
+.name {
+	text-align: center;
+	color: white;
+    font-family: vipernora;
+    font-size: 300%;
+    border: 3px solid #8AC007;
+}
+
+.text {
+	text-align: center;
+	color: white;
+    font-family: geosanslight;
+    font-size: 150%;
+    display: inline-block;
+    margin: 0 auto;
+    border: 3px solid #8AC007;
+}
+
+.email {
+	position: fixed;
+	bottom: 30px;
+	width: 100%;
+	text-align: center;
+	color: white;
+    font-family: geosanslight;
+    font-size: 150%;
+	border: 3px solid #8AC007;
+}
+
+.email a {
+	color: white;
+    text-decoration: none;
+	bottom: 0;
 }
