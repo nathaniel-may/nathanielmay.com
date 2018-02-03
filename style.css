@@ -112,6 +112,7 @@ body {
 
 @media screen 
   and (max-device-width: 450px) 
+  and (max-device-height:700px) 
   and (orientation: portrait) {
   	.circle { 
   		height: 75vw;
@@ -145,5 +146,46 @@ body {
 
   	 .email {
   	 	font-size: 150%;
+  	 	bottom: 0;
+  	 }
+}
+
+@media screen 
+  and (max-device-width:700px)
+  and (max-device-height:450px) 
+  and (orientation: landscape) {
+  	.circle { 
+  		height: 75%;
+  		width: 75vh;
+  		transform: translate(-50%, -60%);
+  	 }
+
+	.center-container {
+		transform: translate(-50%, -60%);
+	}
+
+	.name {
+	    font-size: 17vh;
+	}
+
+  	 .flex-icons {
+  	 	bottom: 30px;
+  	 	width: 50%;
+  	 	height: 36px;
+  	 	margin-left: -25%;
+  	 }
+
+  	 .icon {
+  	 	bottom: 30px;
+  	 	margin: auto;
+  	 }
+
+  	 .icon img {
+  	 	height: 36px;
+  	 }
+
+  	 .email {
+  	 	font-size: 75%;
+  	 	bottom: 0;
   	 }
 }
