@@ -110,9 +110,10 @@ body {
 	height: 36px;
 }
 
+/* portrait */
 @media screen 
   and (max-device-width: 450px) 
-  and (max-device-height:700px) 
+  and (max-device-height: 700px) 
   and (orientation: portrait) {
   	.circle { 
   		height: 75vw;
@@ -150,9 +151,10 @@ body {
   	 }
 }
 
+/* landscape */
 @media screen 
-  and (max-device-width:700px)
-  and (max-device-height:450px) 
+  and (max-device-width: 700px)
+  and (max-device-height: 450px) 
   and (orientation: landscape) {
   	.circle { 
   		height: 75%;
@@ -185,7 +187,7 @@ body {
   	 }
 
   	 .email {
-  	 	font-size: 75%;
+  	 	font-size: 125%;
   	 	bottom: 0;
   	 }
 }
