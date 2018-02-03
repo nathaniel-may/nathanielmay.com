@@ -25,11 +25,6 @@ body {
     src: url(fonts/geosanslight.ttf);
 }
 
-@font-face {
-    font-family: dinotblack;
-    src: url(fonts/dinot_black.otf);
-}
-
 .fixed-bg {
 	background-image: url(background-bw-small.jpg);
 	position: fixed;
