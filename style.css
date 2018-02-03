@@ -109,3 +109,41 @@ body {
 	width: auto;
 	height: 36px;
 }
+
+@media screen 
+  and (max-device-width: 450px) 
+  and (orientation: portrait) {
+  	.circle { 
+  		height: 75vw;
+  		width: 75%;
+  		transform: translate(-50%, -70%);
+  	 }
+
+	.center-container {
+		transform: translate(-50%, -70%);
+	}
+
+	.name {
+	    font-size: 17vw;
+	}
+
+  	 .flex-icons {
+  	 	bottom: 70px;
+  	 	width: 100%;
+  	 	height: 36px;
+  	 	margin-left: -50%;
+  	 }
+
+  	 .icon {
+  	 	bottom: 140px;
+  	 	margin: auto;
+  	 }
+
+  	 .icon img {
+  	 	height: 36px;
+  	 }
+
+  	 .email {
+  	 	font-size: 150%;
+  	 }
+}
