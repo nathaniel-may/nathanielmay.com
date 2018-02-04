@@ -1,10 +1,12 @@
 
 html {
+	width: 100%;
 	padding: 0;
 	margin: 0;
 }
 
 body { 
+	width: 100%;
 	padding: 0;
 	margin: 0;
 	height: 100%;
@@ -41,8 +43,8 @@ body {
     border-radius: 50%;
 	background-color: #0e4c3d; 
 	position:absolute;
-   	top:50%;
-   	left:50%;
+   	top: 50%;
+   	left: 50%;
    	transform: translate(-50%, -50%);
    	opacity:.92;
 }
@@ -118,7 +120,7 @@ body {
   	.circle { 
   		height: 75vw;
   		width: 75%;
-  		transform: translate(-50%, -70%);
+		transform: translate(-50%, -70%);
   	 }
 
 	.center-container {
@@ -130,14 +132,14 @@ body {
 	}
 
   	 .flex-icons {
-  	 	bottom: 70px;
+  	 	bottom: 40px;
   	 	width: 100%;
   	 	height: 36px;
   	 	margin-left: -50%;
   	 }
 
   	 .icon {
-  	 	bottom: 140px;
+  	 	bottom: 40px;
   	 	margin: auto;
   	 }
 
@@ -159,7 +161,7 @@ body {
   	.circle { 
   		height: 75%;
   		width: 75vh;
-  		transform: translate(-50%, -60%);
+		transform: translate(-50%, -60%);
   	 }
 
 	.center-container {
@@ -170,24 +172,24 @@ body {
 	    font-size: 17vh;
 	}
 
-  	 .flex-icons {
-  	 	bottom: 30px;
-  	 	width: 50%;
-  	 	height: 36px;
-  	 	margin-left: -25%;
-  	 }
+	.flex-icons {
+		bottom: 30px;
+		width: 50%;
+		height: 36px;
+		margin-left: -25%;
+	}
 
-  	 .icon {
-  	 	bottom: 30px;
-  	 	margin: auto;
-  	 }
+	.icon {
+		bottom: 30px;
+		margin: auto;
+	}
 
-  	 .icon img {
-  	 	height: 36px;
-  	 }
+	.icon img {
+		height: 36px;
+	}
 
-  	 .email {
-  	 	font-size: 125%;
-  	 	bottom: 0;
-  	 }
+	.email {
+		font-size: 125%;
+		bottom: 0;
+	}
 }
