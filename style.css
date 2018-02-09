@@ -17,31 +17,14 @@ body {
 	text-align: center;
 }
 
-/*kearning makes me mad. A<->T and A<->Y look way too far apart*/
-@font-face {
-    font-family: vipernora;
-    src: url(fonts/viper_nora.otf);
-}
-
-/*used for tagline and email*/
+/* used for tagline and email */
 @font-face {
     font-family: geosanslight;
     src: url(fonts/geosanslight.ttf);
 }
 
-/* GREAT */
-@font-face {
-    font-family: bebas_neue;
-    src: url(fonts/bebas_neue.otf);
-}
 
-/* GREAT */
-@font-face {
-    font-family: norwester;
-    src: url(fonts/norwester.otf);
-}
-
-/* GREAT */
+/* used for name */
 @font-face {
     font-family: qanelassoft;
     src: url(fonts/qanelassoft.otf);
@@ -90,7 +73,6 @@ body {
 	color: #eaeaea;
     font-family: qanelassoft;
     font-size: 320%;
-    /*font-weight: lighter;*/
     letter-spacing: 3px;
 }
 
