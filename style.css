@@ -17,18 +17,38 @@ body {
 	text-align: center;
 }
 
+/*kearning makes me mad. A<->T and A<->Y look way too far apart*/
 @font-face {
     font-family: vipernora;
     src: url(fonts/viper_nora.otf);
 }
 
+/*used for tagline and email*/
 @font-face {
     font-family: geosanslight;
     src: url(fonts/geosanslight.ttf);
 }
 
+/* GREAT */
+@font-face {
+    font-family: bebas_neue;
+    src: url(fonts/bebas_neue.otf);
+}
+
+/* GREAT */
+@font-face {
+    font-family: norwester;
+    src: url(fonts/norwester.otf);
+}
+
+/* GREAT */
+@font-face {
+    font-family: qanelassoft;
+    src: url(fonts/qanelassoft.otf);
+}
+
 .fixed-bg {
-	background-image: url(background-bw-small.jpg);
+	background-image: url(background-bw-small-darker.jpg);
 	position: fixed;
 	background-size: cover;
 	background-position: center;
@@ -68,8 +88,9 @@ body {
 .name {
 	text-align: center;
 	color: #eaeaea;
-    font-family: vipernora;
-    font-size: 300%;
+    font-family: qanelassoft;
+    font-size: 320%;
+    /*font-weight: lighter;*/
     letter-spacing: 3px;
 }
 
@@ -145,7 +166,7 @@ body {
 	}
 
 	.name {
-	    font-size: 17vw;
+	    font-size: 15.5vw;
 	}
 
 	.flex-icons {
