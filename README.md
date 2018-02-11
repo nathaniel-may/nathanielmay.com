@@ -7,18 +7,18 @@ DNS: AWS Route53
 CDN: AWS CloudFront
 Hosting: AWS S3
 
-## Google Domains
+### Google Domains
 
 nathanielmay.com is registered with Google Domains
 Google is configured to use AWS nameservers because Google does not support CNAMES at the apex
 
 Route53 Records:
 ```
-	root 	A (alias) 	cloudfront
-	www		A (alias)	root		
+root	A (alias) 	cloudfront
+www	A (alias)	root		
 ```
 
-## CloudFront
+### CloudFront
 
 Distribution
   - General Settings
@@ -34,7 +34,7 @@ Distribution
       - http -> https
       - Max TTL, Min TTL, Default TTL = 0 #for deployment purposes only. Will raise significantly.
 
-## ACM
+### ACM
 
 Signed for addresses
 ```
@@ -44,7 +44,7 @@ nathanielmay.com
 
 Used ACM link from AWS region [us-east-1](https://console.aws.amazon.com/acm/home?region=us-east-1). Other regions cannot be imported to CloudFront.
 
-## S3
+### S3
 
 Buckets
   - nathanielmay.com
