@@ -34,7 +34,7 @@ Distribution
     - Alternate Domain Names
       - nathanielmay.com
       - *.nathanielmay.com
-    - SSl Cert
+    - SSL Cert
       - From AWS ACM
     - Default root object
       - left blank #explicit values prevent s3 bucket redirects
