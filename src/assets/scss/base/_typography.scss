@@ -58,12 +58,14 @@
 		margin: 0 0 _size(element-margin) 0;
 	}
 
-	h2 {
+	h1 {
 		color: _palette(fg-bold);
+		font-weight: _font(weight-bold);
 		line-height: 1.5;
-		margin: 0 0 (_size(element-margin) * 1.5) 0;
+		margin: 0 0 (_size(element-margin) * 0.3) 0;
 		text-transform: uppercase;
 		letter-spacing: _font(letter-spacing);
+		white-space: nowrap;
 
 		a {
 			color: inherit;
@@ -81,7 +83,31 @@
 		}
 	}
 
-	h1, h3, h4, h5, h6 {
+	h2 {
+		color: _palette(fg-bold);
+		line-height: 1.5;
+		margin: 0 0 (_size(element-margin) * 1.5) 0;
+		text-transform: uppercase;
+		letter-spacing: _font(letter-spacing);
+		white-space: nowrap;
+
+		a {
+			color: inherit;
+			text-decoration: none;
+		}
+
+		&.major {
+			border-bottom: solid _size(border-width) _palette(border);
+			width: -moz-max-content;
+			width: -webkit-max-content;
+			width: -ms-max-content;
+			width: max-content;
+			padding-bottom: 0.5rem;
+			margin: 0 0 (_size(element-margin) * 1) 0;
+		}
+	}
+
+	h3, h4, h5, h6 {
 		color: _palette(fg-bold);
 		font-weight: _font(weight-bold);
 		line-height: 1.5;
