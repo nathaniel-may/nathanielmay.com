@@ -9,10 +9,7 @@ const Header = props => (
     <div className="content">
       <div className="inner">
         <h1>Nathaniel May</h1>
-        <p>
-          — Engineering Manager —
-          <br />
-        </p>
+        <h2>— Engineering Manager —</h2>
         <p>
           Simplicity · Honesty · Community · Creativity · Advocacy
         </p>
@@ -25,7 +22,7 @@ const Header = props => (
         <li className="leaf">
           <a href="https://dev.to/codenoodle" target="_blank">
             <div className="logo">
-              <span className="icon fa-pencil-square-o"></span>
+              <span className="icon fa-book"></span>
             </div>
           </a>
         </li>
