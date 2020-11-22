@@ -115,12 +115,14 @@
       @include vendor('display', 'flex');
       margin-bottom: 0;
       list-style: none;
-      padding-left: 0;
 
-      li {
+      .leaf {
         padding-top: 20px;
         padding-right: 14px;
         padding-left: 14px;
+      }
+
+      li {
 
         &:first-child {
           border-left: 0;
@@ -249,8 +251,13 @@
     }
 
     nav {
-      ul {
+
+      .branch {
         @include vendor('flex-direction', 'column');
+      }
+
+      ul {
+        @include vendor('flex-direction', 'row');
         min-width: 10rem;
         max-width: 100%;
 
