@@ -21,40 +21,32 @@ const Header = props => (
     <nav>
       <ul>
         <li>
-          <button
-            onClick={() => {
-              props.onOpenArticle('intro')
-            }}
-          >
-            Intro
-          </button>
+          <a href="https://dev.to/codenoodle">
+            <div className="logo">
+              <span className="icon fa-pencil-square-o"></span>
+            </div>
+          </a>
         </li>
         <li>
-          <button
-            onClick={() => {
-              props.onOpenArticle('work')
-            }}
-          >
-            Work
-          </button>
+          <a href="https://github.com/nathaniel-may">
+            <div className="logo">
+              <span className="icon fa-github"></span>
+            </div>
+          </a>
         </li>
         <li>
-          <button
-            onClick={() => {
-              props.onOpenArticle('about')
-            }}
-          >
-            About
-          </button>
+          <a href="https://twitter.com/codenoodle">
+            <div className="logo">
+              <span className="icon fa-twitter"></span>
+            </div>
+          </a>
         </li>
         <li>
-          <button
-            onClick={() => {
-              props.onOpenArticle('contact')
-            }}
-          >
-            Contact
-          </button>
+          <a href="https://www.linkedin.com/in/nathanieldmay/">
+            <div className="logo">
+              <span className="icon fa-linkedin"></span>
+            </div>
+          </a>
         </li>
       </ul>
     </nav>
