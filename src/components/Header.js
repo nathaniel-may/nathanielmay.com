@@ -21,28 +21,28 @@ const Header = props => (
     <nav>
       <ul>
         <li>
-          <a href="https://dev.to/codenoodle">
+          <a href="https://dev.to/codenoodle" target="_blank">
             <div className="logo">
               <span className="icon fa-pencil-square-o"></span>
             </div>
           </a>
         </li>
         <li>
-          <a href="https://github.com/nathaniel-may">
+          <a href="https://github.com/nathaniel-may" target="_blank">
             <div className="logo">
               <span className="icon fa-github"></span>
             </div>
           </a>
         </li>
         <li>
-          <a href="https://twitter.com/codenoodle">
+          <a href="https://twitter.com/codenoodle" target="_blank">
             <div className="logo">
               <span className="icon fa-twitter"></span>
             </div>
           </a>
         </li>
         <li>
-          <a href="https://www.linkedin.com/in/nathanieldmay/">
+          <a href="https://www.linkedin.com/in/nathanieldmay/" target="_blank">
             <div className="logo">
               <span className="icon fa-linkedin"></span>
             </div>
