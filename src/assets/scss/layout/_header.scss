@@ -253,11 +253,11 @@
     nav {
 
       .branch {
-        @include vendor('flex-direction', 'column');
+        @include vendor('flex-direction', 'row');
       }
 
       ul {
-        @include vendor('flex-direction', 'row');
+        @include vendor('flex-direction', 'column');
         min-width: 10rem;
         max-width: 100%;
 
