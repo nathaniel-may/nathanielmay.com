@@ -4,7 +4,7 @@ import React from 'react'
 const Header = props => (
   <header id="header" style={props.timeout ? { display: 'none' } : {}}>
     <div className="logo">
-      <span className="icon fa-diamond"></span>
+      <p style={{"font-weight": "500", "font-size": "30px"}}>λ</p>
     </div>
     <div className="content">
       <div className="inner">
@@ -12,7 +12,8 @@ const Header = props => (
         <p>
           — Engineering Manager —
           <br />
-          <br />
+        </p>
+        <p>
           Simplicity · Honesty · Community · Creativity · Advocacy
         </p>
       </div>
