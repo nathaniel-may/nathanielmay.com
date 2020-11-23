@@ -20,14 +20,14 @@ const Header = props => (
       <li>
       <ul className="branch">
         <li className="leaf">
-          <a href="https://dev.to/codenoodle" target="_blank">
+          <a href="https://dev.to/codenoodle" title="blog" target="_blank">
             <div className="logo">
               <span className="icon fa-book"></span>
             </div>
           </a>
         </li>
         <li className="leaf">
-          <a href="https://github.com/nathaniel-may" target="_blank">
+          <a href="https://github.com/nathaniel-may" title="github" target="_blank">
             <div className="logo">
               <span className="icon fa-github"></span>
             </div>
@@ -38,14 +38,14 @@ const Header = props => (
       <li>
       <ul className="branch">
         <li className="leaf">
-          <a href="https://twitter.com/codenoodle" target="_blank">
+          <a href="https://twitter.com/codenoodle" title="twitter" target="_blank">
             <div className="logo">
               <span className="icon fa-twitter"></span>
             </div>
           </a>
         </li>
         <li className="leaf">
-          <a href="https://www.linkedin.com/in/nathanieldmay/" target="_blank">
+          <a href="https://www.linkedin.com/in/nathanieldmay/" title="linkedin" target="_blank">
             <div className="logo">
               <span className="icon fa-linkedin"></span>
             </div>
