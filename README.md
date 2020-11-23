@@ -1,19 +1,41 @@
-# gatsby-starter-dimension
+# nathanielmay.com
 
-**This is a starter for Gatsby.js V2.**
+## Components
 
-**The older V1 version of this starter can be found on the v1 branch:**
+Domain: Google
+Hosting, CDN, Certs and Name Servers: Netlify
+Email: Gsuites
+Code: Github
 
-Gatsby.js V2 starter based on the Dimension site template, designed by HTML5 UP. Check out https://codebushi.com/gatsby-starters-and-themes/ for more Gatsby starters and templates.
+### Making Changes
 
-## Preview
+Netlify is set up to [preview deploy](https://app.netlify.com/sites/goofy-sinoussi-dd0461/deploys) every branch on the project. This does not consume any limits on their free tier as of Nov 2020. Pushing to master updates nathanielmay.com publicly.
 
-https://gatsby-dimension.surge.sh/
+### DNS
 
-## Installation
+nathanielmay.com is registered with Google Domains  
+Google is configured to use Netlify nameservers because Google does not support CNAMES at the apex
 
-Install this starter (assuming Gatsby is installed) by running from your CLI:
-<br/>
-`gatsby new gatsby-starter-dimension https://github.com/codebushi/gatsby-starter-dimension`
+Route53 Records:
+```
+Netlify (type of record similar to alias)
+	root	goofy-sinoussi-dd0461.netlify.com
+	www 	goofy-sinoussi-dd0461.netlify.com
 
-Run `gatsby develop` in the terminal to start the dev site.
+MX
+	root	1  ASPMX.L.GOOGLE.COM
+	root	5  ALT1.ASPMX.L.GOOGLE.COM
+	root	5  ALT2.ASPMX.L.GOOGLE.COM
+	root	10 ALT3.ASPMX.L.GOOGLE.COM
+	root	10 ALT4.ASPMX.L.GOOGLE.COM	
+
+TXT
+	git    https://github.com/nathaniel-may	
+```
+
+### Gsuites
+
+Mail hosting that comes with Google Domains can only be used if Google Name servers are enabled  
+Gsuites registers the domain inside Google mail servers  
+The MX records in the Netlify nameservers direct all mail to Google  
+Gsuites which costs 5$/user/month  
