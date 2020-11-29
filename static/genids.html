@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Generate IDs</h1>
+
+<p id="idx"></p>
+
+<button onclick="setid()">Generate</button>
+
+<script>
+function setid() {
+	// IDs are always length 6. Edit here for different length.
+    document.getElementById("idx").innerHTML = mkid(6);
+}
+
+function mkid(len) {
+	const chars   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'; // no zero. can't confuse with the char 'O'.
+	const charLen = chars.length;
+	return _mkid('');
+
+	function _mkid(id) {
+		if (id.length >= len) {
+			return id;
+		} else {
+			const nextChar = chars.charAt(Math.floor(Math.random() * charLen));
+			return _mkid(id + nextChar);
+		}
+	}
+}
+</script>
+
+</body>
+</html>
