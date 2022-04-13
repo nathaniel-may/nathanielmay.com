@@ -5,14 +5,25 @@
 
 <h1>Generate IDs</h1>
 
-<p id="idx"></p>
+<p id="idx">--</p>
+<p id="status">--</p>
 
-<button onclick="setid()">Generate</button>
+<button onclick="setAndCopyId()">Generate + Copy</button>
 
 <script>
-function setid() {
+function setAndCopyId() {
+	// clear status message
+	document.getElementById("status").innerHTML = "--";
 	// IDs are always length 6. Edit here for different length.
-    document.getElementById("idx").innerHTML = mkid(6);
+	id6 = mkid(6)
+    document.getElementById("idx").innerHTML = id6;
+
+	navigator.clipboard.writeText(id6).then(function() {
+		document.getElementById("status").innerHTML = "copied";
+	}, function(err) {
+		console.error('Async: Could not copy text: ', err);
+		document.getElementById("status").innerHTML = "failed to copy";
+	});
 }
 
 function mkid(len) {
