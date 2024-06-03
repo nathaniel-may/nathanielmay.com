@@ -11,7 +11,7 @@ const Header = props => (
         <h1>Nathaniel May</h1>
         <h2>Senior Software Engineer</h2>
         <p>
-          Management Experience · Rust · Haskell · Data
+          Management Experience · Rust · Data · Math
         </p>
       </div>
     </div>
