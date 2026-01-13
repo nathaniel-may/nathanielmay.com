@@ -30,6 +30,6 @@
     "url": "https://github.com/gatsbyjs/gatsby-starter-default"
   },
   "engines": {
-    "node": "16.x"
+    "node": "14.x"
   }
 }
