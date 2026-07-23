@@ -1,28 +1,32 @@
 ---
 import Layout from '~/layouts/Layout.astro';
 import Button from '~/components/ui/Button.astro';
-import FontSwitcher from '~/components/ui/FontSwitcher.astro';
 import { getBlogPermalink, getPermalink } from '~/utils/permalinks';
+import inversionzUrl from '~/assets/fonts/Inversionz.otf?url';
 
 const metadata = {
   title: 'Nathaniel May — Engineering Manager',
   ignoreTitleTemplate: true,
 };
+
+const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inversionzUrl}') format('opentype'); font-display: swap; }`;
 ---
 
 <Layout metadata={metadata}>
+  <style set:html={nameFontFaceCss} />
+
   <main class="min-h-screen flex items-center justify-center gap-12 md:gap-24 px-6">
     <div
-      class="font-target text-5xl md:text-9xl font-bold tracking-[-0.2em]"
-      style="writing-mode: vertical-rl; text-orientation: upright;"
+      class="text-5xl md:text-9xl font-bold tracking-[-0.2em]"
+      style="writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz';"
     >
       NATHANIEL
     </div>
 
     <div class="flex flex-col items-center gap-8">
       <div
-        class="font-target text-5xl md:text-9xl font-bold tracking-[-0.2em]"
-        style="writing-mode: vertical-rl; text-orientation: upright;"
+        class="text-5xl md:text-9xl font-bold tracking-[-0.2em]"
+        style="writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz';"
       >
         MAY
       </div>
@@ -34,6 +38,4 @@ const metadata = {
       </div>
     </div>
   </main>
-
-  <FontSwitcher />
 </Layout>
