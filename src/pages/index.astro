@@ -1,6 +1,7 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
-import Hero from '~/components/widgets/Hero.astro';
+import Layout from '~/layouts/Layout.astro';
+import Button from '~/components/ui/Button.astro';
+import { getBlogPermalink, getPermalink } from '~/utils/permalinks';
 
 const metadata = {
   title: 'Nathaniel May — Engineering Manager',
@@ -9,36 +10,27 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <Hero
-    actions={[
-      {
-        variant: 'primary',
-        text: 'GitHub',
-        href: 'https://github.com/nathaniel-may',
-        target: '_blank',
-        icon: 'tabler:brand-github',
-      },
-      {
-        text: 'LinkedIn',
-        href: 'https://www.linkedin.com/in/nathanieldmay/',
-        target: '_blank',
-        icon: 'tabler:brand-linkedin',
-      },
-    ]}
-  >
-    <Fragment slot="title">
-      Nathaniel May
-    </Fragment>
+  <main class="min-h-screen flex items-center justify-center gap-12 md:gap-24 px-6">
+    <div
+      class="text-5xl md:text-7xl font-bold tracking-widest"
+      style="writing-mode: vertical-rl; transform: rotate(180deg);"
+    >
+      NATHANIEL
+    </div>
 
-    <Fragment slot="subtitle">
-      <span class="block font-semibold text-xl mb-2">Engineering Manager</span>
-      <span class="block text-lg mb-4 text-muted">
-        Hiring Pipelines · Coaching · Distributed Systems · Data Analytics
-      </span>
-      <span class="block text-base text-default">
-        Nathaniel May is an Engineering Manager focused on hiring pipelines, coaching, distributed systems, and data
-        analytics. He builds teams and infrastructure that scale.
-      </span>
-    </Fragment>
-  </Hero>
+    <div class="flex flex-col items-center gap-8">
+      <div
+        class="text-5xl md:text-7xl font-bold tracking-widest"
+        style="writing-mode: vertical-rl; transform: rotate(180deg);"
+      >
+        MAY
+      </div>
+
+      <div class="flex flex-col gap-4 w-40">
+        <Button variant="primary" text="Posts" href={getBlogPermalink()} />
+        <Button variant="primary" text="Projects" href={getPermalink('/projects')} />
+        <Button variant="primary" text="Career" href="/resume.pdf" />
+      </div>
+    </div>
+  </main>
 </Layout>
