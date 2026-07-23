@@ -1,0 +1,85 @@
+---
+export interface Props {
+  targetSelector?: string;
+}
+
+const { targetSelector = '.font-target' } = Astro.props;
+
+const fontModules = import.meta.glob('/src/assets/fonts/**/*.{woff2,woff,ttf,otf,eot}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>;
+
+const fonts = Object.entries(fontModules)
+  .map(([path, url]) => {
+    const relative = path.replace('/src/assets/fonts/', '');
+    const base = relative.replace(/\.[^/.]+$/, '');
+    const ext = path.split('.').pop() || '';
+    const format =
+      { woff2: 'woff2', woff: 'woff', ttf: 'truetype', otf: 'opentype', eot: 'embedded-opentype' }[ext] || ext;
+    const family = `font-preview-${base.replace(/[^a-zA-Z0-9]+/g, '-')}`;
+    const label = (base.split('/').pop() || base).replace(/[-_]+/g, ' ');
+    return { path: relative, url, family, format, label };
+  })
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const fontFaceCss = fonts
+  .map((f) => `@font-face { font-family: '${f.family}'; src: url('${f.url}') format('${f.format}'); font-display: swap; }`)
+  .join('\n');
+
+const fontData = fonts.map(({ family, label }) => ({ family, label }));
+---
+
+{fonts.length > 0 && <style set:html={fontFaceCss} />}
+
+<div
+  class="font-switcher fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-page/90 backdrop-blur border border-gray-300 dark:border-slate-600 rounded-full px-4 py-2 shadow-lg z-50"
+>
+  <button id="font-prev" class="btn-tertiary px-2 disabled:opacity-40" aria-label="Previous font" disabled={fonts.length === 0}>
+    &lsaquo;
+  </button>
+  <span id="font-label" class="min-w-40 text-center text-sm font-medium">
+    {fonts.length > 0 ? fonts[0].label : 'No fonts found in src/assets/fonts'}
+  </span>
+  <button id="font-next" class="btn-tertiary px-2 disabled:opacity-40" aria-label="Next font" disabled={fonts.length === 0}>
+    &rsaquo;
+  </button>
+</div>
+
+<script type="application/json" id="font-data" set:html={JSON.stringify(fontData)} />
+<script type="application/json" id="font-target-selector" set:html={JSON.stringify(targetSelector)} />
+
+<script>
+  const data = JSON.parse(document.getElementById('font-data')?.textContent || '[]');
+  const targetSelector = JSON.parse(document.getElementById('font-target-selector')?.textContent || '".font-target"');
+
+  const label = document.getElementById('font-label');
+  const prevBtn = document.getElementById('font-prev');
+  const nextBtn = document.getElementById('font-next');
+
+  let index = 0;
+
+  function apply() {
+    if (!data.length || !label) return;
+    const font = data[index];
+    label.textContent = font.label;
+    document.querySelectorAll(targetSelector).forEach((el) => {
+      (el as HTMLElement).style.fontFamily = `'${font.family}'`;
+    });
+  }
+
+  prevBtn?.addEventListener('click', () => {
+    if (!data.length) return;
+    index = (index - 1 + data.length) % data.length;
+    apply();
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    if (!data.length) return;
+    index = (index + 1) % data.length;
+    apply();
+  });
+
+  apply();
+</script>
