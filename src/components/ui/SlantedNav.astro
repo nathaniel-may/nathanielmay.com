@@ -37,15 +37,28 @@ const points = `0,${rise} ${width},0 ${width},${thickness} 0,${totalHeight}`;
 
 const popX = popDistance * Math.cos(angleRad);
 const popY = -popDistance * Math.sin(angleRad);
+
+// Each plank's white fill only reaches into two opposite corners of its own
+// bounding box (a diagonal sliver at the top-right and another at the
+// bottom-left) — the rest of those corners are transparent. That means
+// bounding boxes can overlap (negative gap) well before the actual white
+// shapes touch. They meet exactly at gap = -rise / 2; past that the fills
+// intersect, so warn if the requested gap pushes beyond it.
+const maxOverlap = rise / 2;
+if (gap < -maxOverlap) {
+  console.warn(
+    `[SlantedNav] gap=${gap} exceeds the safe overlap limit of -${maxOverlap.toFixed(1)} for angle=${angle}/width=${width} — plank shapes will visually intersect.`
+  );
+}
 ---
 
-<div class={`slanted-nav flex flex-col items-center ${className}`} style={`gap: ${gap}px;`}>
+<div class={`slanted-nav flex flex-col items-center ${className}`}>
   {
-    links.map((link) => (
+    links.map((link, i) => (
       <a
         href={link.href}
         class="plank relative block transition-transform duration-200"
-        style={`width: ${width}px; height: ${totalHeight}px; --pop-x: ${popX}px; --pop-y: ${popY}px;`}
+        style={`width: ${width}px; height: ${totalHeight}px; margin-top: ${i === 0 ? 0 : gap}px; --pop-x: ${popX}px; --pop-y: ${popY}px;`}
       >
         <svg
           viewBox={`0 0 ${width} ${totalHeight}`}
