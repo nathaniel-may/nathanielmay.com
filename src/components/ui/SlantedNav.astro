@@ -7,34 +7,72 @@ export interface NavLink {
 export interface Props {
   links: NavLink[];
   angle?: number;
+  width?: number;
+  thickness?: number;
   borderWidth?: number;
+  gap?: number;
   popDistance?: number;
   class?: string;
 }
 
-const { links, angle = -30, borderWidth = 5, popDistance = 20, class: className = '' } = Astro.props;
+const {
+  links,
+  angle = 30,
+  width = 240,
+  thickness = 72,
+  borderWidth = 5,
+  gap = 14,
+  popDistance = 18,
+  class: className = '',
+} = Astro.props;
+
+// Each plank keeps vertical left/right edges (so stacked items' edges line up
+// into one straight vertical line) and only slants the top/bottom edges by
+// `angle` degrees, which is what makes the shape an actual parallelogram
+// instead of a rotated rectangle's pointed silhouette.
+const angleRad = (angle * Math.PI) / 180;
+const rise = width * Math.tan(angleRad);
+const totalHeight = thickness + rise;
+const points = `0,${rise} ${width},0 ${width},${thickness} 0,${totalHeight}`;
+
+const popX = popDistance * Math.cos(angleRad);
+const popY = -popDistance * Math.sin(angleRad);
 ---
 
-<div
-  class={`slanted-nav flex flex-col bg-white ${className}`}
-  style={`border: ${borderWidth}px solid black; transform: rotate(${angle}deg);`}
->
+<div class={`slanted-nav flex flex-col items-center ${className}`} style={`gap: ${gap}px;`}>
   {
-    links.map((link, i) => (
+    links.map((link) => (
       <a
         href={link.href}
-        class="slanted-nav__item relative bg-white px-6 py-5 text-center text-3xl font-extrabold text-black transition-transform duration-200"
-        style={`${i < links.length - 1 ? `border-bottom: ${borderWidth}px solid black;` : ''} --pop-distance: ${popDistance}px;`}
+        class="plank relative block transition-transform duration-200"
+        style={`width: ${width}px; height: ${totalHeight}px; --pop-x: ${popX}px; --pop-y: ${popY}px;`}
       >
-        {link.text}
+        <svg
+          viewBox={`0 0 ${width} ${totalHeight}`}
+          width={width}
+          height={totalHeight}
+          class="absolute inset-0 block"
+          preserveAspectRatio="none"
+        >
+          <polygon points={points} fill="white" stroke="black" stroke-width={borderWidth} stroke-linejoin="round" />
+        </svg>
+        <span
+          class="absolute left-1/2 top-1/2 whitespace-nowrap text-3xl font-extrabold text-black"
+          style={`transform: translate(-50%, -50%) rotate(${-angle}deg);`}
+        >
+          {link.text}
+        </span>
       </a>
     ))
   }
 </div>
 
 <style>
-  .slanted-nav__item:hover {
-    transform: translateX(var(--pop-distance));
+  .plank {
+    z-index: 1;
+  }
+  .plank:hover {
+    transform: translate(var(--pop-x), var(--pop-y));
     z-index: 10;
   }
 </style>
