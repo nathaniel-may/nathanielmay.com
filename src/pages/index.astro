@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/Layout.astro';
-import Button from '~/components/ui/Button.astro';
+import SlantedNav from '~/components/ui/SlantedNav.astro';
 import { getBlogPermalink, getPermalink } from '~/utils/permalinks';
 import inversionzUrl from '~/assets/fonts/Inversionz.otf?url';
 
@@ -31,11 +31,14 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
         MAY
       </div>
 
-      <div class="flex flex-col gap-4 w-40">
-        <Button variant="primary" text="Posts" href={getBlogPermalink()} />
-        <Button variant="primary" text="Projects" href={getPermalink('/projects')} />
-        <Button variant="primary" text="Career" href="/resume.pdf" />
-      </div>
+      <SlantedNav
+        class="w-56 md:w-64"
+        links={[
+          { text: 'Posts', href: getBlogPermalink() },
+          { text: 'Projects', href: getPermalink('/projects') },
+          { text: 'Career', href: '/resume.pdf' },
+        ]}
+      />
     </div>
   </main>
 </Layout>

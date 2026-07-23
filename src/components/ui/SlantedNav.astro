@@ -1,0 +1,40 @@
+---
+export interface NavLink {
+  text: string;
+  href: string;
+}
+
+export interface Props {
+  links: NavLink[];
+  angle?: number;
+  borderWidth?: number;
+  popDistance?: number;
+  class?: string;
+}
+
+const { links, angle = -30, borderWidth = 5, popDistance = 20, class: className = '' } = Astro.props;
+---
+
+<div
+  class={`slanted-nav flex flex-col bg-white ${className}`}
+  style={`border: ${borderWidth}px solid black; transform: rotate(${angle}deg);`}
+>
+  {
+    links.map((link, i) => (
+      <a
+        href={link.href}
+        class="slanted-nav__item relative bg-white px-6 py-5 text-center text-3xl font-extrabold text-black transition-transform duration-200"
+        style={`${i < links.length - 1 ? `border-bottom: ${borderWidth}px solid black;` : ''} --pop-distance: ${popDistance}px;`}
+      >
+        {link.text}
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .slanted-nav__item:hover {
+    transform: translateX(var(--pop-distance));
+    z-index: 10;
+  }
+</style>
