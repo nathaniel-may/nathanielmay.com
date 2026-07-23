@@ -18,10 +18,10 @@ export interface Props {
 const {
   links,
   angle = 30,
-  width = 240,
+  width = 150,
   thickness = 72,
   borderWidth = 5,
-  gap = 14,
+  gap = -80,
   popDistance = 18,
   class: className = '',
 } = Astro.props;
@@ -70,7 +70,7 @@ if (gap < -maxOverlap) {
           <polygon points={points} fill="white" stroke="black" stroke-width={borderWidth} stroke-linejoin="round" />
         </svg>
         <span
-          class="absolute left-1/2 top-1/2 whitespace-nowrap text-3xl font-extrabold text-black"
+          class="absolute left-1/2 top-1/2 whitespace-nowrap text-2xl font-extrabold text-black"
           style={`transform: translate(-50%, -50%) rotate(${-angle}deg);`}
         >
           {link.text}
