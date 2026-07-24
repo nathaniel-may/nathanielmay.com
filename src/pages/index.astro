@@ -29,20 +29,24 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
 
   <main class="min-h-screen flex items-center justify-center px-6" style={`background-color: ${COLOR_BG};`}>
     <div class="flex flex-row items-stretch gap-12">
-      <div
-        class="vertical-name font-bold text-9xl tracking-[-0.2em]"
-        style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; text-box: trim-both text;`}
-      >
-        NATHANIEL
+      <div class="vertical-name-wrap inline-block overflow-hidden">
+        <div
+          class="vertical-name font-bold text-9xl tracking-[-0.2em]"
+          style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; text-box: trim-both text;`}
+        >
+          NATHANIEL
+        </div>
       </div>
 
       <div class="flex flex-col justify-between" style={`width: ${NAV_WIDTH}px;`}>
         <div class="flex flex-row items-start justify-between">
-          <div
-            class="vertical-name font-bold text-9xl tracking-[-0.2em]"
-            style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; text-box: trim-both text;`}
-          >
-            MAY
+          <div class="vertical-name-wrap inline-block overflow-hidden">
+            <div
+              class="vertical-name font-bold text-9xl tracking-[-0.2em]"
+              style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; text-box: trim-both text;`}
+            >
+              MAY
+            </div>
           </div>
 
           <div class="flex flex-col gap-3">
@@ -77,4 +81,42 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
       </div>
     </div>
   </main>
+
+  <script>
+    // The block-axis (left/right, in vertical-rl) gap was fixed with
+    // text-box-trim. There's no CSS equivalent for the *inline* axis
+    // (top/bottom): the first character's cell reserves space up to the
+    // font's full advance width, but its actual ink often doesn't reach
+    // that edge — pixel-measured at ~21px here, at the top only (the
+    // bottom already lands flush). Canvas TextMetrics predicts this
+    // almost exactly via advance-width minus actualBoundingBoxRight for
+    // the first character, so derive it from the real font rather than
+    // hand-picking a pixel value, then clip an outer wrapper to the true
+    // ink height and shift the text up into it.
+    async function trimVerticalNameTop() {
+      await document.fonts.ready;
+
+      document.querySelectorAll<HTMLElement>('.vertical-name-wrap').forEach((wrap) => {
+        const inner = wrap.firstElementChild as HTMLElement | null;
+        if (!inner) return;
+        const text = inner.textContent?.trim();
+        if (!text) return;
+
+        const cs = getComputedStyle(inner);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        const metrics = ctx.measureText(text[0]);
+        const topGap = metrics.width - metrics.actualBoundingBoxRight;
+
+        if (topGap > 0) {
+          const naturalHeight = inner.getBoundingClientRect().height;
+          wrap.style.height = `${naturalHeight - topGap}px`;
+          inner.style.marginTop = `${-topGap}px`;
+        }
+      });
+    }
+    trimVerticalNameTop();
+  </script>
 </Layout>
