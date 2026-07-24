@@ -12,8 +12,37 @@ const github = footerData.socialLinks.find((link) => link.ariaLabel === 'GitHub'
 const COLOR_BG = '#E2DABF';
 const COLOR_FG = '#1c1a18';
 
-// Width of the MAY/logos/nav column. Needs to be at least MAY's rendered
-// width + the icon column's width, or the icons overflow past the row.
+// ---------------------------------------------------------------------
+// Font-specific tuning for the vertical NATHANIEL/MAY text. None of
+// these values are guaranteed to carry over to a different font — if
+// you swap NAME_FONT_FAMILY, re-verify all of them:
+//
+// - NAME_TRACKING and the text-9xl font-size class on the name divs
+//   below both affect MAY's rendered width, which NAV_WIDTH is derived
+//   from (see its own comment). Re-measure MAY's width after any
+//   change here and adjust NAV_WIDTH to match.
+// - NAME_TEXT_BOX_EDGE controls how much text-box-trim removes from
+//   the vertical line's width. 'cap'/'alphabetic' clipped the glyph
+//   outright for Inversionz; 'text' was the one keyword (out of every
+//   valid over/under combination, swept programmatically) that landed
+//   exactly on the ink width with zero clipping. A different font may
+//   need a different keyword — verify by comparing the trimmed width
+//   against Range.getBoundingClientRect() on the text node.
+//
+// NOT in this list: the top-of-glyph trim in the <script> below. It
+// measures the live rendered font via canvas at runtime, so it
+// self-adjusts for any font/text/size automatically — nothing to
+// retune there.
+// ---------------------------------------------------------------------
+const NAME_FONT_FAMILY = 'Inversionz';
+const NAME_TRACKING = '-0.2em';
+const NAME_TEXT_BOX_EDGE = 'text';
+const nameStyle = `writing-mode: vertical-rl; text-orientation: upright; font-family: '${NAME_FONT_FAMILY}'; letter-spacing: ${NAME_TRACKING}; text-box: trim-both ${NAME_TEXT_BOX_EDGE}; color: ${COLOR_FG};`;
+
+// Width of the MAY/logos/nav column. Must be at least MAY's rendered
+// width (governed by the font tuning above) + the icon column's width
+// (32px) + a gap between them, or the icons overflow past the row's
+// right edge.
 const NAV_WIDTH = 176;
 
 const metadata = {
@@ -21,7 +50,7 @@ const metadata = {
   ignoreTitleTemplate: true,
 };
 
-const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inversionzUrl}') format('opentype'); font-display: swap; }`;
+const nameFontFaceCss = `@font-face { font-family: '${NAME_FONT_FAMILY}'; src: url('${inversionzUrl}') format('opentype'); font-display: swap; }`;
 ---
 
 <Layout metadata={metadata}>
@@ -31,8 +60,8 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
     <div class="flex flex-row items-stretch gap-12">
       <div class="vertical-name-wrap inline-block overflow-hidden">
         <div
-          class="vertical-name font-bold text-9xl tracking-[-0.2em]"
-          style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; text-box: trim-both text;`}
+          class="vertical-name font-bold text-9xl"
+          style={nameStyle}
         >
           NATHANIEL
         </div>
@@ -42,8 +71,8 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
         <div class="flex flex-row items-start justify-between">
           <div class="vertical-name-wrap inline-block overflow-hidden">
             <div
-              class="vertical-name font-bold text-9xl tracking-[-0.2em]"
-              style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; text-box: trim-both text;`}
+              class="vertical-name font-bold text-9xl"
+              style={nameStyle}
             >
               MAY
             </div>
