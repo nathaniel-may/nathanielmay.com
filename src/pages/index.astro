@@ -112,17 +112,19 @@ const nameFontFaceCss = `@font-face { font-family: '${NAME_FONT_FAMILY}'; src: u
   </main>
 
   <script>
-    // The block-axis (left/right, in vertical-rl) gap was fixed with
-    // text-box-trim. There's no CSS equivalent for the *inline* axis
-    // (top/bottom): the first character's cell reserves space up to the
-    // font's full advance width, but its actual ink often doesn't reach
-    // that edge — pixel-measured at ~21px here, at the top only (the
-    // bottom already lands flush). Canvas TextMetrics predicts this
-    // almost exactly via advance-width minus actualBoundingBoxRight for
-    // the first character, so derive it from the real font rather than
-    // hand-picking a pixel value, then clip an outer wrapper to the true
-    // ink height and shift the text up into it.
-    async function trimVerticalNameTop() {
+    // The block-axis (left/right, in vertical-rl) width was matched to
+    // the font's "text" metric box via text-box-trim, but that doesn't
+    // mean the ink sits flush against the left edge within that width —
+    // text-orientation:upright doesn't simply left-align it. Pixel-
+    // measured a real ~16px gap on the left for this font (the right
+    // side has its own, separate gap this doesn't touch).
+    //
+    // Canvas TextMetrics predicts the top gap via
+    // advance-width - actualBoundingBoxRight (see below), and separately
+    // predicts this left gap via 2 * fontBoundingBoxDescent — matched
+    // exactly (16px predicted, 16px pixel-measured) for this font, so
+    // derive it from the real font rather than hand-picking a value.
+    async function trimVerticalNameGaps() {
       await document.fonts.ready;
 
       document.querySelectorAll<HTMLElement>('.vertical-name-wrap').forEach((wrap) => {
@@ -138,14 +140,21 @@ const nameFontFaceCss = `@font-face { font-family: '${NAME_FONT_FAMILY}'; src: u
         ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
         const metrics = ctx.measureText(text[0]);
         const topGap = metrics.width - metrics.actualBoundingBoxRight;
+        const leftGap = 2 * metrics.fontBoundingBoxDescent;
 
         if (topGap > 0) {
           const naturalHeight = inner.getBoundingClientRect().height;
           wrap.style.height = `${naturalHeight - topGap}px`;
           inner.style.marginTop = `${-topGap}px`;
         }
+
+        if (leftGap > 0) {
+          const naturalWidth = inner.getBoundingClientRect().width;
+          wrap.style.width = `${naturalWidth - leftGap}px`;
+          inner.style.marginLeft = `${-leftGap}px`;
+        }
       });
     }
-    trimVerticalNameTop();
+    trimVerticalNameGaps();
   </script>
 </Layout>
