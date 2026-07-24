@@ -31,7 +31,7 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
     <div class="flex flex-row items-stretch gap-12">
       <div
         class="vertical-name font-bold text-9xl tracking-[-0.2em]"
-        style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG};`}
+        style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; text-box: trim-both cap alphabetic;`}
       >
         NATHANIEL
       </div>
@@ -40,7 +40,7 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
         <div class="flex flex-row items-start justify-between">
           <div
             class="vertical-name font-bold text-9xl tracking-[-0.2em]"
-            style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG};`}
+            style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; text-box: trim-both cap alphabetic;`}
           >
             MAY
           </div>
@@ -77,26 +77,4 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
       </div>
     </div>
   </main>
-
-  <script>
-    // Tailwind's text-9xl pairs a line-height of exactly 1em, which in
-    // vertical writing mode becomes the *width* of the text's line box.
-    // This font's actual glyph ink is narrower than that box, so upright
-    // text (which centers within the line box) ends up sitting in visible
-    // padding on both sides. Rather than hand-picking a leading ratio for
-    // this one font, measure the real ink width and set line-height to
-    // match it directly — self-correcting for any font/text/size.
-    async function tightenVerticalText() {
-      await document.fonts.ready;
-      document.querySelectorAll<HTMLElement>('.vertical-name').forEach((el) => {
-        const textNode = el.firstChild;
-        if (!textNode) return;
-        const range = document.createRange();
-        range.selectNodeContents(textNode);
-        const inkWidth = range.getBoundingClientRect().width;
-        if (inkWidth > 0) el.style.lineHeight = `${inkWidth}px`;
-      });
-    }
-    tightenVerticalText();
-  </script>
 </Layout>
