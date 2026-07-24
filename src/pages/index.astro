@@ -9,6 +9,9 @@ import inversionzUrl from '~/assets/fonts/Inversionz.otf?url';
 const linkedin = footerData.socialLinks.find((link) => link.ariaLabel === 'LinkedIn');
 const github = footerData.socialLinks.find((link) => link.ariaLabel === 'GitHub');
 
+const COLOR_BG = '#E2DABF';
+const COLOR_FG = '#1c1a18';
+
 const metadata = {
   title: 'Nathaniel May — Engineering Manager',
   ignoreTitleTemplate: true,
@@ -20,10 +23,10 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
 <Layout metadata={metadata}>
   <style set:html={nameFontFaceCss}></style>
 
-  <main class="min-h-screen flex items-center justify-center gap-12 px-6">
+  <main class="min-h-screen flex items-center justify-center gap-12 px-6" style={`background-color: ${COLOR_BG};`}>
     <div
       class="text-9xl font-bold tracking-[-0.2em]"
-      style="writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz';"
+      style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG};`}
     >
       NATHANIEL
     </div>
@@ -32,7 +35,7 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
       <div class="flex flex-row items-center gap-4">
         <div
           class="text-9xl font-bold tracking-[-0.2em]"
-          style="writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz';"
+          style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG};`}
         >
           MAY
         </div>
@@ -41,14 +44,14 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
           {
             linkedin && (
               <a href={linkedin.href} target="_blank" rel="noopener noreferrer" aria-label={linkedin.ariaLabel}>
-                <Icon name={linkedin.icon} class="h-8 w-8 text-black" />
+                <Icon name={linkedin.icon} class="h-8 w-8" style={`color: ${COLOR_FG};`} />
               </a>
             )
           }
           {
             github && (
               <a href={github.href} target="_blank" rel="noopener noreferrer" aria-label={github.ariaLabel}>
-                <Icon name={github.icon} class="h-8 w-8 text-black" />
+                <Icon name={github.icon} class="h-8 w-8" style={`color: ${COLOR_FG};`} />
               </a>
             )
           }
@@ -56,6 +59,9 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
       </div>
 
       <SlantedNav
+        fill={COLOR_FG}
+        strokeColor={COLOR_FG}
+        textColor={COLOR_BG}
         links={[
           { text: 'Posts', href: getBlogPermalink() },
           { text: 'Projects', href: getPermalink('/projects') },

@@ -12,6 +12,9 @@ export interface Props {
   borderWidth?: number;
   gap?: number;
   popDistance?: number;
+  fill?: string;
+  strokeColor?: string;
+  textColor?: string;
   class?: string;
 }
 
@@ -23,6 +26,9 @@ const {
   borderWidth = 5,
   gap = -80,
   popDistance = 18,
+  fill = '#ffffff',
+  strokeColor = '#000000',
+  textColor = '#000000',
   class: className = '',
 } = Astro.props;
 
@@ -68,11 +74,17 @@ if (gap < -maxOverlap) {
           class="absolute inset-0 block"
           preserveAspectRatio="none"
         >
-          <polygon points={points} fill="white" stroke="black" stroke-width={borderWidth} stroke-linejoin="round" />
+          <polygon
+            points={points}
+            fill={fill}
+            stroke={strokeColor}
+            stroke-width={borderWidth}
+            stroke-linejoin="round"
+          />
         </svg>
         <span
-          class="absolute left-1/2 top-1/2 whitespace-nowrap text-2xl font-extrabold text-black"
-          style={`transform: translate(-50%, -50%) rotate(${-angle}deg);`}
+          class="absolute left-1/2 top-1/2 whitespace-nowrap text-2xl font-extrabold"
+          style={`transform: translate(-50%, -50%) rotate(${-angle}deg); color: ${textColor};`}
         >
           {link.text}
         </span>
