@@ -104,7 +104,9 @@ const nameFontFaceCss = `@font-face { font-family: '${NAME_FONT_FAMILY}'; src: u
           links={[
             { text: 'Posts', href: getBlogPermalink() },
             { text: 'Projects', href: getPermalink('/projects') },
-            { text: 'Career', href: '/resume.pdf' },
+            // TODO: point at a real career/resume destination once one
+            // exists without personal contact info baked into a public PDF.
+            { text: 'Career', href: '#' },
           ]}
         />
       </div>
