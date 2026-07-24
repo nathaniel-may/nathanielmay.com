@@ -12,19 +12,9 @@ const github = footerData.socialLinks.find((link) => link.ariaLabel === 'GitHub'
 const COLOR_BG = '#E2DABF';
 const COLOR_FG = '#1c1a18';
 
-// Single source of truth for the nav's footprint, shared with the grid
-// column below so "left of nav" / "right of nav" are never a guessed number.
-// Must be at least MAY's rendered width + the icon column's width + a gap
-// between them, or the icon column overflows past the row's right edge —
-// measured at MAY=128px, icons=32px.
+// Width of the MAY/logos/nav column. Needs to be at least MAY's rendered
+// width + the icon column's width, or the icons overflow past the row.
 const NAV_WIDTH = 176;
-
-// NATHANIEL sits in a grid cell spanning both rows, so its top naturally
-// lands at the top of the MAY row. Its *bottom* landing on the nav's bottom
-// point isn't something layout alone can do — it's one rigid text run, so
-// its rendered height has to actually equal the target span. Tuned via
-// screenshot measurement against that span; see below.
-const NATHANIEL_TRACKING = '-0.24em';
 
 const metadata = {
   title: 'Nathaniel May — Engineering Manager',
@@ -38,41 +28,41 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
   <style set:html={nameFontFaceCss}></style>
 
   <main class="min-h-screen flex items-center justify-center px-6" style={`background-color: ${COLOR_BG};`}>
-    <div class="grid gap-x-12 gap-y-8" style={`grid-template-columns: auto ${NAV_WIDTH}px;`}>
+    <div class="flex flex-row items-stretch gap-12">
       <div
-        class="font-bold"
-        style={`grid-column: 1; grid-row: 1 / span 2; writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG}; font-size: 9rem; letter-spacing: ${NATHANIEL_TRACKING};`}
+        class="font-bold text-9xl tracking-[-0.2em]"
+        style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG};`}
       >
         NATHANIEL
       </div>
 
-      <div class="flex flex-row items-start justify-between" style="grid-column: 2; grid-row: 1;">
-        <div
-          class="font-bold text-9xl tracking-[-0.2em]"
-          style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG};`}
-        >
-          MAY
+      <div class="flex flex-col justify-between" style={`width: ${NAV_WIDTH}px;`}>
+        <div class="flex flex-row items-start justify-between">
+          <div
+            class="font-bold text-9xl tracking-[-0.2em]"
+            style={`writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz'; color: ${COLOR_FG};`}
+          >
+            MAY
+          </div>
+
+          <div class="flex flex-col gap-3">
+            {
+              linkedin && (
+                <a href={linkedin.href} target="_blank" rel="noopener noreferrer" aria-label={linkedin.ariaLabel}>
+                  <Icon name={linkedin.icon} class="h-8 w-8" style={`color: ${COLOR_FG};`} />
+                </a>
+              )
+            }
+            {
+              github && (
+                <a href={github.href} target="_blank" rel="noopener noreferrer" aria-label={github.ariaLabel}>
+                  <Icon name={github.icon} class="h-8 w-8" style={`color: ${COLOR_FG};`} />
+                </a>
+              )
+            }
+          </div>
         </div>
 
-        <div class="flex flex-col gap-3">
-          {
-            linkedin && (
-              <a href={linkedin.href} target="_blank" rel="noopener noreferrer" aria-label={linkedin.ariaLabel}>
-                <Icon name={linkedin.icon} class="h-8 w-8" style={`color: ${COLOR_FG};`} />
-              </a>
-            )
-          }
-          {
-            github && (
-              <a href={github.href} target="_blank" rel="noopener noreferrer" aria-label={github.ariaLabel}>
-                <Icon name={github.icon} class="h-8 w-8" style={`color: ${COLOR_FG};`} />
-              </a>
-            )
-          }
-        </div>
-      </div>
-
-      <div style="grid-column: 2; grid-row: 2;">
         <SlantedNav
           width={NAV_WIDTH}
           fill={COLOR_FG}
