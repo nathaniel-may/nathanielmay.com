@@ -1,8 +1,13 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Layout from '~/layouts/Layout.astro';
 import SlantedNav from '~/components/ui/SlantedNav.astro';
 import { getBlogPermalink, getPermalink } from '~/utils/permalinks';
+import { footerData } from '~/navigation';
 import inversionzUrl from '~/assets/fonts/Inversionz.otf?url';
+
+const linkedin = footerData.socialLinks.find((link) => link.ariaLabel === 'LinkedIn');
+const github = footerData.socialLinks.find((link) => link.ariaLabel === 'GitHub');
 
 const metadata = {
   title: 'Nathaniel May — Engineering Manager',
@@ -24,11 +29,30 @@ const nameFontFaceCss = `@font-face { font-family: 'Inversionz'; src: url('${inv
     </div>
 
     <div class="flex flex-col items-center gap-8">
-      <div
-        class="text-5xl md:text-9xl font-bold tracking-[-0.2em]"
-        style="writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz';"
-      >
-        MAY
+      <div class="flex flex-row items-center gap-4">
+        <div
+          class="text-5xl md:text-9xl font-bold tracking-[-0.2em]"
+          style="writing-mode: vertical-rl; text-orientation: upright; font-family: 'Inversionz';"
+        >
+          MAY
+        </div>
+
+        <div class="flex flex-col gap-3">
+          {
+            linkedin && (
+              <a href={linkedin.href} target="_blank" rel="noopener noreferrer" aria-label={linkedin.ariaLabel}>
+                <Icon name={linkedin.icon} class="h-8 w-8 text-black" />
+              </a>
+            )
+          }
+          {
+            github && (
+              <a href={github.href} target="_blank" rel="noopener noreferrer" aria-label={github.ariaLabel}>
+                <Icon name={github.icon} class="h-8 w-8 text-black" />
+              </a>
+            )
+          }
+        </div>
       </div>
 
       <SlantedNav
