@@ -1,14 +1,55 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import { Icon } from 'astro-icon/components';
 
 const metadata = {
   title: 'Projects — Nathaniel May',
 };
+
+const projects = [
+  {
+    title: 'Sudoku',
+    description: 'A focused, browser-based Sudoku game.',
+    href: 'https://sudoku.nathanielmay.com',
+    icon: 'tabler:grid-3x3',
+  },
+  {
+    title: 'Party Carlo',
+    description: 'A party game for playing together with friends.',
+    href: 'https://partycarlo.nathanielmay.com',
+    icon: 'tabler:confetti',
+  },
+];
 ---
 
 <Layout metadata={metadata}>
   <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
     <h1 class="heading text-4xl mb-4">Projects</h1>
-    <p class="text-lg text-muted">Coming soon.</p>
+    <p class="text-lg text-muted mb-10">Games and experiments I’ve built for the web.</p>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      {
+        projects.map(({ title, description, href, icon }) => (
+          <a
+            class="group flex min-h-56 flex-col rounded-2xl border border-gray-500/20 bg-surface/40 p-7 transition-colors duration-200 hover:border-primary/50 hover:bg-surface/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name={icon} class="mb-8 h-10 w-10 text-primary" aria-hidden="true" />
+            <h2 class="content-heading mb-2 text-2xl">{title}</h2>
+            <p class="mb-6 text-muted">{description}</p>
+            <span class="mt-auto inline-flex items-center font-medium text-primary">
+              Visit project
+              <Icon
+                name="tabler:arrow-up-right"
+                class="ml-1 h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </span>
+          </a>
+        ))
+      }
+    </div>
   </section>
 </Layout>
