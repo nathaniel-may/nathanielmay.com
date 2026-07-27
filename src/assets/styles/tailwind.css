@@ -12,8 +12,8 @@
 
   --color-page: rgb(12 14 8);
   --color-header: rgb(12 14 8 / 90%);
-  --color-foreground: rgb(229 236 246);
-  --color-foreground-subtle: rgb(156 163 175);
+  --color-foreground: oklch(0.97 0 0);
+  --color-foreground-subtle: oklch(70.8% 0 none);
   --color-muted: rgb(229 236 246 / 66%);
   --color-surface: oklch(37.2% 0.044 257.287);
   --color-surface-raised: rgb(64 64 64);
