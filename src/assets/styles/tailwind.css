@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/source-sans-3';
+@import '@fontsource-variable/source-sans-3/wght-italic.css';
 
 @plugin "@tailwindcss/typography";
 
@@ -14,7 +16,6 @@
   --color-foreground-subtle: rgb(156 163 175);
   --color-muted: rgb(229 236 246 / 66%);
   --color-surface-raised: rgb(64 64 64);
-  --color-focus: rgb(55 65 81);
 
   --font-sans:
     'Source Sans 3 Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
@@ -46,7 +47,7 @@
 }
 
 @utility icon-btn {
-  @apply text-foreground-subtle hover:bg-surface-raised focus:outline-none focus:ring-4 focus:ring-focus rounded-lg text-sm p-2.5 inline-flex items-center;
+  @apply text-foreground-subtle hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg text-sm p-2.5 inline-flex items-center;
 }
 
 @utility btn {
@@ -59,4 +60,9 @@
 
 #header.scroll > div:first-child {
   @apply bg-page md:bg-header border-b border-gray-500/20;
+}
+
+::selection {
+  background-color: black;
+  color: snow;
 }
