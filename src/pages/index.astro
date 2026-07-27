@@ -1,6 +1,8 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
+import Image from '~/components/common/Image.astro';
+import { getPermalink, getBlogPermalink } from '~/utils/permalinks';
 
 const metadata = {
   title: 'Nathaniel May — Engineering Manager',
@@ -12,33 +14,50 @@ const metadata = {
   <Hero
     actions={[
       {
-        variant: 'primary',
+        text: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/nathanieldmay/',
+        target: '_blank',
+        icon: 'tabler:brand-linkedin',
+      },
+      {
         text: 'GitHub',
         href: 'https://github.com/nathaniel-may',
         target: '_blank',
         icon: 'tabler:brand-github',
       },
       {
-        text: 'LinkedIn',
-        href: 'https://www.linkedin.com/in/nathanieldmay/',
-        target: '_blank',
-        icon: 'tabler:brand-linkedin',
+        text: 'Posts',
+        href: getBlogPermalink(),
+        icon: 'tabler:article',
+      },
+      {
+        text: 'Projects',
+        href: getPermalink('/projects'),
+        icon: 'tabler:apps',
       },
     ]}
   >
-    <Fragment slot="title">
-      Nathaniel May
-    </Fragment>
+    <Fragment slot="title"> Nathaniel May </Fragment>
 
     <Fragment slot="subtitle">
-      <span class="block font-semibold text-xl mb-2">Engineering Manager</span>
-      <span class="block text-lg mb-4 text-muted">
-        Hiring Pipelines · Coaching · Distributed Systems · Data Analytics
+      <span class="block text-2xl mb-4">Senior Engineering Manager</span>
+      <span class="block text-lg mb-8">
+        AI Workflows · Data Analytics · Hiring Pipelines · Coaching · Distributed Systems
       </span>
-      <span class="block text-base text-default">
-        Nathaniel May is an Engineering Manager focused on hiring pipelines, coaching, distributed systems, and data
-        analytics. He builds teams and infrastructure that scale.
-      </span>
+    </Fragment>
+
+    <Fragment slot="bg">
+      <Image
+        src="~/assets/images/bg.jpg"
+        class="absolute inset-0 w-full h-full object-cover"
+        widths={[400, 768, 1024, 1920, 2560]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        format="webp"
+        alt=""
+      />
+      <div class="absolute inset-0 bg-black/30"></div>
     </Fragment>
   </Hero>
 </Layout>
