@@ -34,11 +34,18 @@ const {
   <div class="absolute inset-0"></div>
   <div
     class:list={[
-      'relative text-default py-3 px-3 md:px-6 mx-auto w-full flex justify-end items-center',
+      'relative text-default py-3 px-3 md:px-6 mx-auto w-full flex justify-start items-center',
       { 'max-w-7xl': !isFullWidth },
     ]}
   >
     {showToggleTheme && <ToggleTheme iconClass="w-6 h-6 md:w-5 md:h-5 md:inline-block" />}
+    <a
+      class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+      aria-label="Home"
+      href={getHomePermalink()}
+    >
+      <Icon name="tabler:home" class="w-5 h-5" />
+    </a>
     {
       showRssFeed && (
         <a
@@ -50,12 +57,5 @@ const {
         </a>
       )
     }
-    <a
-      class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
-      aria-label="Home"
-      href={getHomePermalink()}
-    >
-      <Icon name="tabler:home" class="w-5 h-5" />
-    </a>
   </div>
 </header>
