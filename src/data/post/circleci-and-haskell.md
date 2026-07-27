@@ -2,7 +2,7 @@
 publishDate: 2020-05-29T21:25:17Z
 title: 'CircleCI and Haskell'
 excerpt: "The reasons behind my choices for CircleCI + Haskell so I don't forget."
-image: 'https://dev-to-uploads.s3.amazonaws.com/i/hsdxajvc39w0g13tcnn6.jpg'
+image: '~/assets/images/posts/circleci-and-haskell.jpg'
 category: 'Practical Engineering'
 tags:
   - haskell

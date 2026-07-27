@@ -2,7 +2,7 @@
 publishDate: 2019-09-19T20:49:52Z
 title: "Don't Read This Monad Tutorial"
 excerpt: "If you want to learn monads, go write your own tutorial like I did. Seriously don't even bother reading this one."
-image: 'https://pbs.twimg.com/media/Db4szC7W0AAKvHh.jpg:large'
+image: '~/assets/images/posts/dont-read-this-monad-tutorial.jpg'
 category: 'Just for me- not for you.'
 tags:
   - scala
@@ -155,7 +155,7 @@ Just like many other functional programming tools, a monad takes legitimately us
 
 In Scala we use monads all the time because they are so natural. `List` and `Option` are both monads that we see in nearly every beginner Scala tutorial.
 
-![alt text](https://pbs.twimg.com/media/Dn20jIIWsAERqkm?format=jpg&name=small)
+![A handwritten flow diagram showing three transformations of a box labeled M](../../assets/images/posts/monad-debug-output.jpg)
 photo source: [my twitter](https://twitter.com/codenoodle/status/1044189951372464128?s=20)
 
 ## Ok but what is a monad?

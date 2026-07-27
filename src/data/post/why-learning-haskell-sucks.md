@@ -3,7 +3,7 @@ publishDate: 2020-02-24T05:31:10Z
 updateDate: 2020-03-04T05:28:20Z
 title: 'Why Learning Haskell Sucks'
 excerpt: 'Did you try to learn haskell and feel pretty stupid trying? Yeah me too.'
-image: 'https://dev-to-uploads.s3.amazonaws.com/i/8b98r756hh7hvk1muynx.jpg'
+image: '~/assets/images/posts/why-learning-haskell-sucks.jpg'
 category: 'Opinion'
 tags:
   - haskell
