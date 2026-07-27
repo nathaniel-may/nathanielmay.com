@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import ToggleTheme from '~/components/common/ToggleTheme.astro';
 
-import { getAsset } from '~/utils/permalinks';
+import { getAsset, getHomePermalink } from '~/utils/permalinks';
 
 export interface Props {
   id?: string;
@@ -50,5 +50,12 @@ const {
         </a>
       )
     }
+    <a
+      class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+      aria-label="Home"
+      href={getHomePermalink()}
+    >
+      <Icon name="tabler:home" class="w-5 h-5" />
+    </a>
   </div>
 </header>
