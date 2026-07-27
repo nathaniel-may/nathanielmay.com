@@ -17,6 +17,7 @@ const projects = [
     href: 'https://sudoku.nathanielmay.com',
     image: wordokuPreview,
     imageAlt: 'A generated Wordoku puzzle with letters arranged in a nine-by-nine grid',
+    since: 'Jan 2021',
   },
   {
     title: 'Party Carlo',
@@ -25,6 +26,7 @@ const projects = [
     href: 'https://partycarlo.nathanielmay.com',
     image: partyCarloPreview,
     imageAlt: 'Party Carlo showing an estimated attendance range of 13 to 20 people',
+    since: 'Sept 2022',
   },
 ];
 ---
@@ -36,7 +38,7 @@ const projects = [
 
     <div class="grid gap-6 sm:grid-cols-2">
       {
-        projects.map(({ title, description, href, image, imageAlt }) => (
+        projects.map(({ title, description, href, image, imageAlt, since }) => (
           <a
             class="group flex flex-col overflow-hidden rounded-2xl border border-gray-500/20 bg-surface/40 transition-colors duration-200 hover:border-primary/50 hover:bg-surface/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             href={href}
@@ -63,6 +65,7 @@ const projects = [
                   aria-hidden="true"
                 />
               </span>
+              <p class="mt-4 border-t border-gray-500/20 pt-4 text-sm text-muted">Since {since}</p>
             </div>
           </a>
         ))
