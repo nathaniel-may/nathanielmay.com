@@ -1,6 +1,9 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import { Icon } from 'astro-icon/components';
+import Image from '~/components/common/Image.astro';
+import wordokuPreview from '~/assets/images/projects/wordoku.png';
+import partyCarloPreview from '~/assets/images/projects/partycarlo.png';
 
 const metadata = {
   title: 'Projects — Nathaniel May',
@@ -12,14 +15,16 @@ const projects = [
     description:
       "Sudoku with letters where the diagonal spells a word. This site was a birthday gift to my mom who finished all the puzzles in the one book she had. Now she can print and play forever. It supports the sudoku variant, and colorku variant. I most frequently use this app on mobile to set up my physical colorku board. Particularly helpful for dropping a hint when we're stuck and want to move the game along.",
     href: 'https://sudoku.nathanielmay.com',
-    icon: 'tabler:grid-3x3',
+    image: wordokuPreview,
+    imageAlt: 'A generated Wordoku puzzle with letters arranged in a nine-by-nine grid',
   },
   {
     title: 'Party Carlo',
     description:
       'Invite a ton of people to a party, estimate the liklihood of each individual coming, and use Monte Carlo methods to see how many folks you think might come! I use it to see if I need to invite more people or ask folks to bring friends. Designed to copy paste from a spreadsheet.',
     href: 'https://partycarlo.nathanielmay.com',
-    icon: 'tabler:confetti',
+    image: partyCarloPreview,
+    imageAlt: 'Party Carlo showing an estimated attendance range of 13 to 20 people',
   },
 ];
 ---
@@ -31,24 +36,34 @@ const projects = [
 
     <div class="grid gap-6 sm:grid-cols-2">
       {
-        projects.map(({ title, description, href, icon }) => (
+        projects.map(({ title, description, href, image, imageAlt }) => (
           <a
-            class="group flex min-h-56 flex-col rounded-2xl border border-gray-500/20 bg-surface/40 p-7 transition-colors duration-200 hover:border-primary/50 hover:bg-surface/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            class="group flex flex-col overflow-hidden rounded-2xl border border-gray-500/20 bg-surface/40 transition-colors duration-200 hover:border-primary/50 hover:bg-surface/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             href={href}
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Icon name={icon} class="mb-8 h-10 w-10 text-primary" aria-hidden="true" />
-            <h2 class="content-heading mb-2 text-2xl">{title}</h2>
-            <p class="mb-6 text-muted">{description}</p>
-            <span class="mt-auto inline-flex items-center font-medium text-primary">
-              Visit project
-              <Icon
-                name="tabler:arrow-up-right"
-                class="ml-1 h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
-            </span>
+            <Image
+              src={image}
+              alt={imageAlt}
+              widths={[400, 800]}
+              sizes="(min-width: 640px) 416px, calc(100vw - 48px)"
+              format="webp"
+              layout="responsive"
+              class="border-b border-gray-500/20"
+            />
+            <div class="flex flex-1 flex-col p-7">
+              <h2 class="content-heading mb-2 text-2xl">{title}</h2>
+              <p class="mb-6 text-muted">{description}</p>
+              <span class="mt-auto inline-flex items-center font-medium text-primary">
+                Visit project
+                <Icon
+                  name="tabler:arrow-up-right"
+                  class="ml-1 h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </span>
+            </div>
           </a>
         ))
       }
