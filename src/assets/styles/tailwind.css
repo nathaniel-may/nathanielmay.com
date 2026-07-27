@@ -15,6 +15,7 @@
   --color-foreground: rgb(229 236 246);
   --color-foreground-subtle: rgb(156 163 175);
   --color-muted: rgb(229 236 246 / 66%);
+  --color-surface: oklch(37.2% 0.044 257.287);
   --color-surface-raised: rgb(64 64 64);
 
   --font-sans:
