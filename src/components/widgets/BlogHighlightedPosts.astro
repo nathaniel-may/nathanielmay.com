@@ -39,7 +39,10 @@ const posts = APP_BLOG.isEnabled ? await findPostsByIds(postIds) : [];
           <div class="md:max-w-sm">
             <h2 class="content-heading text-3xl sm:text-4xl group mb-2" set:html={title} />
             {APP_BLOG.list.isEnabled && linkText && linkUrl && (
-              <a class="text-muted hover:text-primary transition-colors ease-in duration-200 block mb-6 lg:mb-0" href={linkUrl}>
+              <a
+                class="text-muted hover:text-primary transition-colors ease-in duration-200 block mb-6 lg:mb-0"
+                href={linkUrl}
+              >
                 {linkText} »
               </a>
             )}

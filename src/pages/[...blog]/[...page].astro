@@ -14,7 +14,12 @@ export const getStaticPaths = (async ({ paginate }) => {
   const paths = await getStaticPathsBlogList({ paginate });
   // If no posts exist, generate the /blog page manually
   if (paths.length === 0) {
-    return [{ params: { blog: 'blog', page: undefined }, props: { page: { data: [], currentPage: 1, url: { prev: undefined, next: undefined } } } }];
+    return [
+      {
+        params: { blog: 'blog', page: undefined },
+        props: { page: { data: [], currentPage: 1, url: { prev: undefined, next: undefined } } },
+      },
+    ];
   }
   return paths;
 }) satisfies GetStaticPaths;
@@ -38,16 +43,16 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-    <Headline>
-      Blog
-    </Headline>
-    {page.data.length > 0 ? (
-      <>
-        <BlogList posts={page.data} />
-        <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-      </>
-    ) : (
-      <p class="text-lg text-muted">Posts coming soon.</p>
-    )}
+    <Headline> Blog </Headline>
+    {
+      page.data.length > 0 ? (
+        <>
+          <BlogList posts={page.data} />
+          <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+        </>
+      ) : (
+        <p class="text-lg text-muted">Posts coming soon.</p>
+      )
+    }
   </section>
 </Layout>
