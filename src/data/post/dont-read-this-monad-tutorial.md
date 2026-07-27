@@ -2,14 +2,13 @@
 publishDate: 2019-09-19T20:49:52Z
 title: "Don't Read This Monad Tutorial"
 excerpt: 'A Scala walkthrough that builds a useful monad from scratch, explains the monad laws, and shows what happens when they are broken.'
+image: 'https://pbs.twimg.com/media/Db4szC7W0AAKvHh.jpg:large'
 category: 'Functional Programming'
 tags:
   - scala
   - functional
 author: 'Nathaniel May'
 ---
-
-![alt text](https://pbs.twimg.com/media/Db4szC7W0AAKvHh.jpg:large)
 
 In an attempt to break the cycle where every monad tutorial claims to be better than the others, I seriously don't think this tutorial will make you understand monads better than any other one. That's because reading tutorials can only get you so far. Instead, you should write your own with the intent to publish it. Dig up all the details, try everything yourself, and answer all the questions your readers will inevitably have. I found inspiration in [Dan Piponi's](http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html) idea that I could have invented monads myself and [Brent Yorgey's](https://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/) assertion that monads are not, in fact, burritos.
 

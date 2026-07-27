@@ -3,13 +3,13 @@ publishDate: 2020-02-24T05:31:10Z
 updateDate: 2020-03-04T05:28:20Z
 title: 'Why Learning Haskell Sucks'
 excerpt: 'Why Haskell remains difficult for mainstream developers to learn, despite its passionate community and excellent resources.'
+image: 'https://dev-to-uploads.s3.amazonaws.com/i/8b98r756hh7hvk1muynx.jpg'
 category: 'Haskell'
 tags:
   - haskell
 author: 'Nathaniel May'
 ---
 
-![Marion Bolognesi watercolor face](https://dev-to-uploads.s3.amazonaws.com/i/8b98r756hh7hvk1muynx.jpg)
 _image: [Marion Bolognesi](http://www.marion-b.com/index.php?/paintings/sneak-peek/) watercolor face_
 
 Even for brilliant minds, Haskell often takes _multiple tries_ to learn. There are some significant technical hurdles you encounter early on, but that's not the problem. There are endless resources for learning about Haskell syntax, the IO monad, type class hierarchies and essentially every other unfamiliar aspect of Haskell. If you ever post a question to Stack Overflow with the [Haskell](https://stackoverflow.com/questions/tagged/haskell) tag, you'll quickly get thoughtful comments and clear answers from brilliant people. Once you discover [Hoogle](https://hoogle.haskell.org/) you immediately wonder how you ever coded without it. There are even [talks](https://www.youtube.com/watch?v=RvRVn8jXoNY) within the community helping current Haskellers empathize with new learners. Yet even with all this community support and passion for the language, at the peak of my frustration during my first attempt I remember saying out loud,
