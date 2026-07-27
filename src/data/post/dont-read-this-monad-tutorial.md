@@ -1,12 +1,11 @@
 ---
 publishDate: 2019-09-19T20:49:52Z
 title: "Don't Read This Monad Tutorial"
-excerpt: 'A Scala walkthrough that builds a useful monad from scratch, explains the monad laws, and shows what happens when they are broken.'
+excerpt: "If you want to learn monads, go write your own tutorial like I did. Seriously don't even bother reading this one."
 image: 'https://pbs.twimg.com/media/Db4szC7W0AAKvHh.jpg:large'
-category: 'Functional Programming'
+category: 'Just for me- not for you.'
 tags:
   - scala
-  - functional
 author: 'Nathaniel May'
 ---
 

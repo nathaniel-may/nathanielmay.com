@@ -1,9 +1,9 @@
 ---
 publishDate: 2020-05-29T21:25:17Z
 title: 'CircleCI and Haskell'
-excerpt: 'A practical CircleCI configuration for Cabal-based Haskell projects, including dependency caching, builds, and tests.'
+excerpt: "The reasons behind my choices for CircleCI + Haskell so I don't forget."
 image: 'https://dev-to-uploads.s3.amazonaws.com/i/hsdxajvc39w0g13tcnn6.jpg'
-category: 'Haskell'
+category: 'Practical Engineering'
 tags:
   - haskell
 author: 'Nathaniel May'
