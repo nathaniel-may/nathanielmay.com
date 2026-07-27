@@ -24,7 +24,7 @@
  *   `alt` is required. Pass `alt=""` explicitly for purely decorative images.
  */
 import { Image as AstroImage } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+import type { ImageMetadata, ImageQuality } from 'astro';
 import type { HTMLAttributes } from 'astro/types';
 import { transformUrl, parseUrl } from 'unpic';
 import { findImage } from '~/utils/images';
@@ -38,10 +38,11 @@ interface Props extends Omit<HTMLAttributes<'img'>, 'src' | 'width' | 'height'> 
   height?: number | string;
   widths?: number[];
   format?: Format;
+  quality?: ImageQuality;
   layout?: Layout;
 }
 
-const { src, alt, width, height, widths, format, layout = 'constrained', ...rest } = Astro.props;
+const { src, alt, width, height, widths, format, quality, layout = 'constrained', ...rest } = Astro.props;
 
 // --- Accessibility ---------------------------------------------------------
 if (alt === undefined || alt === null) {
@@ -184,6 +185,7 @@ const cdnSrcSet =
           alt,
           widths,
           format,
+          quality,
           style: finalStyle,
         } as unknown as Parameters<typeof AstroImage>[0])}
       />
