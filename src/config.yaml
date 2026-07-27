@@ -11,7 +11,7 @@ metadata:
   title:
     default: Nathaniel May
     template: '%s — Nathaniel May'
-  description: "Engineering Manager — Hiring Pipelines · Coaching · Distributed Systems · Data Analytics"
+  description: "Nathaniel's personal webpage"
   robots:
     index: true
     follow: true
