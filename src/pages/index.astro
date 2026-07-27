@@ -2,6 +2,7 @@
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import Image from '~/components/common/Image.astro';
+import { getPermalink, getBlogPermalink } from '~/utils/permalinks';
 
 const metadata = {
   title: 'Nathaniel May — Engineering Manager',
@@ -13,6 +14,12 @@ const metadata = {
   <Hero
     actions={[
       {
+        text: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/nathanieldmay/',
+        target: '_blank',
+        icon: 'tabler:brand-linkedin',
+      },
+      {
         variant: 'primary',
         text: 'GitHub',
         href: 'https://github.com/nathaniel-may',
@@ -20,10 +27,14 @@ const metadata = {
         icon: 'tabler:brand-github',
       },
       {
-        text: 'LinkedIn',
-        href: 'https://www.linkedin.com/in/nathanieldmay/',
-        target: '_blank',
-        icon: 'tabler:brand-linkedin',
+        text: 'Posts',
+        href: getBlogPermalink(),
+        icon: 'tabler:article',
+      },
+      {
+        text: 'Projects',
+        href: getPermalink('/projects'),
+        icon: 'tabler:apps',
       },
     ]}
   >
