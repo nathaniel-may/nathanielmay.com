@@ -27,13 +27,13 @@ const { post, url } = Astro.props;
     >
       <div class="flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-6 sm:items-center">
         <p>
-          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 text-gray-400" />
+          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 text-foreground-subtle" />
           <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
           {
             post.author && (
               <>
                 {' '}
-                · <Icon name="tabler:user" class="w-4 h-4 inline-block -mt-0.5 text-gray-400" />
+                · <Icon name="tabler:user" class="w-4 h-4 inline-block -mt-0.5 text-foreground-subtle" />
                 <span class="inline-block">{post.author}</span>
               </>
             )
@@ -59,12 +59,8 @@ const { post, url } = Astro.props;
         </p>
       </div>
 
-      <h1
-        class="px-4 sm:px-6 max-w-3xl mx-auto text-4xl md:text-5xl font-bold leading-tight tracking-tighter font-heading"
-      >
-        {post.title}
-      </h1>
-      <p class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-2xl text-slate-400 text-justify">
+      <h1 class="content-heading px-4 sm:px-6 max-w-3xl mx-auto text-4xl md:text-5xl">{post.title}</h1>
+      <p class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-2xl text-muted text-justify">
         {post.excerpt}
       </p>
 
@@ -90,7 +86,7 @@ const { post, url } = Astro.props;
       }
     </header>
     <div
-      class="mx-auto px-6 sm:px-6 max-w-3xl prose prose-md lg:prose-xl prose-invert prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tight prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px] prose-li:my-0"
+      class="mx-auto px-6 sm:px-6 max-w-3xl prose prose-md lg:prose-xl prose-invert prose-headings:content-heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px] prose-li:my-0"
     >
       <slot />
     </div>

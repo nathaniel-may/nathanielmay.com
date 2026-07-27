@@ -6,17 +6,16 @@ import { getAsset, getHomePermalink } from '~/utils/permalinks';
 export interface Props {
   id?: string;
   isSticky?: boolean;
-  isDark?: boolean;
   isFullWidth?: boolean;
   showRssFeed?: boolean;
 }
 
-const { id = 'header', isSticky = false, isDark = false, isFullWidth = false, showRssFeed = false } = Astro.props;
+const { id = 'header', isSticky = false, isFullWidth = false, showRssFeed = false } = Astro.props;
 ---
 
 <header
   class:list={[
-    { sticky: isSticky, relative: !isSticky, dark: isDark },
+    { sticky: isSticky, relative: !isSticky },
     'top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-opacity ease-in-out',
   ]}
   {...isSticky ? { 'data-aw-sticky-header': true } : {}}
@@ -25,24 +24,16 @@ const { id = 'header', isSticky = false, isDark = false, isFullWidth = false, sh
   <div class="absolute inset-0"></div>
   <div
     class:list={[
-      'relative text-default py-3 px-3 md:px-6 mx-auto w-full flex justify-start items-center',
+      'relative text-foreground py-3 px-3 md:px-6 mx-auto w-full flex justify-start items-center',
       { 'max-w-7xl': !isFullWidth },
     ]}
   >
-    <a
-      class="text-gray-400 hover:bg-neutral-700 focus:outline-none focus:ring-4 focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
-      aria-label="Home"
-      href={getHomePermalink()}
-    >
+    <a class="icon-btn" aria-label="Home" href={getHomePermalink()}>
       <Icon name="tabler:home" class="w-5 h-5" />
     </a>
     {
       showRssFeed && (
-        <a
-          class="text-gray-400 hover:bg-neutral-700 focus:outline-none focus:ring-4 focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
-          aria-label="RSS Feed"
-          href={getAsset('/rss.xml')}
-        >
+        <a class="icon-btn" aria-label="RSS Feed" href={getAsset('/rss.xml')}>
           <Icon name="tabler:rss" class="w-5 h-5" />
         </a>
       )

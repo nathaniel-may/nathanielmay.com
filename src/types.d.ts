@@ -78,7 +78,6 @@ export interface MetaDataTwitter {
 
 export interface Widget {
   id?: string;
-  isDark?: boolean;
   bg?: string;
   classes?: Record<string, string | Record<string, string>>;
 }
@@ -92,7 +91,7 @@ export interface Headline {
 
 // COMPONENTS
 export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
+  variant?: 'default' | 'ghost';
   text?: string;
   icon?: string;
   classes?: Record<string, string>;
@@ -100,7 +99,7 @@ export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
 }
 
 // WIDGETS
-export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'isDark' | 'classes'> {
+export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'classes'> {
   content?: string;
   actions?: string | CallToAction[];
   image?: string | unknown;
