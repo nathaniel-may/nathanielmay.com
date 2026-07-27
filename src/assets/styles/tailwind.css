@@ -19,6 +19,8 @@
   --font-serif: var(--aw-font-serif, ui-serif), ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-heading: var(--aw-font-heading, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
 
+  --tracking-heading: 0.17em;
+
   --animate-fade: fadeInUp 1s both;
 
   @keyframes fadeInUp {
@@ -41,16 +43,16 @@
   background-color: var(--aw-color-bg-page-dark);
 }
 
-@utility text-page {
-  color: var(--aw-color-text-page);
-}
-
 @utility text-muted {
   color: var(--aw-color-text-muted);
 }
 
+@utility heading {
+  @apply font-heading font-semibold uppercase tracking-heading leading-tight;
+}
+
 @utility btn {
-  @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-white/20 font-medium text-center text-base text-page leading-snug transition py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-neutral-800 dark:bg-black/60 dark:hover:bg-neutral-800 dark:hover:border-neutral-800 cursor-pointer;
+  @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-white/20 font-medium text-center text-base text-default leading-snug transition py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-neutral-800 dark:bg-black/60 dark:hover:bg-neutral-800 dark:hover:border-neutral-800 cursor-pointer;
 }
 
 @utility btn-primary {
