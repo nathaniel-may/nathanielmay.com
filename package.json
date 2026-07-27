@@ -10,6 +10,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "lighthouse": "lhci autorun",
     "preview": "astro preview",
     "astro": "astro",
     "check": "npm run check:astro && npm run check:eslint && npm run check:prettier",
@@ -38,6 +39,7 @@
     "unpic": "^4.2.2"
   },
   "devDependencies": {
+    "@lhci/cli": "0.15.1",
     "@astrojs/check": "^0.9.9",
     "@astrojs/mdx": "^6.0.1",
     "@astrojs/partytown": "^2.1.7",
