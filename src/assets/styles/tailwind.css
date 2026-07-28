@@ -46,6 +46,10 @@
   @apply font-heading font-bold tracking-tighter leading-tight;
 }
 
+@utility measure {
+  @apply mx-auto w-full max-w-3xl px-6;
+}
+
 @utility icon-btn {
   @apply text-foreground-subtle hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg text-sm p-2.5 inline-flex items-center;
 }

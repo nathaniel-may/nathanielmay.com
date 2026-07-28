@@ -3,16 +3,15 @@ import { ANALYTICS } from 'astrowind:config';
 
 const id = ANALYTICS?.vendors?.googleAnalytics?.id ? String(ANALYTICS.vendors.googleAnalytics.id) : '';
 const initializationScript = `
-  var d = document.getElementById('ga-init').dataset.id;
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () {
     dataLayer.push(arguments);
   };
   window.gtag('js', new Date());
-  window.gtag('config', d);
+  window.gtag('config', ${JSON.stringify(id)});
 `;
 ---
 
 {id && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${id}`} />}
 
-{id && <script is:inline id="ga-init" data-id={id} set:html={initializationScript} />}
+{id && <script is:inline set:html={initializationScript} />}
