@@ -1,5 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import Section from '~/components/ui/Section.astro';
 
 import type { MetaData } from '~/types';
 
@@ -17,7 +18,7 @@ const metadata: MetaData = {
 ---
 
 <Layout metadata={metadata}>
-  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-4xl">
+  <Section>
     <h1 class="heading text-4xl md:text-5xl">
       {frontmatter.title}
     </h1>
@@ -26,5 +27,5 @@ const metadata: MetaData = {
     >
       <slot />
     </div>
-  </section>
+  </Section>
 </Layout>

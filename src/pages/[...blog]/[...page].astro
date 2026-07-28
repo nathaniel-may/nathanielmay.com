@@ -5,6 +5,7 @@ import Layout from '~/layouts/PageLayout.astro';
 import BlogList from '~/components/blog/List.astro';
 import Headline from '~/components/blog/Headline.astro';
 import Pagination from '~/components/blog/Pagination.astro';
+import Section from '~/components/ui/Section.astro';
 
 import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
 
@@ -42,7 +43,7 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
+  <Section>
     <Headline> Posts </Headline>
     {
       page.data.length > 0 ? (
@@ -54,5 +55,5 @@ const metadata = {
         <p class="text-lg text-muted">Posts coming soon.</p>
       )
     }
-  </section>
+  </Section>
 </Layout>

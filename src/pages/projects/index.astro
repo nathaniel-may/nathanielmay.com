@@ -2,6 +2,7 @@
 import Layout from '~/layouts/PageLayout.astro';
 import { Icon } from 'astro-icon/components';
 import Image from '~/components/common/Image.astro';
+import Section from '~/components/ui/Section.astro';
 import wordokuPreview from '~/assets/images/projects/wordoku.png';
 import partyCarloPreview from '~/assets/images/projects/partycarlo.png';
 
@@ -32,7 +33,7 @@ const projects = [
 ---
 
 <Layout metadata={metadata}>
-  <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
+  <Section>
     <h1 class="heading text-4xl mb-4">Projects</h1>
     <p class="text-lg text-muted mb-10">Tools and projects I actively maintain.</p>
 
@@ -71,5 +72,5 @@ const projects = [
         ))
       }
     </div>
-  </section>
+  </Section>
 </Layout>

@@ -24,6 +24,7 @@
   --font-heading: 'Source Sans 3 Variable', ui-sans-serif, system-ui, sans-serif;
 
   --tracking-heading: 0.17em;
+  --spacing-header: 4rem;
 
   --animate-fade: fadeInUp 1s both;
 
