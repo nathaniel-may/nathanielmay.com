@@ -60,7 +60,7 @@
 }
 
 #header.scroll > div:first-child {
-  @apply bg-page md:bg-header border-b border-gray-500/20;
+  @apply bg-black/40 md:bg-header border-b border-transparent md:border-gray-500/20;
 }
 
 ::selection {
