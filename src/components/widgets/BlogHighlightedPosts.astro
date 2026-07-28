@@ -37,7 +37,7 @@ const posts = APP_BLOG.isEnabled ? await findPostsByIds(postIds) : [];
       <div class="flex flex-col lg:justify-between lg:flex-row mb-8">
         {title && (
           <div class="md:max-w-sm">
-            <h2 class="content-heading text-3xl sm:text-4xl group mb-2" set:html={title} />
+            <h2 class="heading text-3xl sm:text-4xl group mb-2" set:html={title} />
             {APP_BLOG.list.isEnabled && linkText && linkUrl && (
               <a
                 class="text-muted hover:text-primary transition-colors ease-in duration-200 block mb-6 lg:mb-0"

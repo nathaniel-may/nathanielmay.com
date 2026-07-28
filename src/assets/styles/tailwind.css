@@ -38,11 +38,11 @@
   }
 }
 
-@utility heading {
+@utility display {
   @apply font-heading font-semibold uppercase tracking-heading leading-tight;
 }
 
-@utility content-heading {
+@utility heading {
   @apply font-heading font-bold tracking-tighter leading-tight;
 }
 

@@ -63,7 +63,7 @@ const { post } = Astro.props;
         </p>
       </Section>
 
-      <Section as="h1" variant="prose" spacing={false} class="content-heading text-4xl md:text-5xl">
+      <Section as="h1" variant="prose" spacing={false} class="heading text-4xl md:text-5xl">
         {post.title}
       </Section>
       <Section as="p" variant="prose" spacing={false} class="mt-4 mb-8 text-xl md:text-2xl text-muted text-justify">
@@ -95,7 +95,7 @@ const { post } = Astro.props;
       as="div"
       variant="prose"
       spacing={false}
-      class="prose lg:prose-xl prose-invert prose-headings:content-heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-header prose-li:my-0"
+      class="prose lg:prose-xl prose-invert prose-headings:heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-header prose-li:my-0"
     >
       <slot />
     </Section>

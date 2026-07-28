@@ -14,7 +14,7 @@ Run `npm run check:audit`, `npm run check`, `npm run build`, and `npm run check:
 
 - Use `~/components/ui/Section.astro` for page and prose-width shells instead of repeating container classes.
 - Define colors, spacing, and fonts in the `@theme` block in `src/assets/styles/tailwind.css`. There is no `--aw-*` token layer.
-- Reuse the `heading`, `content-heading`, `btn`, `btn-ghost`, and `icon-btn` utilities.
+- Reuse the `display`, `heading`, `btn`, `btn-ghost`, and `icon-btn` utilities.
 - The site is dark-only. Do not introduce ad hoc `dark:` variants.
 - Posts live in the `src/data/post` content collection. Post permalinks are `/%slug%`; `/posts` is the listing.
 - Site configuration lives in `src/config.yaml`. The `vendor/integration` build integration exposes it through the `astrowind:config` virtual module.
