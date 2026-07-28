@@ -1,0 +1,1899 @@
+---
+/**
+ * The architecture figure, carried over from the standalone `arch.html` built
+ * in the pipeline repo (nathaniel-may/personal-analytics @ e7878ab).
+ *
+ * Two assets, not one drawing that reflows. Above 900px the concentric SVG
+ * shows the whole shape at once; below it a single-column HTML/CSS layout
+ * reads as a traversal. The SVG has a fixed viewBox, so on a phone it could
+ * only shrink below legibility or scroll — hence the second asset rather than
+ * a rearrangement. Both pull their detail prose from the same DATA object, and
+ * both carry the same `data-key` set, so a node added to one and forgotten in
+ * the other is a visible bug.
+ *
+ * Integration notes:
+ *  - Everything is namespaced under `.arch-post`. The original restyled bare
+ *    elements (body, section, table, h1, h2, footer) and used generic class
+ *    names and `:root` custom properties, all of which would collide here.
+ *    Custom properties are prefixed `--arch-*` for the same reason.
+ *  - `not-prose` keeps Tailwind Typography off the figure; the surrounding
+ *    post body is `prose`, and it would otherwise restyle the table and cards.
+ *  - The arrowhead marker ids are prefixed too. They are document-global, and
+ *    astro-icon injects other SVGs into the page. A `<base href>` in the site
+ *    template would break every `url(#…)` reference; there isn't one today.
+ *  - Styles are `is:global` rather than Astro-scoped on purpose: the mobile
+ *    card bodies are built by the script at runtime, and scoped styles only
+ *    reach markup that existed at build time.
+ *  - The post is rendered at the wide measure (see `wide` in the frontmatter).
+ *    The 844px floor below assumes 28px of page inset at the 900px swap point.
+ *
+ * Dark-only by design, which matches the site. Domain-neutral by design: the
+ * real pipeline is health and training data, deliberately scrubbed.
+ */
+---
+
+<div class="arch-post not-prose">
+  <div class="figures">
+    <div class="figure"><b>0</b><span>long-running processes</span></div>
+    <div class="figure"><b>0</b><span>endpoints I operate</span></div>
+    <div class="figure"><b>~2 min</b><span>of compute per day, in two runs</span></div>
+    <div class="figure"><b>5</b><span>JSON files on the public side</span></div>
+  </div>
+
+  <div class="diagram-wrap">
+    <div class="scroller">
+      <svg
+        class="arch"
+        id="arch-svg"
+        viewBox="0 0 1062 828"
+        role="img"
+        aria-label="Concentric architecture diagram: a public internet ring containing a scheduled job ring, which contains the DuckDB warehouse."
+      >
+        <!--
+          One grid for the whole figure.
+            box        126 x 60, everywhere
+            rows       228 / 324 / 420  (sources, steps and the reader chain share them)
+            columns    68 sources | 230-832 job band | 868 reader chain
+            ring gaps  44 outside the public nodes, 36 inside
+        -->
+
+        <defs>
+          <marker
+            id="arch-ah"
+            viewBox="0 0 10 10"
+            refX="9.2"
+            refY="5"
+            markerWidth="5.4"
+            markerHeight="5.4"
+            orient="auto-start-reverse"
+          >
+            <path d="M0 0 L10 5 L0 10 Z" fill="#3a4a54"></path>
+          </marker>
+          <marker
+            id="arch-ahl"
+            viewBox="0 0 10 10"
+            refX="9.2"
+            refY="5"
+            markerWidth="5.4"
+            markerHeight="5.4"
+            orient="auto-start-reverse"
+          >
+            <path d="M0 0 L10 5 L0 10 Z" fill="#e5a44e"></path>
+          </marker>
+        </defs>
+
+        <!-- ============ outer band: public internet ============ -->
+        <g class="grp hit" id="g-public" data-key="public" tabindex="0" role="button" aria-label="Public internet">
+          <rect class="band outer" x="24" y="24" width="1014" height="780" rx="22"></rect>
+          <text class="band-label" x="68" y="58">Public internet</text>
+          <text class="band-sub" x="68" y="77">other people's uptime · everything here is replaceable</text>
+        </g>
+
+        <!-- ============ job band ============ -->
+        <g class="grp hit" id="g-job" data-key="job" tabindex="0" role="button" aria-label="Scheduled job">
+          <rect class="band jobband" x="230" y="140" width="602" height="526" rx="16"></rect>
+          <text class="band-label" x="252" y="170">Scheduled job</text>
+          <text class="band-sub" x="252" y="189">0 11,23 * * * UTC — starts, runs for ~1 min, exits</text>
+          <g id="arch-ticks">
+            <rect class="tick" x="252" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="259" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="266" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="273" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="280" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="287" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="294" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="301" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="308" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="315" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="322" y="198" width="5" height="6"></rect>
+            <rect class="tick lit" x="329" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="336" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="343" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="350" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="357" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="364" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="371" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="378" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="385" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="392" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="399" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="406" y="198" width="5" height="6"></rect>
+            <rect class="tick lit" x="413" y="198" width="5" height="6"></rect>
+          </g>
+          <text class="band-sub" x="428" y="204">24 h</text>
+        </g>
+
+        <!-- ============ edges ============ -->
+
+        <!-- sources merge onto one spine and enter the loader once -->
+        <g class="grp" id="e-src1"><path class="edge plain" d="M194 258 H212"></path></g>
+        <g class="grp" id="e-src2"><path class="edge plain" d="M194 354 H212"></path></g>
+        <g class="grp" id="e-src3"><path class="edge plain" d="M194 450 H212"></path></g>
+        <g class="grp" id="e-trunk"><path class="edge" d="M212 450 V258 H248"></path></g>
+
+        <!-- the one step-to-step edge in the system: Deploy's input is a
+             directory on disk, not the warehouse -->
+        <g class="grp" id="e-dist">
+          <path class="edge" d="M603 226 V206 H747 V224"></path>
+          <text class="edge-label" x="675" y="198" text-anchor="middle">dashboard/dist</text>
+        </g>
+
+        <!-- the rail: every step that moves data opens the same one file -->
+        <g class="grp" id="e-rail"><path class="edge plain" d="M315 350 H603"></path></g>
+        <!-- rail into the core: deliberately headless, because direction is carried
+             per-step by the drops above and differs between them -->
+        <g class="grp" id="e-core"><path class="edge plain" d="M531 350 V392"></path></g>
+
+        <g class="grp" id="e-ingest">
+          <path class="edge" d="M315 290 V348"></path>
+          <text class="edge-label" x="323" y="322">writes raw</text>
+        </g>
+        <g class="grp" id="e-transform">
+          <path class="edge both" d="M459 292 V346"></path>
+          <text class="edge-label" x="467" y="322">reads + writes</text>
+        </g>
+        <g class="grp" id="e-build">
+          <path class="edge" d="M603 348 V292"></path>
+          <text class="edge-label" x="611" y="322">reads, read-only</text>
+        </g>
+
+        <!-- publish out to the static site -->
+        <g class="grp" id="e-publish"><path class="edge" d="M810 258 H864"></path></g>
+
+        <!-- reader chain, the only inbound path in the system -->
+        <g class="grp" id="e-reader"><path class="edge" d="M931 418 V388"></path></g>
+        <g class="grp" id="e-clerk"><path class="edge" d="M931 322 V292"></path></g>
+
+        <!-- durability, out the bottom -->
+        <g class="grp" id="e-backup">
+          <path class="edge" d="M531 496 V544"></path>
+          <text class="edge-label" x="541" y="526">source_* → Parquet</text>
+        </g>
+        <g class="grp" id="e-b2">
+          <path class="edge" d="M531 608 V696"></path>
+          <text class="edge-label" x="541" y="656">encrypted, then sent</text>
+        </g>
+
+        <!-- ============ core ============ -->
+        <g class="grp hit" id="g-warehouse" data-key="warehouse" tabindex="0" role="button" aria-label="Warehouse">
+          <rect class="core-rect" x="347" y="392" width="368" height="104" rx="10"></rect>
+          <text class="c-title" x="531" y="428" text-anchor="middle">Warehouse</text>
+          <text class="c-path" x="531" y="451" text-anchor="middle">DuckDB · /data/warehouse.duckdb</text>
+          <text class="c-note" x="531" y="473" text-anchor="middle">NO PROCESS · NO PORT · NO CONNECTION STRING</text>
+        </g>
+
+        <!-- ============ job steps — row 1 ============ -->
+        <g class="grp hit" id="g-ingest" data-key="ingest" tabindex="0" role="button" aria-label="Load step">
+          <rect class="node-rect" x="252" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="315" y="254" text-anchor="middle">Load</text>
+          <text class="n-sub" x="315" y="272" text-anchor="middle">Node.js</text>
+        </g>
+        <g class="grp hit" id="g-transform" data-key="transform" tabindex="0" role="button" aria-label="Model step">
+          <rect class="node-rect" x="396" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="459" y="254" text-anchor="middle">Model</text>
+          <text class="n-sub" x="459" y="272" text-anchor="middle">dbt-core</text>
+        </g>
+        <g class="grp hit" id="g-build" data-key="build" tabindex="0" role="button" aria-label="Extract step">
+          <rect class="node-rect" x="540" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="603" y="254" text-anchor="middle">Extract</text>
+          <text class="n-sub" x="603" y="272" text-anchor="middle">Observable FW</text>
+        </g>
+        <g class="grp hit" id="g-publish" data-key="publish" tabindex="0" role="button" aria-label="Deploy step">
+          <rect class="node-rect" x="684" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="747" y="254" text-anchor="middle">Deploy</text>
+          <text class="n-sub" x="747" y="272" text-anchor="middle">Netlify CLI</text>
+        </g>
+
+        <!-- backup: off the main line, on its own cadence -->
+        <g class="grp hit" id="g-backup" data-key="backup" tabindex="0" role="button" aria-label="Durability step">
+          <rect class="node-rect" x="468" y="548" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="531" y="574" text-anchor="middle">Durability</text>
+          <text class="n-sub" x="531" y="592" text-anchor="middle">restic · when due</text>
+        </g>
+
+        <!-- ============ public ring: sources, rows 1-3 ============ -->
+        <g class="grp hit" id="g-src1" data-key="src1" tabindex="0" role="button" aria-label="Source, OAuth">
+          <rect class="node-rect" x="68" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="131" y="254" text-anchor="middle">Source</text>
+          <text class="n-sub" x="131" y="272" text-anchor="middle">REST · OAuth</text>
+        </g>
+        <g class="grp hit" id="g-src2" data-key="src2" tabindex="0" role="button" aria-label="Source, API key">
+          <rect class="node-rect" x="68" y="324" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="131" y="350" text-anchor="middle">Source</text>
+          <text class="n-sub" x="131" y="368" text-anchor="middle">REST · API key</text>
+        </g>
+        <g class="grp hit" id="g-src3" data-key="src3" tabindex="0" role="button" aria-label="Source, API key">
+          <rect class="node-rect" x="68" y="420" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="131" y="446" text-anchor="middle">Source</text>
+          <text class="n-sub" x="131" y="464" text-anchor="middle">REST · API key</text>
+        </g>
+
+        <!-- ============ public ring: reader chain, same three rows ============ -->
+        <g class="grp hit" id="g-site" data-key="site" tabindex="0" role="button" aria-label="Published site">
+          <rect class="node-rect" x="868" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="931" y="254" text-anchor="middle">Published site</text>
+          <text class="n-sub" x="931" y="272" text-anchor="middle">Netlify · static</text>
+        </g>
+        <g class="grp hit" id="g-clerk" data-key="clerk" tabindex="0" role="button" aria-label="Auth gate">
+          <rect class="node-rect" x="868" y="324" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="931" y="350" text-anchor="middle">Auth gate</text>
+          <text class="n-sub" x="931" y="368" text-anchor="middle">Clerk · edge fn</text>
+        </g>
+        <g class="grp hit" id="g-reader" data-key="reader" tabindex="0" role="button" aria-label="Reader">
+          <rect class="node-rect" x="868" y="420" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="931" y="446" text-anchor="middle">Reader</text>
+          <text class="n-sub" x="931" y="464" text-anchor="middle">signed-in browser</text>
+        </g>
+
+        <g class="grp hit" id="g-b2" data-key="b2" tabindex="0" role="button" aria-label="Cold copy">
+          <rect class="node-rect" x="468" y="700" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="531" y="726" text-anchor="middle">Cold copy</text>
+          <text class="n-sub" x="531" y="744" text-anchor="middle">Backblaze B2</text>
+        </g>
+      </svg>
+    </div>
+
+    <p class="scroll-hint">The diagram scrolls sideways →</p>
+
+    <p class="legend">
+      <span><em>Dashed</em> — exists only while the job runs</span>
+      <span><em>The rail</em> — every step opens the same one file</span>
+      <span><em>Nothing outside the job band has a path into the core.</em></span>
+    </p>
+  </div>
+
+  <!-- The narrow-screen asset. Same content, same keys, different drawing:
+       one column, warehouse as a continuous bar, detail opens in place
+       because a phone has no hover and the desktop panel is below the fold. -->
+  <div class="mobile-arch" id="arch-column">
+    <div class="mshell">
+      <div class="mcard mcard-zone" id="m-public" data-key="public">
+        <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-public">
+          <span class="mcard-name">Public internet</span>
+          <span class="mcard-sign" aria-hidden="true"></span>
+          <span class="mcard-rel">other people&rsquo;s uptime · everything here is replaceable</span>
+        </button>
+        <div class="mcard-body" id="mb-public" hidden></div>
+      </div>
+
+      <div class="mgroup">
+        <p class="mgroup-label">Sources — swap these for whatever you care about</p>
+
+        <div class="mcard" id="m-src1" data-key="src1">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-src1">
+            <span class="mcard-name">Source</span>
+            <span class="mcard-vendor">REST · OAuth</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">↓ read by Load</span>
+          </button>
+          <div class="mcard-body" id="mb-src1" hidden></div>
+        </div>
+
+        <div class="mcard" id="m-src2" data-key="src2">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-src2">
+            <span class="mcard-name">Source</span>
+            <span class="mcard-vendor">REST · API key</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">↓ read by Load</span>
+          </button>
+          <div class="mcard-body" id="mb-src2" hidden></div>
+        </div>
+
+        <div class="mcard" id="m-src3" data-key="src3">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-src3">
+            <span class="mcard-name">Source</span>
+            <span class="mcard-vendor">REST · API key</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">↓ read by Load</span>
+          </button>
+          <div class="mcard-body" id="mb-src3" hidden></div>
+        </div>
+      </div>
+
+      <!-- everything between the dashed rules exists for about a minute -->
+      <div class="mjob">
+        <div class="mcard mcard-zone" id="m-job" data-key="job">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-job">
+            <span class="mcard-name">Scheduled job</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">0 11,23 * * * UTC — starts, runs for ~1 min, exits</span>
+          </button>
+          <div class="mcard-body" id="mb-job" hidden></div>
+        </div>
+
+        <div class="mticks" aria-hidden="true">
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick lit"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick lit"></span>
+        </div>
+
+        <!-- the bar starts here, where the volume mounts -->
+        <div class="mcard mcard-core" id="m-warehouse" data-key="warehouse">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-warehouse">
+            <span class="mcard-name">Warehouse</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-vendor">DuckDB · /data/warehouse.duckdb</span>
+            <span class="mcard-rel">no process · no port · no connection string</span>
+          </button>
+          <div class="mcard-body" id="mb-warehouse" hidden></div>
+        </div>
+
+        <div class="mrail">
+          <span class="mrail-bar" aria-hidden="true"></span>
+
+          <div class="mcard" id="m-ingest" data-key="ingest">
+            <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-ingest">
+              <span class="mcard-name">Load</span>
+              <span class="mcard-vendor">Node.js</span>
+              <span class="mcard-sign" aria-hidden="true"></span>
+              <span class="mcard-rel">writes raw</span>
+            </button>
+            <div class="mcard-body" id="mb-ingest" hidden></div>
+          </div>
+
+          <div class="mcard" id="m-transform" data-key="transform">
+            <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-transform">
+              <span class="mcard-name">Model</span>
+              <span class="mcard-vendor">dbt-core</span>
+              <span class="mcard-sign" aria-hidden="true"></span>
+              <span class="mcard-rel">reads + writes</span>
+            </button>
+            <div class="mcard-body" id="mb-transform" hidden></div>
+          </div>
+
+          <div class="mcard" id="m-build" data-key="build">
+            <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-build">
+              <span class="mcard-name">Extract</span>
+              <span class="mcard-vendor">Observable FW</span>
+              <span class="mcard-sign" aria-hidden="true"></span>
+              <span class="mcard-rel">reads, read-only</span>
+            </button>
+            <div class="mcard-body" id="mb-build" hidden></div>
+          </div>
+
+          <div class="mcard" id="m-backup" data-key="backup">
+            <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-backup">
+              <span class="mcard-name">Durability</span>
+              <span class="mcard-vendor">restic · when due</span>
+              <span class="mcard-sign" aria-hidden="true"></span>
+              <span class="mcard-rel">source_* → Parquet → Cold copy</span>
+            </button>
+            <div class="mcard-body" id="mb-backup" hidden></div>
+          </div>
+
+          <p class="mrail-end">the volume detaches when the job exits</p>
+        </div>
+
+        <div class="mcard mstep-free" id="m-publish" data-key="publish">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-publish">
+            <span class="mcard-name">Deploy</span>
+            <span class="mcard-vendor">Netlify CLI</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">reads dashboard/dist off disk</span>
+          </button>
+          <div class="mcard-body" id="mb-publish" hidden></div>
+        </div>
+
+        <p class="mjob-note">
+          The one step with no connection to the bar. Its input is a directory, not the warehouse.
+        </p>
+      </div>
+
+      <div class="mgroup">
+        <p class="mgroup-label">What the run leaves behind</p>
+
+        <div class="mcard" id="m-b2" data-key="b2">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-b2">
+            <span class="mcard-name">Cold copy</span>
+            <span class="mcard-vendor">Backblaze B2</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">↑ from Durability · encrypted before it left</span>
+          </button>
+          <div class="mcard-body" id="mb-b2" hidden></div>
+        </div>
+
+        <div class="mcard" id="m-site" data-key="site">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-site">
+            <span class="mcard-name">Published site</span>
+            <span class="mcard-vendor">Netlify · static</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">↑ from Deploy · 5 JSON files</span>
+          </button>
+          <div class="mcard-body" id="mb-site" hidden></div>
+        </div>
+
+        <div class="mcard" id="m-clerk" data-key="clerk">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-clerk">
+            <span class="mcard-name">Auth gate</span>
+            <span class="mcard-vendor">Clerk · edge fn</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">in front of every path</span>
+          </button>
+          <div class="mcard-body" id="mb-clerk" hidden></div>
+        </div>
+
+        <div class="mcard" id="m-reader" data-key="reader">
+          <button class="mcard-head" type="button" aria-expanded="false" aria-controls="mb-reader">
+            <span class="mcard-name">Reader</span>
+            <span class="mcard-vendor">signed-in browser</span>
+            <span class="mcard-sign" aria-hidden="true"></span>
+            <span class="mcard-rel">the only inbound request in the system</span>
+          </button>
+          <div class="mcard-body" id="mb-reader" hidden></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="mlegend">
+      <span><em>Dashed rules</em> — the job exists only between them</span>
+      <span><em>The bar</em> — the warehouse, mounted; it begins and ends inside the job</span>
+      <span><em>Outside the rules the bar does not exist.</em> Nothing out there has a path to it.</span>
+      <span>Tap any card for detail.</span>
+    </p>
+  </div>
+
+  <div class="panel" id="arch-panel">
+    <div class="panel-id">
+      <div class="panel-role" id="arch-p-role">Read the picture</div>
+      <div class="panel-title" id="arch-p-title">Three rings</div>
+      <div class="panel-vendor" id="arch-p-vendor">public shell · scheduled job · private core</div>
+    </div>
+    <p class="panel-body" id="arch-p-body">
+      Sources enter on the left, readers leave on the right, durability drops out the bottom. The middle ring is a
+      container that exists for a few minutes twice a day; the innermost ring is a file that container mounts. Trace any
+      arrow you like — none of them start outside the job band and end in the core.
+    </p>
+    <p class="panel-hint" id="arch-p-hint">Hover any part of the diagram to trace it. Click to pin, Esc to release.</p>
+  </div>
+
+  <hr class="rule" />
+
+  <section class="arch-section">
+    <h2 class="heading text-2xl md:text-3xl text-foreground">What this costs</h2>
+    <div class="costs">
+      <div class="cost">
+        <h3>Freshness is bounded by the schedule</h3>
+        <p>
+          Data is at most twelve hours old, and older if a source is down. The dashboard reports its own freshness
+          rather than hiding it. If you need minutes, this is the wrong design and no amount of tuning fixes that.
+        </p>
+      </div>
+      <div class="cost">
+        <h3>The published side cannot ask new questions</h3>
+        <p>
+          It holds answers, not a database. A new question means a new dbt model, a new loader, and the next run — not a
+          filter in a UI. In exchange, no query I write can be slow for a reader, and no reader can write a query at
+          all.
+        </p>
+      </div>
+      <div class="cost">
+        <h3>One writer, by construction</h3>
+        <p>
+          One file, one process at a time. That is free correctness for one person and the first thing that breaks the
+          day a second person needs to write. It is a deliberate ceiling, not an oversight.
+        </p>
+      </div>
+      <div class="cost">
+        <h3>Recovery is only as good as the restore</h3>
+        <p>
+          A backup that has never been restored is a guess. <code>restore-test</code> pulls the latest snapshot into a scratch
+          directory and reads every Parquet file back. It is treated as a gate before anything irreversible, not as a nicety.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="arch-section">
+    <h2 class="heading text-2xl md:text-3xl text-foreground">Where each role went, and why that one</h2>
+    <p class="section-note">
+      The last column is deliberately empty. Every choice here is load-bearing for one person with limited time, and the
+      honest boundaries of that are mine to write down.
+    </p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Role</th><th>Choice</th><th>Why this one</th><th>When I&rsquo;d use something different</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Warehouse</td><td>DuckDB</td>
+            <td data-label="Why this one"
+              >A file, not a service. Between jobs there is nothing to run, secure, or upgrade — the entire operational
+              surface of the database is a path on disk.</td
+            >
+            <td data-label="When I’d use something different"><!-- to fill in --></td>
+          </tr>
+          <tr>
+            <td>Compute</td><td>Railway cron job</td>
+            <td data-label="Why this one"
+              >A native scheduled job with a volume it can mount. No resident worker, no health check, no domain.
+              Overlapping runs are skipped by the platform.</td
+            >
+            <td data-label="When I’d use something different"><!-- to fill in --></td>
+          </tr>
+          <tr>
+            <td>Load</td><td>Node.js</td>
+            <td data-label="Why this one"
+              >One small module per source, each owning its own table. Creating the database, schemas, and tables is the
+              loader's job, so adding a source never means hand-migrating warehouse state.</td
+            >
+            <td data-label="When I’d use something different"><!-- to fill in --></td>
+          </tr>
+          <tr>
+            <td>Model</td><td>dbt-core + dbt-duckdb</td>
+            <td data-label="Why this one"
+              >Ordinary staging → intermediate → marts modelling with tests, pointed at a local file instead of a
+              cluster. Nothing about dbt requires a warehouse that listens.</td
+            >
+            <td data-label="When I’d use something different"><!-- to fill in --></td>
+          </tr>
+          <tr>
+            <td>Extract</td><td>Observable Framework</td>
+            <td data-label="Why this one"
+              >Its build-time data loaders are the whole trick: each one runs a query during the build and writes a
+              static file. That is what turns a warehouse into a website with no database behind it.</td
+            >
+            <td data-label="When I’d use something different"><!-- to fill in --></td>
+          </tr>
+          <tr>
+            <td>Hosting</td><td>Netlify</td>
+            <td data-label="Why this one"
+              >Serves a directory. The only thing it has to do well is stay up, and it is not my process if it doesn't.</td
+            >
+            <td data-label="When I’d use something different"><!-- to fill in --></td>
+          </tr>
+          <tr>
+            <td>Auth</td><td>Clerk</td>
+            <td data-label="Why this one"
+              >Session handling is the one thing worth not writing myself. It runs in an edge function ahead of every
+              path, and it is the only server-side logic in the system.</td
+            >
+            <td data-label="When I’d use something different"><!-- to fill in --></td>
+          </tr>
+          <tr>
+            <td>Durability</td><td>restic → Backblaze B2</td>
+            <td data-label="Why this one"
+              >Client-side AES-256 before anything leaves the machine, because provider-side encryption alone is not
+              enough for data this personal. B2 over its S3-compatible API, which restic recommends over its native
+              backend.</td
+            >
+            <td data-label="When I’d use something different"><!-- to fill in --></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+  (function () {
+    'use strict';
+
+    /** Every id below is rendered by this component, so absence is a bug, not a
+      case to handle. `$` asserts that rather than guarding at each use. */
+    type Detail = { role: string; title: string; vendor: string; body: string; lit: string[] };
+    const $ = (id: string): HTMLElement => document.getElementById(id)!;
+
+    const svg = $('arch-svg');
+    const els = {
+      role: $('arch-p-role'),
+      title: $('arch-p-title'),
+      vendor: $('arch-p-vendor'),
+      body: $('arch-p-body'),
+      hint: $('arch-p-hint'),
+    };
+
+    const REST: Detail = {
+      role: 'Read the picture',
+      title: 'Three rings',
+      vendor: 'public shell · scheduled job · private core',
+      body: 'Sources enter on the left, readers leave on the right, durability drops out the bottom. The middle ring is a container that exists for a few minutes twice a day; the innermost ring is a file that container mounts. Trace any arrow you like — none of them start outside the job band and end in the core.',
+      lit: [],
+    };
+
+    const JOB_PARTS = [
+      'g-job',
+      'g-ingest',
+      'g-transform',
+      'g-build',
+      'g-publish',
+      'g-backup',
+      'g-warehouse',
+      'e-rail',
+      'e-core',
+      'e-ingest',
+      'e-transform',
+      'e-build',
+      'e-backup',
+      'e-dist',
+    ];
+
+    const PUBLIC_PARTS = [
+      'g-public',
+      'g-src1',
+      'g-src2',
+      'g-src3',
+      'g-site',
+      'g-clerk',
+      'g-reader',
+      'g-b2',
+      'e-reader',
+      'e-clerk',
+    ];
+
+    const SOURCE_TRACE = ['g-ingest', 'e-trunk', 'e-src1', 'e-src2', 'e-src3', 'g-src1', 'g-src2', 'g-src3'];
+
+    const DATA: Record<string, Detail> = {
+      public: {
+        role: 'Outer ring',
+        title: 'Public internet',
+        vendor: 'six third-party services, one reader',
+        body: 'Everything on this ring belongs to somebody else: the APIs I read from, a host that serves files, an auth provider, and a bucket that holds an encrypted copy. None of them can see the warehouse, and none of them are mine to keep running. If any one has a bad night, the worst case is stale data or a failed run — not lost data, and not a page at 3am.',
+        lit: PUBLIC_PARTS,
+      },
+      job: {
+        role: 'Middle ring',
+        title: 'The scheduled job',
+        vendor: '0 11,23 * * * UTC',
+        body: 'A container that starts, mounts the volume, runs five steps in order, and exits — about a minute, twice a day. It is the only thing in the system that ever opens the warehouse. It refuses to start unless the mount path and database path are exactly what it expects, so a misconfigured job cannot quietly run against the wrong filesystem. Each mark on the strip above is a full hour wide, which flatters the real figure: the run fits inside one of them roughly sixty times over.',
+        lit: JOB_PARTS,
+      },
+      warehouse: {
+        role: 'Inner ring',
+        title: 'Warehouse',
+        vendor: 'DuckDB · one file on a mounted volume',
+        body: 'One file: <code>/data/warehouse.duckdb</code>. There is no process listening, no port open, no connection string, and no database credential to rotate or leak. The volume is attached only for the duration of a run and detaches when the job exits — for most of the day the file is not even mounted anywhere. This is the entire reason the rest of the design is cheap to own.',
+        lit: ['g-warehouse', 'e-core', 'e-rail'],
+      },
+      src1: {
+        role: 'Source',
+        title: 'A source with rotating credentials',
+        vendor: 'REST · OAuth 2.0',
+        body: 'The hard case, and the one worth designing for. This provider rotates its refresh token on every exchange, so the token cannot live in a config file — it is stored in the warehouse and handed back out at the start of the next run. After one interactive login, the job never needs a human again.',
+        lit: ['g-src1', 'e-src1', 'e-trunk', 'g-ingest', 'g-public'],
+      },
+      src2: {
+        role: 'Source',
+        title: 'A source with a static key',
+        vendor: 'REST · API key',
+        body: 'The easy case. One key, one endpoint, records that arrive already structured. Nothing to refresh and nothing to keep in sync — which is what you want most of your sources to look like.',
+        lit: ['g-src2', 'e-src2', 'e-trunk', 'g-ingest', 'g-public'],
+      },
+      src3: {
+        role: 'Source',
+        title: 'However many more',
+        vendor: 'REST · API key',
+        body: 'Sources are interchangeable here, which is the point of drawing a third one. Adding another costs a small module and its own <code>source_*</code> schema — no migration, no warehouse state to reconcile, and no change to anything downstream until you decide to model it. Whatever you actually care about goes in this slot.',
+        lit: ['g-src3', 'e-src3', 'e-trunk', 'g-ingest', 'g-public'],
+      },
+      ingest: {
+        role: 'Step 1',
+        title: 'Load',
+        vendor: 'Node.js · DuckDB client',
+        body: 'Writes each source into its own <code>source_*</code> schema, untransformed. On a fresh volume it creates the database, the schemas and the tables itself, so adding a source is a code change rather than a migration. One failing source does not stop the others: the run continues and still publishes, because one provider having an outage should not freeze data that loaded fine.',
+        lit: ['g-ingest', 'e-ingest', 'e-rail', 'e-core', 'g-warehouse'].concat(SOURCE_TRACE),
+      },
+      transform: {
+        role: 'Step 2',
+        title: 'Model',
+        vendor: 'dbt-core + dbt-duckdb',
+        body: 'Staging, then intermediate, then marts — built in place against the same file. Tests run alongside the models, so a bad load fails here, loudly, rather than reaching the dashboard quietly. This is completely ordinary dbt; the only thing unusual is what it is pointed at.',
+        lit: ['g-transform', 'e-transform', 'e-rail', 'e-core', 'g-warehouse'],
+      },
+      build: {
+        role: 'Step 3',
+        title: 'Extract',
+        vendor: 'Observable Framework data loaders',
+        body: 'This is the hinge of the whole design. Five loaders each open the warehouse <strong>read-only</strong>, run one query, and write one small JSON file — one per view the dashboard needs. Windowing happens here, at build time, so the output stays a fixed small size no matter how long the site is served afterwards. Read-only also means this step can never contend for the write lock.',
+        lit: ['g-build', 'e-build', 'e-rail', 'e-core', 'g-warehouse', 'e-dist', 'g-publish'],
+      },
+      publish: {
+        role: 'Step 4',
+        title: 'Deploy',
+        vendor: 'Netlify CLI',
+        body: 'Its input is the directory Extract produced, not the warehouse. It hashes <code>dashboard/dist</code> and uploads it, comparing that hash against the last deploy so a day with no new data costs nothing. It runs even when a source failed to ingest: stale is better than frozen, and the freshness indicator on the dashboard says which is which.',
+        lit: ['g-publish', 'e-dist', 'g-build', 'e-publish', 'g-site'],
+      },
+      backup: {
+        role: 'Step 5, if due',
+        title: 'Durability',
+        vendor: 'restic · AES-256 · roughly weekly',
+        body: 'Only the <code>source_*</code> schemas are backed up; everything downstream is reproducible by re-running dbt. They are exported to Parquet and encrypted client-side before anything leaves the machine, because this is personal data and provider-side encryption alone would not be enough. The job calls this on every run but it only does work if seven days have passed, so it schedules itself without a second scheduler to maintain.',
+        lit: ['g-backup', 'e-backup', 'e-b2', 'g-b2', 'g-warehouse'],
+      },
+      b2: {
+        role: 'Off-site',
+        title: 'Cold copy',
+        vendor: 'Backblaze B2, via its S3-compatible API',
+        body: 'A snapshot repository holding encrypted Parquet. The threat model is explicit: this protects the remote copy, so a leaked snapshot or a breach at the provider reveals nothing. It does not defend an already-compromised source machine, and that is accepted rather than pretended away.',
+        lit: ['g-b2', 'e-b2', 'g-backup', 'g-public'],
+      },
+      site: {
+        role: 'Output',
+        title: 'Published site',
+        vendor: 'Netlify · static files',
+        body: 'HTML, a little JavaScript, and five JSON files. Nothing here can query anything — the numbers were selected, aggregated and windowed hours earlier by a process that no longer exists. The worst case for a breach on this side is the loss of a fixed, known set of aggregates, not access to the warehouse.',
+        lit: ['g-site', 'e-publish', 'g-publish', 'e-clerk', 'g-clerk', 'g-public'],
+      },
+      clerk: {
+        role: 'The only gate',
+        title: 'Auth gate',
+        vendor: 'Clerk · Netlify edge function',
+        body: 'An edge function in front of every path validates the session and rejects it unless the token carries an owner role. Sessions last a week and the client refreshes the token in the background; a blocked or idle tab is sent to a hosted sign-in page and returned to where it started. This is roughly a hundred lines and it is the only server-side logic in the entire system.',
+        lit: ['g-clerk', 'e-clerk', 'e-reader', 'g-reader', 'g-site', 'g-public'],
+      },
+      reader: {
+        role: 'Inbound',
+        title: 'Reader',
+        vendor: 'a signed-in browser',
+        body: 'This is the only inbound request path anywhere in the system, and it terminates at a folder of static files behind an auth check. There is no second door, because there is no second thing listening.',
+        lit: ['g-reader', 'e-reader', 'g-clerk', 'e-clerk', 'g-site', 'g-public'],
+      },
+    };
+
+    let pinned: string | null = null;
+
+    function clear() {
+      const lit = svg.querySelectorAll('.grp.lit');
+      for (let i = 0; i < lit.length; i++) lit[i].classList.remove('lit');
+      svg.classList.remove('engaged');
+    }
+
+    function paint(key: string | null) {
+      clear();
+      const d = key ? DATA[key] : null;
+      if (!d) {
+        els.role.textContent = REST.role;
+        els.title.textContent = REST.title;
+        els.vendor.textContent = REST.vendor;
+        els.body.innerHTML = REST.body;
+        return;
+      }
+      svg.classList.add('engaged');
+      for (let i = 0; i < d.lit.length; i++) {
+        const el = document.getElementById(d.lit[i]);
+        if (el) el.classList.add('lit');
+      }
+      els.role.textContent = d.role;
+      els.title.textContent = d.title;
+      els.vendor.textContent = d.vendor;
+      els.body.innerHTML = d.body;
+    }
+
+    function setHint() {
+      els.hint.textContent = pinned
+        ? 'Pinned. Click it again or press Esc to release.'
+        : 'Hover any part of the diagram to trace it. Click to pin, Esc to release.';
+    }
+
+    const hits = svg.querySelectorAll('.hit');
+
+    for (let i = 0; i < hits.length; i++) {
+      (function (el: Element) {
+        const key = el.getAttribute('data-key');
+
+        el.addEventListener('mouseenter', function () {
+          if (!pinned) paint(key);
+        });
+        el.addEventListener('mouseleave', function () {
+          if (!pinned) paint(null);
+        });
+        el.addEventListener('focus', function () {
+          if (!pinned) paint(key);
+        });
+        el.addEventListener('blur', function () {
+          if (!pinned) paint(null);
+        });
+
+        function toggle() {
+          pinned = pinned === key ? null : key;
+          // Either way the pointer/focus is still on this node, so it stays traced.
+          paint(key);
+          setHint();
+        }
+
+        el.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          toggle();
+        });
+
+        el.addEventListener('keydown', function (ev: KeyboardEvent) {
+          if (ev.key === 'Enter' || ev.key === ' ') {
+            ev.preventDefault();
+            toggle();
+          }
+        });
+      })(hits[i]);
+    }
+
+    svg.addEventListener('click', function () {
+      pinned = null;
+      paint(null);
+      setHint();
+    });
+
+    /* ---- narrow-screen column ----
+
+     Same keys, same prose, drawn differently. The detail opens under the
+     card instead of in the panel, because a phone has no hover and the
+     panel is below the fold — tapping something would otherwise update
+     text you cannot see. That is the one place this page lets anything
+     move, and it is scoped to this layout.
+  */
+
+    const march = $('arch-column');
+    let opened: HTMLElement | null = null;
+
+    function lightMobile(keys: string[] | null) {
+      const on = march.querySelectorAll('.mcard.lit');
+      for (let i = 0; i < on.length; i++) on[i].classList.remove('lit');
+
+      if (!keys) {
+        march.classList.remove('engaged');
+        return;
+      }
+      march.classList.add('engaged');
+
+      for (let j = 0; j < keys.length; j++) {
+        // Edge ids have no counterpart here — the bar, the dashed rules and
+        // the per-card relation lines carry those relationships instead.
+        if (keys[j].slice(0, 2) !== 'g-') continue;
+        const el = document.getElementById('m-' + keys[j].slice(2));
+        if (el) el.classList.add('lit');
+      }
+    }
+
+    function collapse(card: HTMLElement) {
+      const body = card.querySelector('.mcard-body') as HTMLElement;
+      card.classList.remove('open');
+      card.querySelector('.mcard-head')!.setAttribute('aria-expanded', 'false');
+      body.hidden = true;
+      body.textContent = '';
+    }
+
+    function expand(card: HTMLElement) {
+      const d = DATA[card.getAttribute('data-key') ?? ''];
+      if (!d) return;
+
+      const body = card.querySelector('.mcard-body') as HTMLElement;
+      const name = card.querySelector('.mcard-name')!.textContent;
+
+      body.innerHTML =
+        '<span class="mcard-role"></span>' +
+        // the title earns its line only where it says more than the card
+        // already does — "A source with rotating credentials" does, "Model"
+        // directly under a card headed Model does not
+        (d.title === name ? '' : '<span class="mcard-title"></span>') +
+        '<span class="mcard-vendor-full"></span>' +
+        '<p class="mcard-prose"></p>';
+
+      body.querySelector('.mcard-role')!.textContent = d.role;
+      body.querySelector('.mcard-vendor-full')!.textContent = d.vendor;
+      body.querySelector('.mcard-prose')!.innerHTML = d.body;
+      if (d.title !== name) body.querySelector('.mcard-title')!.textContent = d.title;
+      body.hidden = false;
+
+      card.querySelector('.mcard-head')!.setAttribute('aria-expanded', 'true');
+      card.classList.add('open');
+      opened = card;
+
+      lightMobile(d.lit);
+      card.classList.add('lit');
+    }
+
+    function toggleCard(card: HTMLElement) {
+      if (opened === card) {
+        collapse(card);
+        opened = null;
+        lightMobile(null);
+        return;
+      }
+      if (opened) collapse(opened);
+      expand(card);
+    }
+
+    const cards = march.querySelectorAll<HTMLElement>('.mcard[data-key]');
+
+    for (let c = 0; c < cards.length; c++) {
+      (function (card: HTMLElement) {
+        // a real <button>, so Enter and Space are already handled
+        card.querySelector('.mcard-head')!.addEventListener('click', function () {
+          toggleCard(card);
+        });
+      })(cards[c]);
+    }
+
+    document.addEventListener('keydown', function (ev: KeyboardEvent) {
+      if (ev.key !== 'Escape') return;
+      if (pinned) {
+        pinned = null;
+        paint(null);
+        setHint();
+      }
+      if (opened) {
+        collapse(opened);
+        opened = null;
+        lightMobile(null);
+      }
+    });
+  })();
+</script>
+
+<style is:global>
+  /* Palette and type for the figure. Dark only, by design — the page never
+     responds to a light-theme signal, so there is no half-lit broken state.
+
+     Value descends inward: the public ring is the lit surface, the job band is
+     a hole in it, the core is deeper still. Two rules hold it together — amber
+     is reserved for interaction (plus the two lit cron ticks and the stat
+     figures), and the warehouse carries the only hue. Teal because it is
+     amber's complement, so the resting focal colour never competes with the
+     interaction colour. Its 16px glow is deliberate; keep it. */
+  .arch-post {
+    --arch-ink: #080b0d;
+    --arch-shell: #111a21;
+    --arch-job: #0a0f12;
+    --arch-core: #0d2028;
+    --arch-core-edge: #4d7d8b;
+    --arch-node: #202d37;
+
+    --arch-line: #2b3a45;
+    --arch-line-soft: #1a242b;
+    --arch-edge: #3a4a54;
+
+    --arch-text: #dce4e7;
+    --arch-muted: #7e8f9a;
+    --arch-dim: #55646d;
+
+    --arch-amber: #e5a44e;
+    --arch-amber-dim: #6f5327;
+
+    /* The original set its argument in a system serif and its interface in a
+       system sans. This site has no serif, so both now resolve to the site
+       face; the two names are kept so the distinction survives if one is ever
+       added. The mono stack stays — identifiers, paths and cron strings are
+       sized against it. */
+    --arch-display: var(--font-sans);
+    --arch-ui: var(--font-sans);
+    --arch-mono:
+      ui-monospace, 'SF Mono', SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+
+    font-family: var(--arch-display);
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--arch-text);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .arch-post * {
+    box-sizing: border-box;
+  }
+
+  .arch-post .arch-section {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .arch-post h2 {
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  /* ---------- header ---------- */
+
+  /* ---------- figures ---------- */
+
+  .arch-post .figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--arch-line-soft);
+    border-block: 1px solid var(--arch-line-soft);
+  }
+
+  .arch-post .figure {
+    background: var(--arch-ink);
+    padding: 20px 22px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .arch-post .figure b {
+    font-family: var(--arch-display);
+    font-size: 38px;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--arch-amber);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .arch-post .figure span {
+    font-family: var(--arch-ui);
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--arch-muted);
+  }
+
+  /* ---------- diagram ---------- */
+
+  .arch-post .diagram-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .arch-post .scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-inline: -4px;
+    padding: 4px;
+  }
+
+  /* 844px is exactly what the page gives the figure at the 900px swap point
+     (900 - 56 of padding), so on desktop it never scrolls sideways — the
+     column handles every width below that. The old 865px floor predates the
+     swap and cost a 21px sideways scroll at 900px to buy 0.3px of glyph. */
+  .arch-post svg.arch {
+    display: block;
+    width: 100%;
+    min-width: 844px;
+    height: auto;
+  }
+
+  .arch-post .band {
+    fill: var(--arch-shell);
+    stroke: var(--arch-line);
+    stroke-width: 1;
+  }
+  .arch-post .band.outer {
+    fill: var(--arch-shell);
+  }
+  .arch-post .band.jobband {
+    fill: var(--arch-job);
+    stroke: #35474f;
+    stroke-dasharray: 4 5;
+  }
+
+  /* The one element with a hue of its own. Amber is reserved for interaction,
+     so the resting focal colour is its complement. */
+  .arch-post .core-rect {
+    fill: var(--arch-core);
+    stroke: var(--arch-core-edge);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 16px rgba(77, 125, 139, 0.22));
+  }
+
+  .arch-post .node-rect {
+    fill: var(--arch-node);
+    stroke: var(--arch-line);
+    stroke-width: 1;
+  }
+
+  .arch-post .n-title {
+    font-family: var(--arch-ui);
+    font-size: 13px;
+    font-weight: 600;
+    fill: var(--arch-text);
+  }
+  .arch-post .n-sub {
+    font-family: var(--arch-mono);
+    font-size: 9.5px;
+    fill: var(--arch-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .arch-post .c-title {
+    font-family: var(--arch-display);
+    font-size: 21px;
+    font-weight: 600;
+    fill: var(--arch-text);
+    letter-spacing: -0.01em;
+  }
+  .arch-post .c-path {
+    font-family: var(--arch-mono);
+    font-size: 11px;
+    fill: #9fb8c0;
+  }
+  .arch-post .c-note {
+    font-family: var(--arch-mono);
+    font-size: 9.5px;
+    fill: #6e8b94;
+    letter-spacing: 0.04em;
+  }
+
+  .arch-post .band-label {
+    font-family: var(--arch-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    fill: var(--arch-muted);
+    text-transform: uppercase;
+  }
+  .arch-post .band-sub {
+    font-family: var(--arch-mono);
+    font-size: 10px;
+    fill: var(--arch-dim);
+  }
+
+  .arch-post .edge-label {
+    font-family: var(--arch-mono);
+    font-size: 9.5px;
+    fill: var(--arch-dim);
+  }
+
+  .arch-post .edge {
+    fill: none;
+    stroke: var(--arch-edge);
+    stroke-width: 1.25;
+    marker-end: url(#arch-ah);
+  }
+  .arch-post .edge.both {
+    marker-start: url(#arch-ah);
+  }
+  .arch-post .edge.plain {
+    marker-end: none;
+  }
+
+  .arch-post .tick {
+    fill: #1e2a31;
+  }
+  .arch-post .tick.lit {
+    fill: var(--arch-amber);
+  }
+
+  /* interaction states — opacity and color only; nothing moves */
+  .arch-post .hit {
+    cursor: pointer;
+  }
+  .arch-post .hit:focus {
+    outline: none;
+  }
+  .arch-post .hit:focus-visible .node-rect,
+  .arch-post .hit:focus-visible .core-rect,
+  .arch-post .hit:focus-visible .band {
+    stroke: var(--arch-amber);
+    stroke-width: 2;
+  }
+
+  .arch-post .arch.engaged .grp {
+    opacity: 0.28;
+    transition: opacity 140ms ease;
+  }
+  .arch-post .arch.engaged .grp.lit {
+    opacity: 1;
+  }
+  .arch-post .arch .grp {
+    transition: opacity 140ms ease;
+  }
+
+  .arch-post .grp.lit .node-rect {
+    stroke: var(--arch-amber);
+    fill: #1e2932;
+  }
+  .arch-post .grp.lit .core-rect {
+    stroke: var(--arch-amber);
+  }
+  .arch-post .grp.lit .band {
+    stroke: var(--arch-amber);
+  }
+  .arch-post .grp.lit .edge {
+    stroke: var(--arch-amber);
+    marker-end: url(#arch-ahl);
+  }
+  .arch-post .grp.lit .edge.both {
+    marker-start: url(#arch-ahl);
+  }
+  .arch-post .grp.lit .edge.plain {
+    marker-end: none;
+  }
+  .arch-post .grp.lit .edge-label {
+    fill: var(--arch-amber);
+  }
+  .arch-post .grp.lit .n-title {
+    fill: #fff;
+  }
+
+  .arch-post .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 26px;
+    font-family: var(--arch-ui);
+    font-size: 12.5px;
+    color: var(--arch-muted);
+    padding-top: 2px;
+  }
+  .arch-post .legend em {
+    font-style: normal;
+    color: var(--arch-text);
+  }
+
+  /* The diagram has a legibility floor; below it, scroll rather than shrink. */
+  .arch-post .scroll-hint {
+    display: none;
+    font-family: var(--arch-mono);
+    font-size: 11px;
+    color: var(--arch-dim);
+  }
+
+  /* ---------- mobile column diagram ----------
+
+     A second asset, not a reflow of the first. The concentric figure is an
+     SVG with a fixed viewBox, so on a phone it can only shrink below
+     legibility or scroll sideways. Here the diagram is real page text at a
+     fixed size — identical at 375 px and 899 px — and the layout reflows.
+
+       bar 9 + gutter 21 + card = 30 px of left inset on the rail
+       every card is one width: whatever the column gives it
+
+     The warehouse is the vertical bar rather than a box things point at. It
+     begins where the volume mounts and terminates where it detaches, so the
+     mount lifetime is a thing you scroll past. Two consequences come free:
+     Deploy is visibly the one step with no connector to it, and "nothing
+     outside reaches the core" needs no caption, because outside the dashed
+     rules the bar does not exist.
+  */
+
+  .arch-post .mobile-arch {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .arch-post .mshell {
+    background: var(--arch-shell);
+    border: 1px solid var(--arch-line);
+    border-radius: 14px;
+    padding: 16px 15px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .arch-post .mgroup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .arch-post .mgroup-label {
+    font-family: var(--arch-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--arch-dim);
+    margin: 0;
+  }
+
+  /* full-bleed inside the shell: the job is a band across it, not a box in it */
+  .arch-post .mjob {
+    margin-inline: -15px;
+    padding: 15px 15px 18px;
+    background: var(--arch-job);
+    border-block: 1px dashed #35474f;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* ---- cards ---- */
+
+  .arch-post .mcard {
+    position: relative;
+  }
+
+  .arch-post .mcard-head {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: baseline;
+    gap: 2px 10px;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: var(--arch-node);
+    border: 1px solid var(--arch-line);
+    border-radius: 8px;
+    padding: 11px 13px 12px;
+    cursor: pointer;
+  }
+
+  .arch-post .mcard-head:focus {
+    outline: none;
+  }
+  .arch-post .mcard-head:focus-visible {
+    border-color: var(--arch-amber);
+    box-shadow: 0 0 0 1px var(--arch-amber);
+  }
+
+  .arch-post .mcard-name {
+    font-family: var(--arch-ui);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .arch-post .mcard-vendor {
+    font-family: var(--arch-mono);
+    font-size: 11px;
+    color: var(--arch-muted);
+  }
+
+  .arch-post .mcard-sign {
+    font-family: var(--arch-mono);
+    font-size: 13px;
+    line-height: 1;
+    color: var(--arch-dim);
+    width: 9px;
+    text-align: center;
+  }
+  .arch-post .mcard-sign::after {
+    content: '+';
+  }
+  .arch-post .mcard.open .mcard-sign::after {
+    content: '\2212';
+  }
+  .arch-post .mcard.open .mcard-sign {
+    color: var(--arch-amber);
+  }
+
+  .arch-post .mcard-rel {
+    grid-column: 1 / -1;
+    font-family: var(--arch-mono);
+    font-size: 10px;
+    color: var(--arch-dim);
+    letter-spacing: 0.02em;
+  }
+
+  .arch-post .mcard-body {
+    border: 1px solid var(--arch-line);
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+    background: #0b1013;
+    padding: 15px 14px 17px;
+    margin: -1px 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* author display beats the UA [hidden] rule, so restate it */
+  .arch-post .mcard-body[hidden] {
+    display: none;
+  }
+
+  .arch-post .mcard.open > .mcard-head {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .arch-post .mcard-role {
+    font-family: var(--arch-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--arch-amber);
+  }
+  .arch-post .mcard-title {
+    font-family: var(--arch-display);
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .arch-post .mcard-vendor-full {
+    font-family: var(--arch-mono);
+    font-size: 11px;
+    color: var(--arch-muted);
+  }
+  .arch-post .mcard-prose {
+    margin: 4px 0 0;
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+  .arch-post .mcard-prose code {
+    font-family: var(--arch-mono);
+    font-size: 0.86em;
+    color: var(--arch-text);
+    background: #141c21;
+    border: 1px solid var(--arch-line-soft);
+    padding: 1px 4px;
+    border-radius: 3px;
+    overflow-wrap: anywhere;
+  }
+
+  /* zone headers behave like cards but read as labels */
+  .arch-post .mcard-zone > .mcard-head {
+    background: none;
+    border-color: transparent;
+    padding: 2px 0 4px;
+    grid-template-columns: 1fr auto;
+  }
+  .arch-post .mcard-zone .mcard-name {
+    font-family: var(--arch-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--arch-muted);
+    font-weight: 400;
+  }
+  .arch-post .mcard-zone .mcard-rel {
+    color: var(--arch-dim);
+  }
+  .arch-post .mcard-zone .mcard-body {
+    margin-inline: 0;
+    border-top: 1px solid var(--arch-line);
+    border-radius: 8px;
+  }
+  .arch-post .mcard-zone.open > .mcard-head {
+    border-radius: 0;
+  }
+  .arch-post .mcard-zone:focus-within .mcard-head {
+    border-radius: 4px;
+  }
+
+  /* the warehouse: the only element carrying a hue, here and on desktop */
+  .arch-post .mcard-core > .mcard-head {
+    background: var(--arch-core);
+    border: 1.5px solid var(--arch-core-edge);
+    filter: drop-shadow(0 0 16px rgba(77, 125, 139, 0.22));
+    border-radius: 8px 8px 0 0;
+    padding: 14px 14px 15px;
+    /* the path is too long to sit beside a 20px title — its own row */
+    grid-template-columns: 1fr auto;
+  }
+  .arch-post .mcard-core .mcard-name {
+    font-family: var(--arch-display);
+    font-size: 20px;
+  }
+  .arch-post .mcard-core .mcard-vendor {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    color: #9fb8c0;
+  }
+  .arch-post .mcard-core .mcard-rel {
+    color: #6e8b94;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .arch-post .mcard-core .mcard-body {
+    margin-inline: 8px;
+  }
+
+  /* ---- the rail: the mounted volume, and everything that opens it ---- */
+
+  .arch-post .mrail {
+    position: relative;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .arch-post .mrail-bar {
+    position: absolute;
+    left: 0;
+    top: -14px;
+    bottom: 26px;
+    width: 9px;
+    background: var(--arch-core);
+    border: 1.5px solid var(--arch-core-edge);
+    border-top: 0;
+    filter: drop-shadow(0 0 12px rgba(77, 125, 139, 0.22));
+  }
+
+  /* widened foot: the volume detaching, not a line that ran out of page */
+  .arch-post .mrail-bar::after {
+    content: '';
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    bottom: -1.5px;
+    height: 1.5px;
+    background: var(--arch-core-edge);
+  }
+
+  .arch-post .mrail > .mcard::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 25px;
+    width: 21px;
+    height: 1px;
+    background: var(--arch-edge);
+  }
+
+  .arch-post .mrail-end {
+    margin: 2px 0 0 -30px;
+    font-family: var(--arch-mono);
+    font-size: 10px;
+    color: var(--arch-dim);
+  }
+
+  /* Deploy keeps the rail's indent and has no tick — the whole point */
+  .arch-post .mstep-free {
+    margin-left: 30px;
+  }
+
+  .arch-post .mjob-note {
+    margin: -4px 0 0 30px;
+    font-family: var(--arch-ui);
+    font-size: 12px;
+    color: var(--arch-muted);
+  }
+
+  /* ---- 24-hour strip ---- */
+
+  /* one mark per hour, spanning the column: the run fits inside one of them
+     roughly sixty times over */
+  .arch-post .mticks {
+    display: flex;
+    gap: 2px;
+    padding: 2px 0 0;
+  }
+  .arch-post .mtick {
+    flex: 1;
+    height: 6px;
+    background: #1e2a31;
+  }
+  .arch-post .mtick.lit {
+    background: var(--arch-amber);
+  }
+
+  /* ---- interaction: opacity and colour, plus the one thing that moves ---- */
+
+  .arch-post .mobile-arch.engaged .mcard {
+    opacity: 0.3;
+    transition: opacity 140ms ease;
+  }
+  .arch-post .mobile-arch.engaged .mcard.lit {
+    opacity: 1;
+  }
+  .arch-post .mobile-arch .mcard {
+    transition: opacity 140ms ease;
+  }
+
+  .arch-post .mcard.lit > .mcard-head {
+    border-color: var(--arch-amber);
+  }
+  .arch-post .mcard.lit .mcard-name {
+    color: #fff;
+  }
+  .arch-post .mcard-zone.lit > .mcard-head {
+    border-color: transparent;
+  }
+  .arch-post .mcard-zone.lit .mcard-name {
+    color: var(--arch-amber);
+  }
+  .arch-post .mcard-core.lit > .mcard-head {
+    border-color: var(--arch-amber);
+  }
+
+  .arch-post .mlegend {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-family: var(--arch-ui);
+    font-size: 12.5px;
+    color: var(--arch-muted);
+  }
+  .arch-post .mlegend em {
+    font-style: normal;
+    color: var(--arch-text);
+  }
+
+  /* ---------- detail panel ---------- */
+
+  .arch-post .panel {
+    border: 1px solid var(--arch-line-soft);
+    background: #0b1013;
+    padding: 26px 28px 28px;
+    min-height: 200px;
+    display: grid;
+    grid-template-columns: minmax(190px, 250px) 1fr;
+    gap: 28px 40px;
+    align-items: start;
+  }
+
+  .arch-post .panel-id {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .arch-post .panel-role {
+    font-family: var(--arch-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--arch-amber);
+  }
+
+  .arch-post .panel-title {
+    font-family: var(--arch-display);
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    line-height: 1.15;
+  }
+
+  .arch-post .panel-vendor {
+    font-family: var(--arch-mono);
+    font-size: 11.5px;
+    color: var(--arch-muted);
+  }
+
+  .arch-post .panel-body {
+    margin: 0;
+    max-width: 60ch;
+    font-size: 16.5px;
+  }
+  .arch-post .panel-body code {
+    font-family: var(--arch-mono);
+    font-size: 0.86em;
+    color: var(--arch-text);
+    background: #141c21;
+    border: 1px solid var(--arch-line-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .arch-post .panel-hint {
+    font-family: var(--arch-ui);
+    font-size: 12px;
+    color: var(--arch-dim);
+    grid-column: 1 / -1;
+    padding-top: 4px;
+    border-top: 1px solid var(--arch-line-soft);
+    margin-top: 2px;
+  }
+
+  /* ---------- prose sections ---------- */
+
+  .arch-post .rule {
+    border: 0;
+    border-top: 1px solid var(--arch-line-soft);
+    margin: 0;
+  }
+
+  .arch-post .section-note {
+    margin: -8px 0 0;
+    max-width: 60ch;
+    font-size: 16px;
+    color: var(--arch-muted);
+  }
+
+  /* min() so the 340px floor never exceeds the column itself — below ~380px
+     it would otherwise push the page sideways */
+  .arch-post .costs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+    gap: 30px 56px;
+  }
+  .arch-post .cost {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .arch-post .cost h3 {
+    font-family: var(--arch-ui);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--arch-text);
+  }
+  .arch-post .cost p {
+    margin: 0;
+    font-size: 16px;
+    color: #b9c5ca;
+    max-width: 46ch;
+  }
+  .arch-post .cost code {
+    font-family: var(--arch-mono);
+    font-size: 0.85em;
+    color: var(--arch-muted);
+  }
+
+  .arch-post .table-scroll {
+    overflow-x: auto;
+  }
+
+  .arch-post table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 820px;
+  }
+
+  .arch-post th,
+  .arch-post td {
+    text-align: left;
+    padding: 13px 18px 13px 0;
+    border-bottom: 1px solid var(--arch-line-soft);
+    vertical-align: top;
+  }
+
+  .arch-post th {
+    font-family: var(--arch-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--arch-dim);
+    font-weight: 400;
+    padding-bottom: 9px;
+  }
+
+  .arch-post td:nth-child(1) {
+    font-family: var(--arch-ui);
+    font-size: 13.5px;
+    font-weight: 600;
+    width: 13%;
+    white-space: nowrap;
+  }
+  .arch-post td:nth-child(2) {
+    font-family: var(--arch-mono);
+    font-size: 12px;
+    color: var(--arch-muted);
+    width: 19%;
+  }
+  .arch-post td:nth-child(3) {
+    font-size: 15.5px;
+    color: #b9c5ca;
+    width: 42%;
+  }
+
+  /* Left empty on purpose — the header explains why, and this keeps the
+     column reading as unfilled rather than broken. */
+  .arch-post th:nth-child(4),
+  .arch-post td:nth-child(4) {
+    border-left: 1px solid var(--arch-line-soft);
+    padding-left: 18px;
+  }
+  .arch-post td:nth-child(4) {
+    font-size: 15.5px;
+    color: #b9c5ca;
+    width: 26%;
+  }
+
+  /* ---------- the swap ----------
+
+     Below this width only the column renders; above it only the concentric
+     figure does. Two layouts to keep in sync, on purpose: the SVG shows the
+     shape at a glance, which is exactly what a phone cannot do, and the
+     column reads as a traversal, which is exactly what a desktop doesn't
+     need. Neither is a degraded version of the other.
+  */
+  @media (max-width: 899px) {
+    .arch-post .diagram-wrap,
+    .arch-post .panel {
+      display: none;
+    }
+    .arch-post .mobile-arch {
+      display: flex;
+    }
+
+    /* one stacked card per role, so the table stops scrolling sideways —
+       and the empty fourth column gets somewhere sensible to sit */
+    .arch-post .table-scroll {
+      overflow-x: visible;
+    }
+    .arch-post table {
+      display: block;
+      min-width: 0;
+    }
+    .arch-post thead {
+      display: none;
+    }
+    .arch-post tbody,
+    .arch-post tr,
+    .arch-post td {
+      display: block;
+    }
+
+    .arch-post tr {
+      background: #0b1013;
+      border: 1px solid var(--arch-line-soft);
+      border-radius: 10px;
+      padding: 15px 16px 4px;
+      margin-bottom: 14px;
+    }
+
+    .arch-post td {
+      border: 0;
+      padding: 0 0 13px;
+      width: auto;
+    }
+
+    .arch-post td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      font-family: var(--arch-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--arch-dim);
+      font-weight: 400;
+      margin-bottom: 5px;
+    }
+
+    /* role becomes the eyebrow, choice becomes the headline */
+    .arch-post td:nth-child(1) {
+      font-family: var(--arch-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--arch-dim);
+      font-weight: 400;
+      white-space: normal;
+      width: auto;
+      padding-bottom: 4px;
+    }
+    .arch-post td:nth-child(2) {
+      font-family: var(--arch-display);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--arch-text);
+      width: auto;
+      letter-spacing: -0.01em;
+    }
+    .arch-post td:nth-child(3),
+    .arch-post td:nth-child(4) {
+      width: auto;
+    }
+    .arch-post td:nth-child(4) {
+      border-left: 0;
+      padding-left: 0;
+    }
+
+    /* :empty ignores comment nodes, so the to-fill-in markers still match */
+    .arch-post td:nth-child(4):empty::after {
+      content: '\2014';
+      color: var(--arch-dim);
+    }
+  }
+
+  /* Insurance, not the normal case. Media queries count the classic scrollbar
+     in the viewport width but the layout does not get it, so a 900px window on
+     a platform with non-overlay scrollbars is ~15px short and the figure does
+     scroll. It cannot happen wider than this. (The old ≤780px rule for the
+     hint is gone: below 900px there is no figure to scroll.) */
+  @media (min-width: 900px) and (max-width: 920px) {
+    .arch-post .scroll-hint {
+      display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arch-post * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>

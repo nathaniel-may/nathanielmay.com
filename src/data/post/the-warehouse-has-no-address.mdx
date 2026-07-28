@@ -1,0 +1,26 @@
+---
+publishDate: 2026-07-28T00:00:00Z
+title: 'The warehouse has no address.'
+excerpt: 'The standard shape — APIs in, DuckDB, dbt, a dashboard out — with one unusual decision at the centre, chosen because I maintain the whole thing alone.'
+category: 'Practical Engineering'
+tags:
+  - architecture
+  - duckdb
+  - dbt
+author: 'Nathaniel May'
+wide: true
+---
+
+import ArchDiagram from '~/components/arch/ArchDiagram.astro';
+
+This is a single-person analytics pipeline: a few third-party APIs in, a DuckDB warehouse, dbt on top, a dashboard on the far side. The standard shape, and the sources barely matter — swap them for whatever you care about. The one unusual decision is that **the warehouse is not a service**. It is a file, and nothing can reach it.
+
+Twice a day a container starts, mounts that file, loads the sources, runs dbt, bakes five small JSON extracts, ships them to a static host, and exits. Start to finish it takes about a minute. The rest of the day — all twenty-three hours and fifty-eight minutes of it — nothing is running at all. What is public is a folder of files behind an auth check; what is private has no port, no connection string, and no credentials to rotate.
+
+The point is not elegance for its own sake. It is that **I maintain this alone, in whatever time is left over**. Every live endpoint is something to monitor, patch, and be woken up by. This design has none of mine to run.
+
+<ArchDiagram />
+
+---
+
+_Everything above describes the deployed pipeline, not a local development setup. The same commands run on a laptop against a local warehouse file; that path is deliberately left out of this diagram because it changes nothing about the shape._
