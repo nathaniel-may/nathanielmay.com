@@ -13,6 +13,7 @@ wide: true
 
 import ArchDiagram from '~/components/arch/ArchDiagram.astro';
 import RoleTable from '~/components/arch/RoleTable.astro';
+import Role from '~/components/arch/Role.astro';
 
 This is a single-person analytics pipeline: a few third-party APIs in, a DuckDB warehouse, dbt on top, a dashboard on the far side. The standard shape, and the sources barely matter — swap them for whatever you care about. The one unusual decision is that **the warehouse is not a service**. It is a file, and nothing can reach it.
 
@@ -36,7 +37,57 @@ The point is not elegance for its own sake. It is that **I maintain this alone, 
 
 The second column of each card is deliberately empty. Every choice here is load-bearing for one person with limited time, and the honest boundaries of that are mine to write down.
 
-<RoleTable />
+<RoleTable>
+
+<Role role="Warehouse" choice="DuckDB">
+
+A file, not a service. Between jobs there is nothing to run, secure, or upgrade — the entire operational surface of the database is a path on disk.
+
+</Role>
+
+<Role role="Compute" choice="Railway cron job">
+
+A native scheduled job with a volume it can mount. No resident worker, no health check, no domain. Overlapping runs are skipped by the platform.
+
+</Role>
+
+<Role role="Load" choice="Node.js">
+
+One small module per source, each owning its own table. Creating the database, schemas, and tables is the loader's job, so adding a source never means hand-migrating warehouse state.
+
+</Role>
+
+<Role role="Model" choice="dbt-core + dbt-duckdb">
+
+Ordinary staging → intermediate → marts modelling with tests, pointed at a local file instead of a cluster. Nothing about dbt requires a warehouse that listens.
+
+</Role>
+
+<Role role="Extract" choice="Observable Framework">
+
+Its build-time data loaders are the whole trick: each one runs a query during the build and writes a static file. That is what turns a warehouse into a website with no database behind it.
+
+</Role>
+
+<Role role="Hosting" choice="Netlify">
+
+Serves a directory. The only thing it has to do well is stay up, and it is not my process if it doesn't.
+
+</Role>
+
+<Role role="Auth" choice="Clerk">
+
+Session handling is the one thing worth not writing myself. It runs in an edge function ahead of every path, and it is the only server-side logic in the system.
+
+</Role>
+
+<Role role="Durability" choice="restic → Backblaze B2">
+
+Client-side AES-256 before anything leaves the machine, because provider-side encryption alone is not enough for data this personal. B2 over its S3-compatible API, which restic recommends over its native backend.
+
+</Role>
+
+</RoleTable>
 
 ---
 

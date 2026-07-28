@@ -1,0 +1,149 @@
+---
+/**
+ * One role and the choice made for it. Both bodies are markdown written in the
+ * post, so they take code spans, links and emphasis, and — because JSX children
+ * are ordinary mdast children — they count toward the post's reading time.
+ *
+ *   <Role role="Warehouse" choice="DuckDB">
+ *
+ *   A file, not a service…
+ *
+ *   <Fragment slot="when">Once a second person needs to write.</Fragment>
+ *
+ *   </Role>
+ *
+ * Omit the `when` slot and the cell renders an em dash, reading as unwritten
+ * rather than broken.
+ *
+ * Slotted markup belongs to the page, not to this component, so Astro's scoping
+ * never reaches it. Anything targeting the prose has to go through `:global()`
+ * under a class this component does render — hence `.role-prose :global(p)`.
+ * The size and colour sit on `.role-prose` itself rather than on the paragraph,
+ * so the styling holds whether MDX wraps the text in a `<p>` or not.
+ */
+interface Props {
+  role: string;
+  choice: string;
+}
+
+const { role, choice } = Astro.props;
+const hasWhen = Astro.slots.has('when');
+---
+
+<article class="role">
+  <h3 class="role-head">
+    <span class="role-name">{role}</span>
+    <span class="role-choice">{choice}</span>
+  </h3>
+  <div class="role-body">
+    <div>
+      <p class="role-label">Why this one</p>
+      <div class="role-prose"><slot /></div>
+    </div>
+    <div>
+      <p class="role-label">When I&rsquo;d use something different</p>
+      {
+        hasWhen ? (
+          <div class="role-prose">
+            <slot name="when" />
+          </div>
+        ) : (
+          <p class="role-prose role-unwritten">&mdash;</p>
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .role {
+    /* the collapse below keys off the card, not the viewport: what matters is
+       how much room this card has, and that follows the measure it lands in */
+    container-type: inline-size;
+    background: rgb(0 0 0 / 25%);
+    border: 1px solid var(--color-surface);
+    border-radius: 10px;
+    padding: 16px 18px 18px;
+  }
+
+  .role-head {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .role-name {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--color-foreground-subtle);
+  }
+
+  .role-choice {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--color-foreground);
+  }
+
+  .role-body {
+    display: grid;
+    gap: 16px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-surface);
+  }
+
+  /* Side by side as soon as the card can hold two readable columns. The two
+     bodies are meant to be read against each other; below this they stack,
+     because the comparison is not worth two 30-character measures. */
+  @container (min-width: 36rem) {
+    .role-body {
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 40px;
+    }
+  }
+
+  .role-label {
+    margin: 0 0 5px;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--color-foreground-subtle);
+  }
+
+  .role-prose {
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--color-muted);
+  }
+
+  .role-prose :global(p) {
+    margin: 0;
+  }
+
+  .role-prose :global(p + p) {
+    margin-top: 0.6em;
+  }
+
+  .role-prose :global(a) {
+    color: var(--color-primary);
+  }
+
+  .role-prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    color: var(--color-foreground);
+  }
+
+  .role-unwritten {
+    margin: 0;
+    color: var(--color-foreground-subtle);
+  }
+</style>
