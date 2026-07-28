@@ -8,8 +8,6 @@
 
 @theme {
   --color-primary: rgb(212 175 55);
-  --color-secondary: rgb(163 134 42);
-
   --color-page: rgb(12 14 8);
   --color-header: rgb(12 14 8 / 90%);
   --color-foreground: oklch(0.97 0 0);
@@ -21,7 +19,7 @@
   --font-sans:
     'Source Sans 3 Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-heading: 'Source Sans 3 Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-sans);
 
   --tracking-heading: 0.17em;
   --spacing-header: 4rem;
@@ -60,7 +58,7 @@
   @apply btn border-none shadow-none text-foreground-subtle hover:text-foreground;
 }
 
-#header.scroll > div:first-child {
+#header.scroll .header-background {
   @apply bg-transparent md:bg-header border-b border-transparent md:border-gray-500/20;
 }
 

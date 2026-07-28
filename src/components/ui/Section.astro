@@ -1,11 +1,25 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes, HTMLTag } from 'astro/types';
+import { twMerge } from 'tailwind-merge';
 
-type Props = HTMLAttributes<'section'>;
+export interface Props extends Omit<HTMLAttributes<'section'>, 'class'> {
+  as?: HTMLTag;
+  class?: string;
+  spacing?: boolean;
+  variant?: 'page' | 'prose';
+}
 
-const { class: className, ...attrs } = Astro.props;
+const { as: Tag = 'section', class: className, spacing = true, variant = 'page', ...attrs } = Astro.props;
+
+const widths = {
+  page: 'max-w-4xl',
+  prose: 'max-w-3xl',
+};
 ---
 
-<section {...attrs} class:list={['mx-auto w-full max-w-4xl px-6 py-12 sm:py-16 lg:py-20', className]}>
+<Tag
+  {...attrs}
+  class={twMerge('mx-auto w-full px-6', widths[variant], spacing && 'py-12 sm:py-16 lg:py-20', className)}
+>
   <slot />
-</section>
+</Tag>

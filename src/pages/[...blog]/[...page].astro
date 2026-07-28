@@ -8,6 +8,7 @@ import Pagination from '~/components/blog/Pagination.astro';
 import Section from '~/components/ui/Section.astro';
 
 import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
+import { APP_BLOG } from 'astrowind:config';
 
 export const prerender = true;
 
@@ -17,7 +18,7 @@ export const getStaticPaths = (async ({ paginate }) => {
   if (paths.length === 0) {
     return [
       {
-        params: { blog: 'posts', page: undefined },
+        params: { blog: APP_BLOG.list.pathname, page: undefined },
         props: { page: { data: [], currentPage: 1, url: { prev: undefined, next: undefined } } },
       },
     ];

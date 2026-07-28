@@ -21,10 +21,10 @@ const { id = 'header', isSticky = false, isFullWidth = false, showRssFeed = fals
   {...isSticky ? { 'data-aw-sticky-header': true } : {}}
   {...id ? { id } : {}}
 >
-  <div class="absolute inset-0"></div>
+  <div class="header-background absolute inset-0"></div>
   <div
     class:list={[
-      'relative text-foreground py-3 px-3 md:px-6 mx-auto w-full flex justify-start items-center',
+      'relative h-header text-foreground px-3 md:px-6 mx-auto w-full flex justify-start items-center',
       { 'max-w-7xl': !isFullWidth },
     ]}
   >

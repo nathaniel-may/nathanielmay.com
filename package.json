@@ -1,7 +1,7 @@
 {
-  "name": "astrowind-scaffold",
-  "version": "1.0.0-beta.63",
-  "description": "AstroWind: A free template using Astro 6 and Tailwind CSS v4. Astro starter theme.",
+  "name": "nathanielmay.com",
+  "version": "1.0.0",
+  "description": "Personal site and blog for Nathaniel May.",
   "type": "module",
   "engines": {
     "node": ">=22.12.0"
@@ -17,6 +17,7 @@
     "check:astro": "astro check",
     "check:eslint": "eslint .",
     "check:prettier": "prettier --check .",
+    "check:size": "node scripts/check-dist-size.mjs",
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
     "fix:prettier": "prettier -w ."

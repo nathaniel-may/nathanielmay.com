@@ -82,13 +82,6 @@ export interface Widget {
   classes?: Record<string, string | Record<string, string>>;
 }
 
-export interface Headline {
-  title?: string;
-  subtitle?: string;
-  tagline?: string;
-  classes?: Record<string, string>;
-}
-
 // COMPONENTS
 export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
   variant?: 'default' | 'ghost';
@@ -96,11 +89,4 @@ export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
   icon?: string;
   classes?: Record<string, string>;
   type?: 'button' | 'submit' | 'reset';
-}
-
-// WIDGETS
-export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'classes'> {
-  content?: string;
-  actions?: string | CallToAction[];
-  image?: string | unknown;
 }

@@ -6,41 +6,27 @@
 
     window.basic_script = true;
 
-    function attachEvent(selector, event, fn) {
-      const matches = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
-      if (matches && matches.length) {
-        matches.forEach((elem) => {
-          elem.addEventListener(event, (e) => fn(e, elem), false);
-        });
+    let lastKnownScrollPosition = window.scrollY;
+    let ticking = false;
+
+    function applyHeaderStylesOnScroll() {
+      const header = document.querySelector('#header[data-aw-sticky-header]');
+      if (!header) return;
+      header.classList.toggle('scroll', lastKnownScrollPosition > 60);
+      ticking = false;
+    }
+
+    function onScroll() {
+      lastKnownScrollPosition = window.scrollY;
+      if (!ticking) {
+        window.requestAnimationFrame(applyHeaderStylesOnScroll);
+        ticking = true;
       }
     }
 
     const onLoad = function () {
-      let lastKnownScrollPosition = window.scrollY;
-      let ticking = true;
-
-      function applyHeaderStylesOnScroll() {
-        const header = document.querySelector('#header[data-aw-sticky-header]');
-        if (!header) return;
-        if (lastKnownScrollPosition > 60 && !header.classList.contains('scroll')) {
-          header.classList.add('scroll');
-        } else if (lastKnownScrollPosition <= 60 && header.classList.contains('scroll')) {
-          header.classList.remove('scroll');
-        }
-        ticking = false;
-      }
+      lastKnownScrollPosition = window.scrollY;
       applyHeaderStylesOnScroll();
-
-      attachEvent([document], 'scroll', function () {
-        lastKnownScrollPosition = window.scrollY;
-
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            applyHeaderStylesOnScroll();
-          });
-          ticking = true;
-        }
-      });
     };
     const onPageShow = function () {
       document.documentElement.classList.add('motion-safe:scroll-smooth');
@@ -48,6 +34,7 @@
 
     window.onload = onLoad;
     window.onpageshow = onPageShow;
+    document.addEventListener('scroll', onScroll, { passive: true });
 
     document.addEventListener('astro:after-swap', () => {
       onLoad();

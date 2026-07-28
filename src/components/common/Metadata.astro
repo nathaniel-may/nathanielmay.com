@@ -10,9 +10,7 @@ import { getCanonical } from '~/utils/permalinks';
 
 import { adaptOpenGraphImages } from '~/utils/images';
 
-export interface Props extends MetaData {
-  dontUseTitleTemplate?: boolean;
-}
+type Props = MetaData;
 
 const {
   title,
