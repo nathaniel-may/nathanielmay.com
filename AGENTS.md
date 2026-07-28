@@ -13,6 +13,7 @@ Run `npm run check:audit`, `npm run check`, `npm run build`, and `npm run check:
 ## Project conventions
 
 - Use `~/components/ui/Section.astro` for page shells and the `measure` utility for prose-width elements.
+- When `measure` and Tailwind Typography's `prose` share an element, add `max-w-3xl` explicitly because plugin source order lets `prose` otherwise override the measure.
 - Define colors, spacing, and fonts in the `@theme` block in `src/assets/styles/tailwind.css`. There is no `--aw-*` token layer.
 - Reuse the `display`, `heading`, `measure`, `btn`, `btn-ghost`, and `icon-btn` utilities.
 - The site is dark-only. Do not introduce ad hoc `dark:` variants.
