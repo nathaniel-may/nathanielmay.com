@@ -1,0 +1,68 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Image from '~/components/common/Image.astro';
+import { getPermalink, getBlogPermalink } from '~/utils/permalinks';
+
+const metadata = {
+  title: 'Nathaniel May — Engineering Manager',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <Hero
+    actions={[
+      {
+        text: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/nathanieldmay/',
+        target: '_blank',
+        icon: 'tabler:brand-linkedin',
+      },
+      {
+        text: 'GitHub',
+        href: 'https://github.com/nathaniel-may',
+        target: '_blank',
+        icon: 'tabler:brand-github',
+      },
+      {
+        text: 'Posts',
+        href: getBlogPermalink(),
+        icon: 'tabler:article',
+      },
+      {
+        text: 'Projects',
+        href: getPermalink('/projects'),
+        icon: 'tabler:apps',
+      },
+    ]}
+  >
+    <Fragment slot="title"> Nathaniel May </Fragment>
+
+    <Fragment slot="subtitle">
+      <span class="block font-[350] text-2xl mb-4">Senior Engineering Manager</span>
+      <span class="block font-[350] text-lg mb-8 tracking-wider uppercase">
+        AI Workflows · Data Analytics · Hiring Pipelines · Coaching
+      </span>
+    </Fragment>
+
+    <Fragment slot="bg">
+      <Image
+        src="~/assets/images/bg.jpg"
+        class="absolute inset-0 w-full h-full object-cover"
+        widths={[400, 768, 1024, 1920, 2560]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        format="webp"
+        quality={60}
+        alt=""
+      />
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div
+        class="absolute inset-0 bg-[url('/noise.png')] bg-repeat bg-size-[128px_128px] opacity-[.2] mix-blend-overlay"
+      >
+      </div>
+    </Fragment>
+  </Hero>
+</Layout>

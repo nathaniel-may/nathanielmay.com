@@ -1,0 +1,60 @@
+---
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+
+import Layout from '~/layouts/PageLayout.astro';
+import BlogList from '~/components/blog/List.astro';
+import Headline from '~/components/blog/Headline.astro';
+import Pagination from '~/components/blog/Pagination.astro';
+import Section from '~/components/ui/Section.astro';
+
+import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
+import { APP_BLOG } from 'astrowind:config';
+
+export const prerender = true;
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const paths = await getStaticPathsBlogList({ paginate });
+  // If no posts exist, generate the /posts page manually
+  if (paths.length === 0) {
+    return [
+      {
+        params: { blog: APP_BLOG.list.pathname, page: undefined },
+        props: { page: { data: [], currentPage: 1, url: { prev: undefined, next: undefined } } },
+      },
+    ];
+  }
+  return paths;
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { page } = Astro.props as Props;
+const currentPage = page.currentPage ?? 1;
+
+const metadata = {
+  title: `Posts${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
+  robots: {
+    index: blogListRobots?.index && currentPage === 1,
+    follow: blogListRobots?.follow,
+  },
+  openGraph: {
+    type: 'blog',
+  },
+};
+---
+
+<Layout metadata={metadata}>
+  <Section>
+    <Headline> Posts </Headline>
+    {
+      page.data.length > 0 ? (
+        <>
+          <BlogList posts={page.data} />
+          <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+        </>
+      ) : (
+        <p class="text-lg text-muted">Posts coming soon.</p>
+      )
+    }
+  </Section>
+</Layout>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <body>
+    <h1>Generate IDs</h1>
+
+    <p id="idx">--</p>
+    <p id="status">--</p>
+
+    <button onclick="setAndCopyId()">Generate + Copy</button>
+
+    <script>
+      function setAndCopyId() {
+        // clear status message
+        document.getElementById('status').innerHTML = '--';
+        // IDs are always length 6. Edit here for different length.
+        id6 = mkid(6);
+        document.getElementById('idx').innerHTML = id6;
+
+        navigator.clipboard.writeText(id6).then(
+          function () {
+            document.getElementById('status').innerHTML = 'copied';
+          },
+          function (err) {
+            console.error('Async: Could not copy text: ', err);
+            document.getElementById('status').innerHTML = 'failed to copy';
+          }
+        );
+      }
+
+      function mkid(len) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'; // no zero. can't confuse with the char 'O'.
+        const charLen = chars.length;
+        return _mkid('');
+
+        function _mkid(id) {
+          if (id.length >= len) {
+            return id;
+          } else {
+            const nextChar = chars.charAt(Math.floor(Math.random() * charLen));
+            return _mkid(id + nextChar);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

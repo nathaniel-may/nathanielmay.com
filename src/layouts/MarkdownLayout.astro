@@ -1,0 +1,31 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Section from '~/components/ui/Section.astro';
+
+import type { MetaData } from '~/types';
+
+export interface Props {
+  frontmatter: {
+    title?: string;
+  };
+}
+
+const { frontmatter } = Astro.props;
+
+const metadata: MetaData = {
+  title: frontmatter?.title,
+};
+---
+
+<Layout metadata={metadata}>
+  <Section>
+    <h1 class="display text-4xl md:text-5xl">
+      {frontmatter.title}
+    </h1>
+    <div
+      class="mx-auto prose prose-lg max-w-4xl prose-invert prose-headings:heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8"
+    >
+      <slot />
+    </div>
+  </Section>
+</Layout>

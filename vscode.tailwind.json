@@ -1,0 +1,37 @@
+{
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@tailwind",
+      "description": "@tailwind tailwindcss"
+    },
+    {
+      "name": "@layer",
+      "description": "@layer tailwindcss"
+    },
+    {
+      "name": "@apply",
+      "description": "@apply tailwindcss"
+    },
+    {
+      "name": "@plugin",
+      "description": "@plugin tailwindcss"
+    },
+    {
+      "name": "@theme",
+      "description": "@theme tailwindcss"
+    },
+    {
+      "name": "@utility",
+      "description": "@utility tailwindcss"
+    },
+    {
+      "name": "@variant",
+      "description": "@variant tailwindcss"
+    },
+    {
+      "name": "@custom-variant",
+      "description": "@custom-variant tailwindcss"
+    }
+  ]
+}

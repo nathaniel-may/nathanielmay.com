@@ -1,0 +1,91 @@
+---
+import { Icon } from 'astro-icon/components';
+
+import Image from '~/components/common/Image.astro';
+import PostTags from '~/components/blog/Tags.astro';
+
+import { getPermalink } from '~/utils/permalinks';
+import { getFormattedDate } from '~/utils/utils';
+
+import type { Post } from '~/types';
+
+export interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<section class="py-8 sm:py-16 lg:py-20 mx-auto">
+  <article>
+    <header class="intersect-once intersect-quarter motion-safe:opacity-0 motion-safe:intersect:animate-fade">
+      <div class="measure mb-2 flex flex-col justify-between sm:flex-row sm:items-center">
+        <p>
+          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 text-foreground-subtle" />
+          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
+          {
+            post.author && (
+              <>
+                {' '}
+                · <Icon name="tabler:user" class="w-4 h-4 inline-block -mt-0.5 text-foreground-subtle" />
+                <span class="inline-block">{post.author}</span>
+              </>
+            )
+          }
+          {
+            post.category && (
+              <>
+                {' '}
+                ·{' '}
+                <a class="hover:underline inline-block" href={getPermalink(post.category.slug, 'category')}>
+                  {post.category.title}
+                </a>
+              </>
+            )
+          }
+          {
+            post.readingTime && (
+              <>
+                &nbsp;· <span>{post.readingTime}</span> min read
+              </>
+            )
+          }
+        </p>
+      </div>
+
+      <h1 class="measure heading text-4xl md:text-5xl">{post.title}</h1>
+      <p class="measure mt-4 mb-8 text-xl md:text-2xl text-muted text-justify">
+        {post.excerpt}
+      </p>
+
+      {
+        post.image ? (
+          <Image
+            src={post.image}
+            class="max-w-full lg:max-w-225 mx-auto mb-6 sm:rounded-md bg-surface"
+            widths={[400, 900]}
+            sizes="(max-width: 900px) 400px, 900px"
+            alt={post?.excerpt || ''}
+            width={900}
+            height={506}
+            format="webp"
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <div class="measure">
+            <div class="border-t border-surface" />
+          </div>
+        )
+      }
+    </header>
+    <div
+      class="measure max-w-3xl prose lg:prose-xl prose-invert prose-headings:heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-header prose-li:my-0"
+    >
+      <slot />
+    </div>
+    <div class="measure mt-8">
+      <PostTags tags={post.tags} />
+    </div>
+  </article>
+</section>

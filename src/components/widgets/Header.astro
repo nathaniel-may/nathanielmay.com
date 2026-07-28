@@ -1,0 +1,42 @@
+---
+import { Icon } from 'astro-icon/components';
+
+import { getAsset, getHomePermalink } from '~/utils/permalinks';
+
+export interface Props {
+  id?: string;
+  isSticky?: boolean;
+  isFullWidth?: boolean;
+  showRssFeed?: boolean;
+}
+
+const { id = 'header', isSticky = false, isFullWidth = false, showRssFeed = false } = Astro.props;
+---
+
+<header
+  class:list={[
+    { sticky: isSticky, relative: !isSticky },
+    'top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-opacity ease-in-out',
+  ]}
+  {...isSticky ? { 'data-aw-sticky-header': true } : {}}
+  {...id ? { id } : {}}
+>
+  <div class="header-background absolute inset-0"></div>
+  <div
+    class:list={[
+      'relative h-header text-foreground px-3 md:px-6 mx-auto w-full flex justify-start items-center',
+      { 'max-w-7xl': !isFullWidth },
+    ]}
+  >
+    <a class="icon-btn" aria-label="Home" href={getHomePermalink()}>
+      <Icon name="tabler:home" class="w-5 h-5" />
+    </a>
+    {
+      showRssFeed && (
+        <a class="icon-btn" aria-label="RSS Feed" href={getAsset('/rss.xml')}>
+          <Icon name="tabler:rss" class="w-5 h-5" />
+        </a>
+      )
+    }
+  </div>
+</header>
