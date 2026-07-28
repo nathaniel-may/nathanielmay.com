@@ -34,3 +34,7 @@ The site is statically generated and deployed to Netlify.
 ## Credits
 
 The current site was rebuilt from an earlier Gatsby site using parts of the AstroWind project structure.
+
+## License
+
+The source code is available under the [MIT License](LICENSE.md). Site content—including articles, images, résumé material, biography, and project descriptions—is © Nathaniel May and all rights reserved; see [Content rights](CONTENT_LICENSE.md).

@@ -1,6 +1,12 @@
 MIT License
 
+Copyright (c) 2026 Nathaniel May
 Copyright (c) 2023 onWidget
+
+This license applies to the source code in this repository. It does not apply
+to site content, including articles, text, photographs, images, résumé
+materials, biographical information, or project descriptions. See
+`CONTENT_LICENSE.md` for the terms governing that content.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
