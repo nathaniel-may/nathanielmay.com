@@ -1,0 +1,182 @@
+---
+/**
+ * Where each role went, and why that one.
+ *
+ * This was a four-column table with a separate stacked layout below 900px. It
+ * is one card per role now, because the table needed two layouts to stay
+ * legible and a card needs none — unlike the figure, this content genuinely
+ * reflows. Two consequences worth keeping:
+ *
+ *  - `why` and `when` sit side by side while there is room. They are meant to
+ *    be read against each other: the second is the honest boundary of the
+ *    first, and stacking them turns a comparison into two separate readings.
+ *    They stack only when the card is too narrow to hold both.
+ *  - No `<table>`. The old layout set `display: block` on table/tr/td below
+ *    900px, which strips table semantics in some assistive tech — a table
+ *    pretending not to be one. Cards are what this always was.
+ *
+ * The collapse is a container query, not a media query: what matters is how
+ * wide the card is, and that follows the measure it is dropped into rather
+ * than the viewport.
+ *
+ * `when` is deliberately empty for now and renders as an em dash, reading as
+ * unwritten rather than broken. It is a real empty string, so unlike the
+ * `:empty`-on-a-comment-node trick this replaces, formatting cannot silently
+ * turn the placeholder off.
+ */
+type Row = {
+  role: string;
+  choice: string;
+  why: string;
+  /** Left empty until written; renders as an em dash. */
+  when?: string;
+};
+
+const ROWS: Row[] = [
+  {
+    role: 'Warehouse',
+    choice: 'DuckDB',
+    why: 'A file, not a service. Between jobs there is nothing to run, secure, or upgrade — the entire operational surface of the database is a path on disk.',
+  },
+  {
+    role: 'Compute',
+    choice: 'Railway cron job',
+    why: 'A native scheduled job with a volume it can mount. No resident worker, no health check, no domain. Overlapping runs are skipped by the platform.',
+  },
+  {
+    role: 'Load',
+    choice: 'Node.js',
+    why: "One small module per source, each owning its own table. Creating the database, schemas, and tables is the loader's job, so adding a source never means hand-migrating warehouse state.",
+  },
+  {
+    role: 'Model',
+    choice: 'dbt-core + dbt-duckdb',
+    why: 'Ordinary staging → intermediate → marts modelling with tests, pointed at a local file instead of a cluster. Nothing about dbt requires a warehouse that listens.',
+  },
+  {
+    role: 'Extract',
+    choice: 'Observable Framework',
+    why: 'Its build-time data loaders are the whole trick: each one runs a query during the build and writes a static file. That is what turns a warehouse into a website with no database behind it.',
+  },
+  {
+    role: 'Hosting',
+    choice: 'Netlify',
+    why: "Serves a directory. The only thing it has to do well is stay up, and it is not my process if it doesn't.",
+  },
+  {
+    role: 'Auth',
+    choice: 'Clerk',
+    why: 'Session handling is the one thing worth not writing myself. It runs in an edge function ahead of every path, and it is the only server-side logic in the system.',
+  },
+  {
+    role: 'Durability',
+    choice: 'restic → Backblaze B2',
+    why: 'Client-side AES-256 before anything leaves the machine, because provider-side encryption alone is not enough for data this personal. B2 over its S3-compatible API, which restic recommends over its native backend.',
+  },
+];
+---
+
+<div class="not-prose roles">
+  {
+    ROWS.map((row) => (
+      <article class="role">
+        <h3 class="role-head">
+          <span class="role-name">{row.role}</span>
+          <span class="role-choice">{row.choice}</span>
+        </h3>
+        <div class="role-body">
+          <div>
+            <p class="role-label">Why this one</p>
+            <p class="role-prose">{row.why}</p>
+          </div>
+          <div>
+            <p class="role-label">When I&rsquo;d use something different</p>
+            {row.when ? <p class="role-prose">{row.when}</p> : <p class="role-prose role-unwritten">&mdash;</p>}
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .roles {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    /* block only — the post's wide container centres its children with
+       `margin-inline: auto`, and a shorthand here would out-specify it and
+       pin the list to the left edge */
+    margin-block: 2rem;
+  }
+
+  .role {
+    container-type: inline-size;
+    background: rgb(0 0 0 / 25%);
+    border: 1px solid var(--color-surface);
+    border-radius: 10px;
+    padding: 16px 18px 18px;
+  }
+
+  .role-head {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .role-name {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--color-foreground-subtle);
+  }
+
+  .role-choice {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--color-foreground);
+  }
+
+  .role-body {
+    display: grid;
+    gap: 16px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-surface);
+  }
+
+  /* Side by side as soon as the card can hold two readable columns. Below that
+     the comparison is not worth two 30-character measures. */
+  @container (min-width: 36rem) {
+    .role-body {
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 40px;
+    }
+  }
+
+  .role-label {
+    margin: 0 0 5px;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--color-foreground-subtle);
+  }
+
+  .role-prose {
+    margin: 0;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--color-muted);
+  }
+
+  .role-unwritten {
+    color: var(--color-foreground-subtle);
+  }
+</style>

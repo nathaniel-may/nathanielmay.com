@@ -12,6 +12,7 @@ wide: true
 ---
 
 import ArchDiagram from '~/components/arch/ArchDiagram.astro';
+import RoleTable from '~/components/arch/RoleTable.astro';
 
 This is a single-person analytics pipeline: a few third-party APIs in, a DuckDB warehouse, dbt on top, a dashboard on the far side. The standard shape, and the sources barely matter — swap them for whatever you care about. The one unusual decision is that **the warehouse is not a service**. It is a file, and nothing can reach it.
 
@@ -20,6 +21,22 @@ Twice a day a container starts, mounts that file, loads the sources, runs dbt, b
 The point is not elegance for its own sake. It is that **I maintain this alone, in whatever time is left over**. Every live endpoint is something to monitor, patch, and be woken up by. This design has none of mine to run.
 
 <ArchDiagram />
+
+## What this costs
+
+**Freshness is bounded by the schedule.** Data is at most twelve hours old, and older if a source is down. The dashboard reports its own freshness rather than hiding it. If you need minutes, this is the wrong design and no amount of tuning fixes that.
+
+**The published side cannot ask new questions.** It holds answers, not a database. A new question means a new dbt model, a new loader, and the next run — not a filter in a UI. In exchange, no query I write can be slow for a reader, and no reader can write a query at all.
+
+**One writer, by construction.** One file, one process at a time. That is free correctness for one person and the first thing that breaks the day a second person needs to write. It is a deliberate ceiling, not an oversight.
+
+**Recovery is only as good as the restore.** A backup that has never been restored is a guess. `restore-test` pulls the latest snapshot into a scratch directory and reads every Parquet file back. It is treated as a gate before anything irreversible, not as a nicety.
+
+## Where each role went, and why that one
+
+The second column of each card is deliberately empty. Every choice here is load-bearing for one person with limited time, and the honest boundaries of that are mine to write down.
+
+<RoleTable />
 
 ---
 

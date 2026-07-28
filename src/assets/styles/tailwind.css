@@ -51,12 +51,32 @@
 }
 
 /* Wide measure, for posts built around a figure that a reading column cannot
-   hold. The 28px inset is load-bearing: the architecture figure has a legibility
-   floor of 844px and swaps to its column layout at 900px, so 900 - 2*28 = 844 is
-   exactly the width it needs at the swap point. Changing this padding, or the
-   swap breakpoint, means recomputing that floor. */
+   hold. The inset matches `measure` so that a wide post's title and its body
+   text still line up at widths below the max.
+
+   Check the figure before changing it: the architecture diagram has a
+   legibility floor of 844px and swaps to its column layout at 900px, so the
+   tightest it ever gets is 900 - 2*24 = 852px, 8px above the floor. A larger
+   inset here eats that margin. */
 @utility measure-wide {
-  @apply mx-auto w-full max-w-255 px-7;
+  @apply mx-auto w-full max-w-255 px-6;
+}
+
+/* The container is wide so a figure can break out, but text is still text: every
+   direct child sits at the reading measure other posts use, and only elements
+   marked `breakout` span the full width. Done with the container wide and the
+   children narrow — rather than the reverse, with the figure escaping via
+   `100vw` — because `vw` counts the scrollbar the layout does not get, which is
+   the exact off-by-a-scrollbar that the figure's own swap band guards against. */
+/* 720px, not max-w-3xl: `measure` is a 768px box with a 24px inset, so its text
+   runs to 720. These children carry no inset of their own, and anything wider
+   would sit out of line with the post's own title. */
+.post-wide > * {
+  @apply mx-auto max-w-180;
+}
+
+.post-wide > .breakout {
+  @apply max-w-none;
 }
 
 @utility icon-btn {

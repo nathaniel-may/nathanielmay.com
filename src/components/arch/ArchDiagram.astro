@@ -11,28 +11,35 @@
  * both carry the same `data-key` set, so a node added to one and forgotten in
  * the other is a visible bug.
  *
+ * This component is the figure and nothing else. The prose that used to sit
+ * under it — "what this costs", and the role/choice table — now lives in the
+ * MDX and in RoleTable.astro, so it reads at the reading measure and counts
+ * toward the post's reading time, which only sees markdown.
+ *
  * Integration notes:
  *  - Everything is namespaced under `.arch-post`. The original restyled bare
  *    elements (body, section, table, h1, h2, footer) and used generic class
  *    names and `:root` custom properties, all of which would collide here.
  *    Custom properties are prefixed `--arch-*` for the same reason.
  *  - `not-prose` keeps Tailwind Typography off the figure; the surrounding
- *    post body is `prose`, and it would otherwise restyle the table and cards.
+ *    post body is `prose`, and it would otherwise restyle the cards.
  *  - The arrowhead marker ids are prefixed too. They are document-global, and
  *    astro-icon injects other SVGs into the page. A `<base href>` in the site
  *    template would break every `url(#…)` reference; there isn't one today.
  *  - Styles are `is:global` rather than Astro-scoped on purpose: the mobile
  *    card bodies are built by the script at runtime, and scoped styles only
  *    reach markup that existed at build time.
- *  - The post is rendered at the wide measure (see `wide` in the frontmatter).
- *    The 844px floor below assumes 28px of page inset at the 900px swap point.
+ *  - `breakout` opts the figure out of the reading measure it is nested in, so
+ *    it spans the full wide container (see `wide` in the post's frontmatter).
+ *    The figure is the only thing on the page that needs that width; its 844px
+ *    floor is checked against the container's inset in tailwind.css.
  *
  * Dark-only by design, which matches the site. Domain-neutral by design: the
  * real pipeline is health and training data, deliberately scrubbed.
  */
 ---
 
-<div class="arch-post not-prose">
+<div class="arch-post breakout not-prose">
   <div class="figures">
     <div class="figure"><b>0</b><span>long-running processes</span></div>
     <div class="figure"><b>0</b><span>endpoints I operate</span></div>
@@ -470,126 +477,6 @@
     </p>
     <p class="panel-hint" id="arch-p-hint">Hover any part of the diagram to trace it. Click to pin, Esc to release.</p>
   </div>
-
-  <hr class="rule" />
-
-  <section class="arch-section">
-    <h2 class="heading text-2xl md:text-3xl text-foreground">What this costs</h2>
-    <div class="costs">
-      <div class="cost">
-        <h3>Freshness is bounded by the schedule</h3>
-        <p>
-          Data is at most twelve hours old, and older if a source is down. The dashboard reports its own freshness
-          rather than hiding it. If you need minutes, this is the wrong design and no amount of tuning fixes that.
-        </p>
-      </div>
-      <div class="cost">
-        <h3>The published side cannot ask new questions</h3>
-        <p>
-          It holds answers, not a database. A new question means a new dbt model, a new loader, and the next run — not a
-          filter in a UI. In exchange, no query I write can be slow for a reader, and no reader can write a query at
-          all.
-        </p>
-      </div>
-      <div class="cost">
-        <h3>One writer, by construction</h3>
-        <p>
-          One file, one process at a time. That is free correctness for one person and the first thing that breaks the
-          day a second person needs to write. It is a deliberate ceiling, not an oversight.
-        </p>
-      </div>
-      <div class="cost">
-        <h3>Recovery is only as good as the restore</h3>
-        <p>
-          A backup that has never been restored is a guess. <code>restore-test</code> pulls the latest snapshot into a scratch
-          directory and reads every Parquet file back. It is treated as a gate before anything irreversible, not as a nicety.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <hr class="rule" />
-
-  <section class="arch-section">
-    <h2 class="heading text-2xl md:text-3xl text-foreground">Where each role went, and why that one</h2>
-    <p class="section-note">
-      The last column is deliberately empty. Every choice here is load-bearing for one person with limited time, and the
-      honest boundaries of that are mine to write down.
-    </p>
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr><th>Role</th><th>Choice</th><th>Why this one</th><th>When I&rsquo;d use something different</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Warehouse</td><td>DuckDB</td>
-            <td data-label="Why this one"
-              >A file, not a service. Between jobs there is nothing to run, secure, or upgrade — the entire operational
-              surface of the database is a path on disk.</td
-            >
-            <td data-label="When I’d use something different"><!-- to fill in --></td>
-          </tr>
-          <tr>
-            <td>Compute</td><td>Railway cron job</td>
-            <td data-label="Why this one"
-              >A native scheduled job with a volume it can mount. No resident worker, no health check, no domain.
-              Overlapping runs are skipped by the platform.</td
-            >
-            <td data-label="When I’d use something different"><!-- to fill in --></td>
-          </tr>
-          <tr>
-            <td>Load</td><td>Node.js</td>
-            <td data-label="Why this one"
-              >One small module per source, each owning its own table. Creating the database, schemas, and tables is the
-              loader's job, so adding a source never means hand-migrating warehouse state.</td
-            >
-            <td data-label="When I’d use something different"><!-- to fill in --></td>
-          </tr>
-          <tr>
-            <td>Model</td><td>dbt-core + dbt-duckdb</td>
-            <td data-label="Why this one"
-              >Ordinary staging → intermediate → marts modelling with tests, pointed at a local file instead of a
-              cluster. Nothing about dbt requires a warehouse that listens.</td
-            >
-            <td data-label="When I’d use something different"><!-- to fill in --></td>
-          </tr>
-          <tr>
-            <td>Extract</td><td>Observable Framework</td>
-            <td data-label="Why this one"
-              >Its build-time data loaders are the whole trick: each one runs a query during the build and writes a
-              static file. That is what turns a warehouse into a website with no database behind it.</td
-            >
-            <td data-label="When I’d use something different"><!-- to fill in --></td>
-          </tr>
-          <tr>
-            <td>Hosting</td><td>Netlify</td>
-            <td data-label="Why this one"
-              >Serves a directory. The only thing it has to do well is stay up, and it is not my process if it doesn't.</td
-            >
-            <td data-label="When I’d use something different"><!-- to fill in --></td>
-          </tr>
-          <tr>
-            <td>Auth</td><td>Clerk</td>
-            <td data-label="Why this one"
-              >Session handling is the one thing worth not writing myself. It runs in an edge function ahead of every
-              path, and it is the only server-side logic in the system.</td
-            >
-            <td data-label="When I’d use something different"><!-- to fill in --></td>
-          </tr>
-          <tr>
-            <td>Durability</td><td>restic → Backblaze B2</td>
-            <td data-label="Why this one"
-              >Client-side AES-256 before anything leaves the machine, because provider-side encryption alone is not
-              enough for data this personal. B2 over its S3-compatible API, which restic recommends over its native
-              backend.</td
-            >
-            <td data-label="When I’d use something different"><!-- to fill in --></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
 </div>
 
 <script>
@@ -1001,17 +888,6 @@
     box-sizing: border-box;
   }
 
-  .arch-post .arch-section {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-  }
-
-  .arch-post h2 {
-    margin: 0;
-    text-wrap: balance;
-  }
-
   /* ---------- header ---------- */
 
   /* ---------- figures ---------- */
@@ -1063,10 +939,11 @@
     padding: 4px;
   }
 
-  /* 844px is exactly what the page gives the figure at the 900px swap point
-     (900 - 56 of padding), so on desktop it never scrolls sideways — the
-     column handles every width below that. The old 865px floor predates the
-     swap and cost a 21px sideways scroll at 900px to buy 0.3px of glyph. */
+  /* The figure's legibility floor. The column layout handles every width below
+     the 900px swap point, and at that point the wide container gives the figure
+     852px (900 - 48 of inset), so on desktop it never scrolls sideways. The old
+     865px floor predates the swap and cost a 21px sideways scroll at 900px to
+     buy 0.3px of glyph. */
   .arch-post svg.arch {
     display: block;
     width: 100%;
@@ -1676,112 +1553,6 @@
     margin-top: 2px;
   }
 
-  /* ---------- prose sections ---------- */
-
-  .arch-post .rule {
-    border: 0;
-    border-top: 1px solid var(--arch-line-soft);
-    margin: 0;
-  }
-
-  .arch-post .section-note {
-    margin: -8px 0 0;
-    max-width: 60ch;
-    font-size: 16px;
-    color: var(--arch-muted);
-  }
-
-  /* min() so the 340px floor never exceeds the column itself — below ~380px
-     it would otherwise push the page sideways */
-  .arch-post .costs {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
-    gap: 30px 56px;
-  }
-  .arch-post .cost {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-  }
-  .arch-post .cost h3 {
-    font-family: var(--arch-ui);
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-    color: var(--arch-text);
-  }
-  .arch-post .cost p {
-    margin: 0;
-    font-size: 16px;
-    color: #b9c5ca;
-    max-width: 46ch;
-  }
-  .arch-post .cost code {
-    font-family: var(--arch-mono);
-    font-size: 0.85em;
-    color: var(--arch-muted);
-  }
-
-  .arch-post .table-scroll {
-    overflow-x: auto;
-  }
-
-  .arch-post table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 820px;
-  }
-
-  .arch-post th,
-  .arch-post td {
-    text-align: left;
-    padding: 13px 18px 13px 0;
-    border-bottom: 1px solid var(--arch-line-soft);
-    vertical-align: top;
-  }
-
-  .arch-post th {
-    font-family: var(--arch-mono);
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--arch-dim);
-    font-weight: 400;
-    padding-bottom: 9px;
-  }
-
-  .arch-post td:nth-child(1) {
-    font-family: var(--arch-ui);
-    font-size: 13.5px;
-    font-weight: 600;
-    width: 13%;
-    white-space: nowrap;
-  }
-  .arch-post td:nth-child(2) {
-    font-family: var(--arch-mono);
-    font-size: 12px;
-    color: var(--arch-muted);
-    width: 19%;
-  }
-  .arch-post td:nth-child(3) {
-    font-size: 15.5px;
-    color: #b9c5ca;
-    width: 42%;
-  }
-
-  /* Left empty on purpose — the header explains why, and this keeps the
-     column reading as unfilled rather than broken. */
-  .arch-post th:nth-child(4),
-  .arch-post td:nth-child(4) {
-    border-left: 1px solid var(--arch-line-soft);
-    padding-left: 18px;
-  }
-  .arch-post td:nth-child(4) {
-    font-size: 15.5px;
-    color: #b9c5ca;
-    width: 26%;
-  }
-
   /* ---------- the swap ----------
 
      Below this width only the column renders; above it only the concentric
@@ -1797,85 +1568,6 @@
     }
     .arch-post .mobile-arch {
       display: flex;
-    }
-
-    /* one stacked card per role, so the table stops scrolling sideways —
-       and the empty fourth column gets somewhere sensible to sit */
-    .arch-post .table-scroll {
-      overflow-x: visible;
-    }
-    .arch-post table {
-      display: block;
-      min-width: 0;
-    }
-    .arch-post thead {
-      display: none;
-    }
-    .arch-post tbody,
-    .arch-post tr,
-    .arch-post td {
-      display: block;
-    }
-
-    .arch-post tr {
-      background: #0b1013;
-      border: 1px solid var(--arch-line-soft);
-      border-radius: 10px;
-      padding: 15px 16px 4px;
-      margin-bottom: 14px;
-    }
-
-    .arch-post td {
-      border: 0;
-      padding: 0 0 13px;
-      width: auto;
-    }
-
-    .arch-post td[data-label]::before {
-      content: attr(data-label);
-      display: block;
-      font-family: var(--arch-mono);
-      font-size: 9.5px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--arch-dim);
-      font-weight: 400;
-      margin-bottom: 5px;
-    }
-
-    /* role becomes the eyebrow, choice becomes the headline */
-    .arch-post td:nth-child(1) {
-      font-family: var(--arch-mono);
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--arch-dim);
-      font-weight: 400;
-      white-space: normal;
-      width: auto;
-      padding-bottom: 4px;
-    }
-    .arch-post td:nth-child(2) {
-      font-family: var(--arch-display);
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--arch-text);
-      width: auto;
-      letter-spacing: -0.01em;
-    }
-    .arch-post td:nth-child(3),
-    .arch-post td:nth-child(4) {
-      width: auto;
-    }
-    .arch-post td:nth-child(4) {
-      border-left: 0;
-      padding-left: 0;
-    }
-
-    /* :empty ignores comment nodes, so the to-fill-in markers still match */
-    .arch-post td:nth-child(4):empty::after {
-      content: '\2014';
-      color: var(--arch-dim);
     }
   }
 

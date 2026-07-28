@@ -15,18 +15,23 @@ export interface Props {
 
 const { post } = Astro.props;
 
-// Wide posts are built around a figure that the prose measure cannot hold, so
-// the whole article — header included — moves out to the wide measure rather
-// than having the figure break out of a narrow column on its own.
-const measure = post.wide ? 'measure-wide' : 'measure';
+// A wide post widens only its container, not its text: `post-wide` keeps every
+// child at the reading measure and lets elements marked `breakout` — in
+// practice, one figure — span the full width. The header is unaffected, so the
+// title still lines up with the body.
 // `prose` would otherwise override the measure's max-width; see AGENTS.md.
-const proseMeasure = post.wide ? 'measure-wide max-w-255' : 'measure max-w-3xl';
+const proseMeasure = post.wide ? 'measure-wide max-w-255 post-wide' : 'measure max-w-3xl';
 ---
 
-<section class="py-8 sm:py-16 lg:py-20 mx-auto">
+{
+  /* `w-full` because `mx-auto` on a flex child disables cross-axis stretch, which
+    would otherwise shrink-wrap this section to its widest content and leave a
+    wide post's container narrower than its own max-width. */
+}
+<section class="py-8 sm:py-16 lg:py-20 mx-auto w-full">
   <article>
     <header class="intersect-once intersect-quarter motion-safe:opacity-0 motion-safe:intersect:animate-fade">
-      <div class={`${measure} mb-2 flex flex-col justify-between sm:flex-row sm:items-center`}>
+      <div class="measure mb-2 flex flex-col justify-between sm:flex-row sm:items-center">
         <p>
           <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 text-foreground-subtle" />
           <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
@@ -60,8 +65,8 @@ const proseMeasure = post.wide ? 'measure-wide max-w-255' : 'measure max-w-3xl';
         </p>
       </div>
 
-      <h1 class={`${measure} heading text-4xl md:text-5xl`}>{post.title}</h1>
-      <p class={`${measure} mt-4 mb-8 text-xl md:text-2xl text-muted text-justify`}>
+      <h1 class="measure heading text-4xl md:text-5xl">{post.title}</h1>
+      <p class="measure mt-4 mb-8 text-xl md:text-2xl text-muted text-justify">
         {post.excerpt}
       </p>
 
@@ -80,7 +85,7 @@ const proseMeasure = post.wide ? 'measure-wide max-w-255' : 'measure max-w-3xl';
             decoding="async"
           />
         ) : (
-          <div class={measure}>
+          <div class="measure">
             <div class="border-t border-surface" />
           </div>
         )
@@ -91,7 +96,7 @@ const proseMeasure = post.wide ? 'measure-wide max-w-255' : 'measure max-w-3xl';
     >
       <slot />
     </div>
-    <div class={`${measure} mt-8`}>
+    <div class="measure mt-8">
       <PostTags tags={post.tags} />
     </div>
   </article>
