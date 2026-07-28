@@ -22,14 +22,14 @@ const {
 const reveal = 'intersect-once intersect-quarter motion-safe:opacity-0 motion-safe:intersect:animate-fade';
 ---
 
-<section class="relative md:-mt-[76px] not-prose flex-1 flex flex-col" {...id ? { id } : {}}>
+<section class="relative -mt-16 md:-mt-19 not-prose flex-1 flex flex-col" {...id ? { id } : {}}>
   <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
     <slot name="bg">
       {bg ? <Fragment set:html={bg} /> : null}
     </slot>
   </div>
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 flex-1 flex flex-col justify-center">
-    <div class="pt-0 md:pt-[76px] pointer-events-none"></div>
+    <div class="pt-16 md:pt-19 pointer-events-none"></div>
     <div class="py-12 md:py-20">
       <div class="text-center pb-10 md:pb-16 max-w-5xl mx-auto">
         {
@@ -40,9 +40,9 @@ const reveal = 'intersect-once intersect-quarter motion-safe:opacity-0 motion-sa
             />
           )
         }
-        {title && <h1 class={`text-5xl md:text-6xl heading mb-4 text-foreground ${reveal}`} set:html={title} />}
+        {title && <h1 class={`text-5xl md:text-6xl heading mb-1 text-foreground ${reveal}`} set:html={title} />}
         <div class="max-w-3xl mx-auto">
-          {subtitle && <p class={`text-xl mb-6 text-muted ${reveal}`} set:html={subtitle} />}
+          {subtitle && <p class={`text-xl mb-6 text-foreground ${reveal}`} set:html={subtitle} />}
           {
             actions && (
               <div

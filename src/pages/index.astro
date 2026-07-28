@@ -40,9 +40,9 @@ const metadata = {
     <Fragment slot="title"> Nathaniel May </Fragment>
 
     <Fragment slot="subtitle">
-      <span class="block text-2xl mb-4">Senior Engineering Manager</span>
-      <span class="block text-lg mb-8">
-        AI Workflows · Data Analytics · Hiring Pipelines · Coaching · Distributed Systems
+      <span class="block font-[350] text-2xl mb-4">Senior Engineering Manager</span>
+      <span class="block font-[350] text-lg mb-8 tracking-wider uppercase">
+        AI Workflows · Data Analytics · Hiring Pipelines · Coaching
       </span>
     </Fragment>
 
@@ -58,7 +58,11 @@ const metadata = {
         quality={60}
         alt=""
       />
-      <div class="absolute inset-0 bg-black/30"></div>
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div
+        class="absolute inset-0 bg-[url('/noise.png')] bg-repeat `bg-size-[128px_128px] opacity-[.2] mix-blend-overlay"
+      >
+      </div>
     </Fragment>
   </Hero>
 </Layout>

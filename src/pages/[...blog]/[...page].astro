@@ -12,11 +12,11 @@ export const prerender = true;
 
 export const getStaticPaths = (async ({ paginate }) => {
   const paths = await getStaticPathsBlogList({ paginate });
-  // If no posts exist, generate the /blog page manually
+  // If no posts exist, generate the /posts page manually
   if (paths.length === 0) {
     return [
       {
-        params: { blog: 'blog', page: undefined },
+        params: { blog: 'posts', page: undefined },
         props: { page: { data: [], currentPage: 1, url: { prev: undefined, next: undefined } } },
       },
     ];
@@ -30,7 +30,7 @@ const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
 
 const metadata = {
-  title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
+  title: `Posts${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
   robots: {
     index: blogListRobots?.index && currentPage === 1,
     follow: blogListRobots?.follow,
@@ -43,7 +43,7 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-    <Headline> Blog </Headline>
+    <Headline> Posts </Headline>
     {
       page.data.length > 0 ? (
         <>
