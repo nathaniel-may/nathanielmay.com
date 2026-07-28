@@ -58,6 +58,13 @@ const postCollection = defineCollection({
     excerpt: z.string().optional(),
     image: z.string().optional(),
 
+    /**
+     * Render the post at the wide measure instead of the prose measure. For
+     * posts built around a figure that needs more room than a reading column
+     * gives it.
+     */
+    wide: z.boolean().optional(),
+
     category: z.string().optional(),
     tags: z.array(z.string()).optional(),
     author: z.string().optional(),

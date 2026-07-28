@@ -50,6 +50,15 @@
   @apply mx-auto w-full max-w-3xl px-6;
 }
 
+/* Wide measure, for posts built around a figure that a reading column cannot
+   hold. The 28px inset is load-bearing: the architecture figure has a legibility
+   floor of 844px and swaps to its column layout at 900px, so 900 - 2*28 = 844 is
+   exactly the width it needs at the swap point. Changing this padding, or the
+   swap breakpoint, means recomputing that floor. */
+@utility measure-wide {
+  @apply mx-auto w-full max-w-255 px-7;
+}
+
 @utility icon-btn {
   @apply text-foreground-subtle hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg text-sm p-2.5 inline-flex items-center;
 }

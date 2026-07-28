@@ -17,6 +17,9 @@ export interface Post {
   excerpt?: string;
   image?: ImageMetadata | string;
 
+  /** Render at the wide measure rather than the prose measure. */
+  wide?: boolean;
+
   category?: Taxonomy;
   tags?: Taxonomy[];
   author?: string;
