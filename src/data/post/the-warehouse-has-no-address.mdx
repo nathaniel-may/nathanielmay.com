@@ -1,7 +1,7 @@
 ---
-publishDate: 2026-07-28T00:00:00Z
+publishDate: 2026-07-29T00:00:00Z
 title: 'The warehouse has no address.'
-excerpt: 'My personal analytics architecture designed for zero maintenance, for high security, and to cost mere pennies a year.'
+excerpt: 'My personal analytics architecture designed for zero maintenance, for high security, and for a budget of mere pennies a year.'
 category: 'Practical Engineering'
 tags:
   - analytics engineering
@@ -17,7 +17,7 @@ When was the last time you went to the gym, changed your air filters, or had eno
 
 I'm allergic to all kinds of maintenance, and software is no exception. When I get a haircut I schedule the next one before I leave. When my PlayStation controller dies I unplug the other and plug in the dead one. When there's no toilet paper left, I leave the cardboard tube on the lid while I get more from the closet. I've systematized so many small choices over the years that whole classes of problems just aren't something I think about anymore.
 
-If I'm going to put thousands of microscopic details about my entire life in a warehouse, what I really don't want is my security system to be personal due diligence wrapped in a crumpled collection of calendar reminders. That pretty much rules out all the major warehouse providers like BigQuery. With DuckDB, I can own the data and the process with no exploitable endpoint or address for the warehouse to reside.
+If I'm going to put thousands of microscopic details about my entire life in a warehouse, what I really don't want is my security system to be personal due diligence wrapped in a crumpled collection of calendar reminders. That pretty much rules out all the major warehouse providers like BigQuery. With DuckDB, I can own the data and the process with no exploitable endpoint since the warehouse has no address.
 
 When a cron job requests fresh source data and inserts it into DuckDB, it runs `dbt build`, creates the BI from only the pre-computed models it needs, then publishes those to Netlify before shutting down the container and data volume. Unless I'm choosing to actively work on it, no one can even attempt to gain access to my granular data 99.86% of the time.
 
@@ -27,7 +27,7 @@ I want the benefits of a world-class data pipeline for myself, without any of th
 
 ## Tradeoffs
 
-**No ad-hoc queries.** The published data holds answers, not enough to ask new questions. I can restore from backups to my laptop to explore the raw data with ad-hoc queries but it's a sit-down workflow not something I can do on the fly. If I wanted to use some of the cooler BI tech out there like [Hex](https://hex.tech) I'd move to MotherDuck instead. The upside is that all the data the UI needs is co-located and super fast.
+**No ad-hoc queries.** The published data holds pre-computed answers which isn't enough to ask new questions. I can restore from backups to my laptop to explore the raw data with ad-hoc queries but it's a sit-down workflow not something I can do on the fly. If I wanted to use some of the cooler BI tech out there like [Hex](https://hex.tech) I'd move to MotherDuck instead. The upside is that all the data the UI needs is co-located and super fast.
 
 **Team development makes no sense.** I develop locally by restoring from a backup and running my models on my machine. If the data gets too big, or there are team members trying to cooperate on multi-day git branches, dbt's elegant schema isolation on live warehouses doesn't help me at all.
 
@@ -39,7 +39,7 @@ I want the benefits of a world-class data pipeline for myself, without any of th
 
 <Role role="Warehouse" choice="Local DuckDB">
 
-I own the process and the data cheaply. I could have used SQLite or even Postgres, but this is the lightest weight and optimized for analytical workloads.
+I own the process and the data cheaply. I could have used SQLite or even Postgres, but DuckDB is the lightest weight and most optimized for analytical workloads.
 
 <Fragment slot="when">
   When I want ad-hoc queries. I'd probably just go for MotherDuck's generous free tier. I'd avoid BigQuery because
@@ -50,7 +50,7 @@ I own the process and the data cheaply. I could have used SQLite or even Postgre
 
 <Role role="Compute" choice="Railway cron job">
 
-Railway is unfathomably inexpensive and a joy to build on. Everything can be committed as config, it integrates with everything you'd expect it to, and the important stuff like rollbacks and debugging logs are one-click solutions. Best $5 I ever spent.
+Railway is unfathomably inexpensive and a joy to build on. Everything can be committed as config, it integrates with everything you'd expect it to, and the important stuff like rollbacks and debugging logs are one-click solutions. Best $5 I never spent (I'm on a free hobby plan).
 
 <Fragment slot="when">
   If I start caring about uptime SLAs, or the project stops using infrequent bursts of compute and the pay-as-you-go
@@ -84,11 +84,11 @@ Ordinary staging → intermediate → marts models with tests.
 
 <Role role="Extract" choice="Observable Framework">
 
-Turns a warehouse into a website with no database behind it by writing data to files at build time. Makes deployment practically an automated copy-paste.
+Turns a warehouse into a website with no database behind it by writing data to files at build time. Configuring new charts is both simple and highly configurable when something highly specific is called for. Makes deployment practically an automated copy-paste.
 
 <Fragment slot="when">
   If the lack of an interactive exploratory data UI is more painful than maintaining another live service I'd go for
-  Streamlit. As much as I love Metabase as BI, backing up a Postgres db instead of committing source is an architectural
+  Streamlit. As much as I love Metabase as BI, backing up a Postgres instance instead of committing source is an architectural
   blunder I don't plan on repeating or paying to compensate for. If Observable Framework completely abandoned their OSS
   offering like [Evidence](https://evidence.dev) did ([last meaningful release from the Core team was in January
   2025](https://github.com/evidence-dev/evidence/pull/3017)) then there's no great client-side alternative. I'd probably
@@ -97,7 +97,7 @@ Turns a warehouse into a website with no database behind it by writing data to f
 
 </Role>
 
-<Role role="Hosting" choice="Netlify">
+<Role role="Deploy" choice="Netlify">
 
 Serves a static directory, and integrates auth in an edge function.
 
@@ -114,17 +114,17 @@ Handles user management and sessions. It runs in a Netlify edge function ahead o
 
 <Fragment slot="when">
   If I ever leave my legacy free tier plan I would just use Netlify Identity. Anyone with a normal credit-based plan
-  should start here.
+  should should just use Netlify Identity.
 </Fragment>
 
 </Role>
 
 <Role role="Durability" choice="restic → Backblaze B2">
 
-Before shipping the backup, everything is encrypted with AES-256 before anything leaves the machine. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
+Before shipping the backup, everything is encrypted client-side with AES-256 first. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
 
 <Fragment slot="when">
-  Neither have simple, low-cost alternatives. If for some reason I started using my bucket for more egress than storage
+  Neither has simple, low-cost alternatives. If for some reason I started using my bucket for more egress than storage
   I could consider Cloudflare R2.
 </Fragment>
 
