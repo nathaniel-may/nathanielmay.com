@@ -1,0 +1,920 @@
+---
+/**
+ * The architecture figure, carried over from the standalone `arch.html` built
+ * in the pipeline repo (nathaniel-may/personal-analytics @ e7878ab).
+ *
+ * Two assets, not one drawing that reflows. Given at least 852px the concentric
+ * SVG shows the whole shape at once; below that a single-column HTML/CSS layout
+ * reads as a traversal. The SVG has a fixed viewBox, so on a phone it could
+ * only shrink below legibility or scroll — hence the second asset rather than
+ * a rearrangement. Keep the two in step by hand: a node added to one and not
+ * the other is now only a reading error, not a failing check.
+ *
+ * Which of the two renders is a container query on this element rather than a
+ * media query. The viewport is only a proxy for the room the figure actually
+ * has, and a scrollbar, browser zoom and device pixel ratio all pull the two
+ * apart — so the figure asks its container directly and can never choose an
+ * asset that does not fit.
+ *
+ * This component is the figure and nothing else, and it is inert. It used to
+ * carry hover-to-trace, a click-to-pin detail panel, and tap-to-expand cards
+ * on the column, backed by ~930 words in a DATA object — three quarters of the
+ * post's own length, none of it in the reading flow and none of it visible to
+ * anyone who did not hover. The argument belongs in the prose; the figure
+ * shows the shape. What the panels said and the post did not has been moved
+ * into the MDX or dropped deliberately.
+ *
+ * The prose that used to sit under it — "what this costs", and the role/choice
+ * table — lives in the MDX and in RoleTable.astro, so it reads at the reading
+ * measure and counts toward the post's reading time, which only sees markdown.
+ *
+ * Integration notes:
+ *  - Everything is namespaced under `.arch-post`. The original restyled bare
+ *    elements (body, section, table, h1, h2, footer) and used generic class
+ *    names and `:root` custom properties, all of which would collide here.
+ *    Custom properties are prefixed `--arch-*` for the same reason.
+ *  - `not-prose` keeps Tailwind Typography off the figure; the surrounding
+ *    post body is `prose`, and it would otherwise restyle the cards.
+ *  - The arrowhead marker ids are prefixed too. They are document-global, and
+ *    astro-icon injects other SVGs into the page. A `<base href>` in the site
+ *    template would break every `url(#…)` reference; there isn't one today.
+ *  - Styles are `is:global`, which is now a leftover rather than a
+ *    requirement: it was needed when a script built card bodies at runtime,
+ *    since Astro's scoping only reaches markup that existed at build time. All
+ *    the markup is static now, so these could be scoped instead.
+ *  - `breakout` opts the figure out of the reading measure and the container's
+ *    inset, so it spans the full container box. Every post body is such a
+ *    container, so this needs nothing from the post's frontmatter. That width
+ *    has to be unconditional for the container query to mean anything, so the
+ *    column puts the prose inset back on itself.
+ *
+ * Dark-only by design, which matches the site. Domain-neutral by design: the
+ * real pipeline is health and training data, deliberately scrubbed.
+ */
+---
+
+<div class="arch-post breakout not-prose">
+  <div class="figures">
+    <div class="figure"><b>0</b><span>long-running processes</span></div>
+    <div class="figure"><b>0</b><span>endpoints I operate</span></div>
+    <div class="figure"><b>~2 min</b><span>of compute per day, in two runs</span></div>
+    <div class="figure"><b>5</b><span>JSON files on the public side</span></div>
+  </div>
+
+  <div class="diagram-wrap">
+    <div class="scroller">
+      <svg
+        class="arch"
+        id="arch-svg"
+        viewBox="0 0 1062 828"
+        role="img"
+        aria-label="Concentric architecture diagram: a public internet ring containing a scheduled job ring, which contains the DuckDB warehouse."
+      >
+        <!--
+          One grid for the whole figure.
+            box        126 x 60, everywhere
+            rows       228 / 324 / 420  (sources, steps and the reader chain share them)
+            columns    68 sources | 230-832 job band | 868 reader chain
+            ring gaps  44 outside the public nodes, 36 inside
+        -->
+
+        <defs>
+          <marker
+            id="arch-ah"
+            viewBox="0 0 10 10"
+            refX="9.2"
+            refY="5"
+            markerWidth="5.4"
+            markerHeight="5.4"
+            orient="auto-start-reverse"
+          >
+            <path d="M0 0 L10 5 L0 10 Z" fill="#3a4a54"></path>
+          </marker>
+          <marker
+            id="arch-ahl"
+            viewBox="0 0 10 10"
+            refX="9.2"
+            refY="5"
+            markerWidth="5.4"
+            markerHeight="5.4"
+            orient="auto-start-reverse"
+          >
+            <path d="M0 0 L10 5 L0 10 Z" fill="#e5a44e"></path>
+          </marker>
+        </defs>
+
+        <!-- ============ outer band: public internet ============ -->
+        <g class="grp" id="g-public">
+          <rect class="band outer" x="24" y="24" width="1014" height="780" rx="22"></rect>
+          <text class="band-label" x="68" y="58">Public internet</text>
+          <text class="band-sub" x="68" y="77">other people's uptime</text>
+        </g>
+
+        <!-- ============ job band ============ -->
+        <g class="grp" id="g-job">
+          <rect class="band jobband" x="230" y="140" width="602" height="526" rx="16"></rect>
+          <text class="band-label" x="252" y="170">Scheduled job</text>
+          <text class="band-sub" x="252" y="189">0 11,23 * * * UTC — starts, runs for ~1 min, exits</text>
+          <g id="arch-ticks">
+            <rect class="tick" x="252" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="259" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="266" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="273" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="280" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="287" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="294" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="301" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="308" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="315" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="322" y="198" width="5" height="6"></rect>
+            <rect class="tick lit" x="329" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="336" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="343" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="350" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="357" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="364" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="371" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="378" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="385" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="392" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="399" y="198" width="5" height="6"></rect>
+            <rect class="tick" x="406" y="198" width="5" height="6"></rect>
+            <rect class="tick lit" x="413" y="198" width="5" height="6"></rect>
+          </g>
+          <text class="band-sub" x="428" y="204">24 h</text>
+        </g>
+
+        <!-- ============ edges ============ -->
+
+        <!-- sources merge onto one spine and enter the loader once -->
+        <g class="grp" id="e-src1"><path class="edge plain" d="M194 258 H212"></path></g>
+        <g class="grp" id="e-src2"><path class="edge plain" d="M194 354 H212"></path></g>
+        <g class="grp" id="e-src3"><path class="edge plain" d="M194 450 H212"></path></g>
+        <g class="grp" id="e-trunk"><path class="edge" d="M212 450 V258 H248"></path></g>
+
+        <!-- the one step-to-step edge in the system: Deploy's input is a
+             directory on disk, not the warehouse -->
+        <g class="grp" id="e-dist">
+          <path class="edge" d="M603 226 V206 H747 V224"></path>
+          <text class="edge-label" x="675" y="198" text-anchor="middle">dashboard/dist</text>
+        </g>
+
+        <!-- the rail: every step that moves data opens the same one file -->
+        <g class="grp" id="e-rail"><path class="edge plain" d="M315 350 H603"></path></g>
+        <!-- rail into the core: deliberately headless, because direction is carried
+             per-step by the drops above and differs between them -->
+        <g class="grp" id="e-core"><path class="edge plain" d="M531 350 V392"></path></g>
+
+        <g class="grp" id="e-ingest">
+          <path class="edge" d="M315 290 V348"></path>
+          <text class="edge-label" x="323" y="322">writes raw</text>
+        </g>
+        <g class="grp" id="e-transform">
+          <path class="edge both" d="M459 292 V346"></path>
+          <text class="edge-label" x="467" y="322">reads + writes</text>
+        </g>
+        <g class="grp" id="e-build">
+          <path class="edge" d="M603 348 V292"></path>
+          <text class="edge-label" x="611" y="322">reads</text>
+        </g>
+
+        <!-- publish out to the static site -->
+        <g class="grp" id="e-publish"><path class="edge" d="M810 258 H864"></path></g>
+
+        <!-- reader chain, the only inbound path in the system -->
+        <g class="grp" id="e-reader"><path class="edge" d="M931 418 V388"></path></g>
+        <g class="grp" id="e-clerk"><path class="edge" d="M931 322 V292"></path></g>
+
+        <!-- durability, out the bottom -->
+        <g class="grp" id="e-backup">
+          <path class="edge" d="M531 496 V544"></path>
+          <text class="edge-label" x="541" y="526">source_* → Parquet</text>
+        </g>
+        <g class="grp" id="e-b2">
+          <path class="edge" d="M531 608 V696"></path>
+          <text class="edge-label" x="541" y="656">encrypted, then sent</text>
+        </g>
+
+        <!-- ============ core ============ -->
+        <g class="grp" id="g-warehouse">
+          <rect class="core-rect" x="347" y="392" width="368" height="104" rx="10"></rect>
+          <text class="c-title" x="531" y="428" text-anchor="middle">Warehouse</text>
+          <text class="c-path" x="531" y="451" text-anchor="middle">DuckDB · /data/warehouse.duckdb</text>
+          <text class="c-note" x="531" y="473" text-anchor="middle">NO PROCESS · NO PORT · NO CONNECTION STRING</text>
+        </g>
+
+        <!-- ============ job steps — row 1 ============ -->
+        <g class="grp" id="g-ingest">
+          <rect class="node-rect" x="252" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="315" y="254" text-anchor="middle">Load</text>
+          <text class="n-sub" x="315" y="272" text-anchor="middle">Node.js</text>
+        </g>
+        <g class="grp" id="g-transform">
+          <rect class="node-rect" x="396" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="459" y="254" text-anchor="middle">Model</text>
+          <text class="n-sub" x="459" y="272" text-anchor="middle">dbt-core</text>
+        </g>
+        <g class="grp" id="g-build">
+          <rect class="node-rect" x="540" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="603" y="254" text-anchor="middle">Build</text>
+          <text class="n-sub" x="603" y="272" text-anchor="middle">Observable FW</text>
+        </g>
+        <g class="grp" id="g-publish">
+          <rect class="node-rect" x="684" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="747" y="254" text-anchor="middle">Deploy</text>
+          <text class="n-sub" x="747" y="272" text-anchor="middle">Netlify CLI</text>
+        </g>
+
+        <!-- backup: off the main line, on its own cadence -->
+        <g class="grp" id="g-backup">
+          <rect class="node-rect" x="468" y="548" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="531" y="574" text-anchor="middle">Durability</text>
+          <text class="n-sub" x="531" y="592" text-anchor="middle">restic · weekly</text>
+        </g>
+
+        <!-- ============ public ring: sources, rows 1-3 ============ -->
+        <g class="grp" id="g-src1">
+          <rect class="node-rect" x="68" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="131" y="254" text-anchor="middle">Source</text>
+          <text class="n-sub" x="131" y="272" text-anchor="middle">REST · OAuth</text>
+        </g>
+        <g class="grp" id="g-src2">
+          <rect class="node-rect" x="68" y="324" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="131" y="350" text-anchor="middle">Source</text>
+          <text class="n-sub" x="131" y="368" text-anchor="middle">REST · API key</text>
+        </g>
+        <g class="grp" id="g-src3">
+          <rect class="node-rect" x="68" y="420" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="131" y="446" text-anchor="middle">Source</text>
+          <text class="n-sub" x="131" y="464" text-anchor="middle">REST · API key</text>
+        </g>
+
+        <!-- ============ public ring: reader chain, same three rows ============ -->
+        <g class="grp" id="g-site">
+          <rect class="node-rect" x="868" y="228" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="931" y="254" text-anchor="middle">Published site</text>
+          <text class="n-sub" x="931" y="272" text-anchor="middle">Netlify · static</text>
+        </g>
+        <g class="grp" id="g-clerk">
+          <rect class="node-rect" x="868" y="324" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="931" y="350" text-anchor="middle">Auth gate</text>
+          <text class="n-sub" x="931" y="368" text-anchor="middle">Clerk · edge fn</text>
+        </g>
+        <g class="grp" id="g-reader">
+          <rect class="node-rect" x="868" y="420" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="931" y="446" text-anchor="middle">Reader</text>
+          <text class="n-sub" x="931" y="464" text-anchor="middle">signed-in browser</text>
+        </g>
+
+        <g class="grp" id="g-b2">
+          <rect class="node-rect" x="468" y="700" width="126" height="60" rx="7"></rect>
+          <text class="n-title" x="531" y="726" text-anchor="middle">Cold copy</text>
+          <text class="n-sub" x="531" y="744" text-anchor="middle">Backblaze B2</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- The narrow-screen asset. Same content, different drawing: one column,
+       warehouse as a continuous bar. -->
+  <div class="mobile-arch" id="arch-column">
+    <div class="mshell">
+      <div class="mcard mcard-zone" id="m-public">
+        <div class="mcard-head">
+          <span class="mcard-name">Public internet</span>
+          <span class="mcard-rel">other people&rsquo;s uptime</span>
+        </div>
+      </div>
+
+      <div class="mgroup">
+        <p class="mgroup-label">Sources</p>
+
+        <div class="mcard" id="m-src1">
+          <div class="mcard-head">
+            <span class="mcard-name">Source</span>
+            <span class="mcard-vendor">REST · OAuth</span>
+            <span class="mcard-rel">↓ read by Load</span>
+          </div>
+        </div>
+
+        <div class="mcard" id="m-src2">
+          <div class="mcard-head">
+            <span class="mcard-name">Source</span>
+            <span class="mcard-vendor">REST · API key</span>
+            <span class="mcard-rel">↓ read by Load</span>
+          </div>
+        </div>
+
+        <div class="mcard" id="m-src3">
+          <div class="mcard-head">
+            <span class="mcard-name">Source</span>
+            <span class="mcard-vendor">REST · API key</span>
+            <span class="mcard-rel">↓ read by Load</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- everything between the dashed rules exists for about a minute -->
+      <div class="mjob">
+        <div class="mcard mcard-zone" id="m-job">
+          <div class="mcard-head">
+            <span class="mcard-name">Scheduled job</span>
+            <span class="mcard-rel">0 11,23 * * * UTC — starts, runs for ~1 min, exits</span>
+          </div>
+        </div>
+
+        <div class="mticks" aria-hidden="true">
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick lit"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick"></span>
+          <span class="mtick"></span><span class="mtick"></span><span class="mtick lit"></span>
+        </div>
+
+        <!-- the bar starts here, where the volume mounts -->
+        <div class="mcard mcard-core" id="m-warehouse">
+          <div class="mcard-head">
+            <span class="mcard-name">Warehouse</span>
+            <span class="mcard-vendor">DuckDB · /data/warehouse.duckdb</span>
+            <span class="mcard-rel">no process · no port · no connection string</span>
+          </div>
+        </div>
+
+        <div class="mrail">
+          <span class="mrail-bar" aria-hidden="true"></span>
+
+          <div class="mcard" id="m-ingest">
+            <div class="mcard-head">
+              <span class="mcard-name">Load</span>
+              <span class="mcard-vendor">Node.js</span>
+              <span class="mcard-rel">writes raw</span>
+            </div>
+          </div>
+
+          <div class="mcard" id="m-transform">
+            <div class="mcard-head">
+              <span class="mcard-name">Model</span>
+              <span class="mcard-vendor">dbt-core</span>
+              <span class="mcard-rel">reads + writes</span>
+            </div>
+          </div>
+
+          <div class="mcard" id="m-build">
+            <div class="mcard-head">
+              <span class="mcard-name">Build</span>
+              <span class="mcard-vendor">Observable FW</span>
+              <span class="mcard-rel">reads</span>
+            </div>
+          </div>
+
+          <div class="mcard" id="m-backup">
+            <div class="mcard-head">
+              <span class="mcard-name">Durability</span>
+              <span class="mcard-vendor">restic · weekly</span>
+              <span class="mcard-rel">source_* → Parquet → Cold copy</span>
+            </div>
+          </div>
+
+          <p class="mrail-end">the volume detaches when the job exits</p>
+        </div>
+
+        <div class="mcard mstep-free" id="m-publish">
+          <div class="mcard-head">
+            <span class="mcard-name">Deploy</span>
+            <span class="mcard-vendor">Netlify CLI</span>
+            <span class="mcard-rel">reads dashboard/dist off disk</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mgroup">
+        <p class="mgroup-label">What the run leaves behind</p>
+
+        <div class="mcard" id="m-b2">
+          <div class="mcard-head">
+            <span class="mcard-name">Cold copy</span>
+            <span class="mcard-vendor">Backblaze B2</span>
+            <span class="mcard-rel">↑ from Durability · encrypted before it left</span>
+          </div>
+        </div>
+
+        <div class="mcard" id="m-site">
+          <div class="mcard-head">
+            <span class="mcard-name">Published site</span>
+            <span class="mcard-vendor">Netlify · static</span>
+            <span class="mcard-rel">↑ from Deploy · 5 JSON files</span>
+          </div>
+        </div>
+
+        <div class="mcard" id="m-clerk">
+          <div class="mcard-head">
+            <span class="mcard-name">Auth gate</span>
+            <span class="mcard-vendor">Clerk · edge fn</span>
+            <span class="mcard-rel">in front of every path</span>
+          </div>
+        </div>
+
+        <div class="mcard" id="m-reader">
+          <div class="mcard-head">
+            <span class="mcard-name">Reader</span>
+            <span class="mcard-vendor">signed-in browser</span>
+            <span class="mcard-rel">the only inbound request in the system</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* Palette and type for the figure. Dark only, by design — the page never
+     responds to a light-theme signal, so there is no half-lit broken state.
+
+     Value descends inward: the public ring is the lit surface, the job band is
+     a hole in it, the core is deeper still. Two rules hold it together — amber
+     is reserved for interaction (plus the two lit cron ticks and the stat
+     figures), and the warehouse carries the only hue. Teal because it is
+     amber's complement, so the resting focal colour never competes with the
+     interaction colour. Its 16px glow is deliberate; keep it. */
+  .arch-post {
+    /* The swap below keys off this element's width rather than the viewport's.
+       They are not the same number: media queries are evaluated against the
+       window, but the layout only gets window-minus-scrollbar, and zoom and
+       device pixel ratio move them apart further. Asking the container how much
+       room it actually has removes the whole class of mismatch. */
+    container-type: inline-size;
+
+    --arch-ink: #080b0d;
+    --arch-shell: #111a21;
+    --arch-job: #0a0f12;
+    --arch-core: #0d2028;
+    --arch-core-edge: #4d7d8b;
+    --arch-node: #202d37;
+
+    --arch-line: #2b3a45;
+    --arch-line-soft: #1a242b;
+    --arch-edge: #3a4a54;
+
+    --arch-text: #dce4e7;
+    --arch-muted: #7e8f9a;
+    --arch-dim: #55646d;
+
+    --arch-amber: #e5a44e;
+    --arch-amber-dim: #6f5327;
+
+    /* The original set its argument in a system serif and its interface in a
+       system sans. This site has no serif, so both now resolve to the site
+       face; the two names are kept so the distinction survives if one is ever
+       added. The mono stack stays — identifiers, paths and cron strings are
+       sized against it. */
+    --arch-display: var(--font-sans);
+    --arch-ui: var(--font-sans);
+    --arch-mono:
+      ui-monospace, 'SF Mono', SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+
+    font-family: var(--arch-display);
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--arch-text);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .arch-post * {
+    box-sizing: border-box;
+  }
+
+  /* ---------- header ---------- */
+
+  /* ---------- figures ---------- */
+
+  /* Two across or four across, never three. `auto-fit` took whatever count
+     fitted, which between 480px and 640px of container meant three columns and
+     a stranded fourth tile. There are four figures, so only the divisors of
+     four read as deliberate. 640px is where four tiles clear the ~160px each
+     needs before "~2 min" starts wrapping. */
+  .arch-post .figures {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--arch-line-soft);
+    border-block: 1px solid var(--arch-line-soft);
+  }
+
+  @container (min-width: 640px) {
+    .arch-post .figures {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .arch-post .figure {
+    background: var(--arch-ink);
+    padding: 20px 22px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .arch-post .figure b {
+    font-family: var(--arch-display);
+    font-size: 38px;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--arch-amber);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .arch-post .figure span {
+    font-family: var(--arch-ui);
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--arch-muted);
+  }
+
+  /* ---------- diagram ---------- */
+
+  .arch-post .diagram-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  /* Unreachable in practice, and kept only as a guard. The container query
+     below draws the SVG only when there is room for it, so this never has
+     anything to scroll. Nothing announces a sideways scroll any more because
+     one can no longer happen. */
+  .arch-post .scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* Padding keeps focus rings off the clip edge. It used to be cancelled by a
+       matching -4px margin, which the container's inset absorbed — but the
+       figure is flush with the container box now, so that margin escaped the
+       viewport and scrolled the page by 4px. The figure sits 4px inside its
+       band instead, which it can afford. */
+    padding: 4px;
+  }
+
+  /* The figure's legibility floor, and a guard rather than a working
+     constraint: the container query below refuses to draw the SVG unless there
+     is at least 844px for it, so this never binds. It is kept because it states
+     the number the swap threshold is derived from — change one and the other is
+     wrong. Worth knowing the floor is softer than it looks: it was originally
+     reverse-engineered from the layout rather than measured, and at 844px the
+     smallest labels land at 7.5px. They are 9.1px at the width the figure
+     actually gets today. */
+  .arch-post svg.arch {
+    display: block;
+    width: 100%;
+    min-width: 844px;
+    height: auto;
+  }
+
+  .arch-post .band {
+    fill: var(--arch-shell);
+    stroke: var(--arch-line);
+    stroke-width: 1;
+  }
+  .arch-post .band.outer {
+    fill: var(--arch-shell);
+  }
+  .arch-post .band.jobband {
+    fill: var(--arch-job);
+    stroke: #35474f;
+    stroke-dasharray: 4 5;
+  }
+
+  /* The one element with a hue of its own. Amber is reserved for interaction,
+     so the resting focal colour is its complement. */
+  .arch-post .core-rect {
+    fill: var(--arch-core);
+    stroke: var(--arch-core-edge);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 16px rgba(77, 125, 139, 0.22));
+  }
+
+  .arch-post .node-rect {
+    fill: var(--arch-node);
+    stroke: var(--arch-line);
+    stroke-width: 1;
+  }
+
+  .arch-post .n-title {
+    font-family: var(--arch-ui);
+    font-size: 13px;
+    font-weight: 600;
+    fill: var(--arch-text);
+  }
+  .arch-post .n-sub {
+    font-family: var(--arch-mono);
+    font-size: 10.5px;
+    fill: var(--arch-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .arch-post .c-title {
+    font-family: var(--arch-display);
+    font-size: 21px;
+    font-weight: 600;
+    fill: var(--arch-text);
+    letter-spacing: -0.01em;
+  }
+  .arch-post .c-path {
+    font-family: var(--arch-mono);
+    font-size: 11px;
+    fill: #9fb8c0;
+  }
+  .arch-post .c-note {
+    font-family: var(--arch-mono);
+    font-size: 10.5px;
+    fill: #6e8b94;
+    letter-spacing: 0.04em;
+  }
+
+  .arch-post .band-label {
+    font-family: var(--arch-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    fill: var(--arch-muted);
+    text-transform: uppercase;
+  }
+  .arch-post .band-sub {
+    font-family: var(--arch-mono);
+    font-size: 10px;
+    fill: var(--arch-dim);
+  }
+
+  .arch-post .edge-label {
+    font-family: var(--arch-mono);
+    font-size: 10.5px;
+    fill: var(--arch-dim);
+  }
+
+  .arch-post .edge {
+    fill: none;
+    stroke: var(--arch-edge);
+    stroke-width: 1.25;
+    marker-end: url(#arch-ah);
+  }
+  .arch-post .edge.both {
+    marker-start: url(#arch-ah);
+  }
+  .arch-post .edge.plain {
+    marker-end: none;
+  }
+
+  .arch-post .tick {
+    fill: #1e2a31;
+  }
+  .arch-post .tick.lit {
+    fill: var(--arch-amber);
+  }
+
+  /* ---------- mobile column diagram ----------
+
+     A second asset, not a reflow of the first. The concentric figure is an
+     SVG with a fixed viewBox, so on a phone it can only shrink below
+     legibility or scroll sideways. Here the diagram is real page text at a
+     fixed size — identical at every width it renders at — and the layout
+     reflows.
+
+       bar 9 + gutter 21 + card = 30 px of left inset on the rail
+       every card is one width: whatever the column gives it
+
+     The warehouse is the vertical bar rather than a box things point at. It
+     begins where the volume mounts and terminates where it detaches, so the
+     mount lifetime is a thing you scroll past. Two consequences come free:
+     Deploy is visibly the one step with no connector to it, and "nothing
+     outside reaches the core" needs no caption, because outside the dashed
+     rules the bar does not exist.
+  */
+
+  .arch-post .mobile-arch {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .arch-post .mshell {
+    background: var(--arch-shell);
+    border: 1px solid var(--arch-line);
+    border-radius: 14px;
+    padding: 16px 15px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .arch-post .mgroup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .arch-post .mgroup-label {
+    font-family: var(--arch-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--arch-dim);
+    margin: 0;
+  }
+
+  /* full-bleed inside the shell: the job is a band across it, not a box in it */
+  .arch-post .mjob {
+    margin-inline: -15px;
+    padding: 15px 15px 18px;
+    background: var(--arch-job);
+    border-block: 1px dashed #35474f;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* ---- cards ---- */
+
+  .arch-post .mcard {
+    position: relative;
+  }
+
+  .arch-post .mcard-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 2px 10px;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: var(--arch-node);
+    border: 1px solid var(--arch-line);
+    border-radius: 8px;
+    padding: 11px 13px 12px;
+  }
+
+  .arch-post .mcard-name {
+    font-family: var(--arch-ui);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .arch-post .mcard-vendor {
+    font-family: var(--arch-mono);
+    font-size: 11px;
+    color: var(--arch-muted);
+  }
+
+  .arch-post .mcard-rel {
+    grid-column: 1 / -1;
+    font-family: var(--arch-mono);
+    font-size: 10px;
+    color: var(--arch-dim);
+    letter-spacing: 0.02em;
+  }
+
+  /* zone headers behave like cards but read as labels */
+  .arch-post .mcard-zone > .mcard-head {
+    background: none;
+    border-color: transparent;
+    padding: 2px 0 4px;
+    grid-template-columns: 1fr;
+  }
+  .arch-post .mcard-zone .mcard-name {
+    font-family: var(--arch-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--arch-muted);
+    font-weight: 400;
+  }
+  .arch-post .mcard-zone .mcard-rel {
+    color: var(--arch-dim);
+  }
+
+  /* the warehouse: the only element carrying a hue, here and on desktop */
+  .arch-post .mcard-core > .mcard-head {
+    background: var(--arch-core);
+    border: 1.5px solid var(--arch-core-edge);
+    filter: drop-shadow(0 0 16px rgba(77, 125, 139, 0.22));
+    border-radius: 8px 8px 0 0;
+    padding: 14px 14px 15px;
+    /* the path is too long to sit beside a 20px title — its own row */
+    grid-template-columns: 1fr;
+  }
+  .arch-post .mcard-core .mcard-name {
+    font-family: var(--arch-display);
+    font-size: 20px;
+  }
+  .arch-post .mcard-core .mcard-vendor {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    color: #9fb8c0;
+  }
+  .arch-post .mcard-core .mcard-rel {
+    color: #6e8b94;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ---- the rail: the mounted volume, and everything that opens it ---- */
+
+  .arch-post .mrail {
+    position: relative;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .arch-post .mrail-bar {
+    position: absolute;
+    left: 0;
+    top: -14px;
+    bottom: 26px;
+    width: 9px;
+    background: var(--arch-core);
+    border: 1.5px solid var(--arch-core-edge);
+    border-top: 0;
+    filter: drop-shadow(0 0 12px rgba(77, 125, 139, 0.22));
+  }
+
+  /* widened foot: the volume detaching, not a line that ran out of page */
+  .arch-post .mrail-bar::after {
+    content: '';
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    bottom: -1.5px;
+    height: 1.5px;
+    background: var(--arch-core-edge);
+  }
+
+  .arch-post .mrail > .mcard::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 25px;
+    width: 21px;
+    height: 1px;
+    background: var(--arch-edge);
+  }
+
+  .arch-post .mrail-end {
+    margin: 2px 0 0 -30px;
+    font-family: var(--arch-mono);
+    font-size: 10px;
+    color: var(--arch-dim);
+  }
+
+  /* Deploy keeps the rail's indent and has no tick — the whole point */
+  .arch-post .mstep-free {
+    margin-left: 30px;
+  }
+
+  /* ---- 24-hour strip ---- */
+
+  /* one mark per hour, spanning the column: the run fits inside one of them
+     roughly sixty times over */
+  .arch-post .mticks {
+    display: flex;
+    gap: 2px;
+    padding: 2px 0 0;
+  }
+  .arch-post .mtick {
+    flex: 1;
+    height: 6px;
+    background: #1e2a31;
+  }
+  .arch-post .mtick.lit {
+    background: var(--arch-amber);
+  }
+
+  /* ---- interaction: opacity and colour, plus the one thing that moves ---- */
+
+  /* ---------- the swap ----------
+
+     Below this width only the column renders; above it only the concentric
+     figure does. Two layouts to keep in sync, on purpose: the SVG shows the
+     shape at a glance, which is exactly what a phone cannot do, and the
+     column reads as a traversal, which is exactly what a desktop doesn't
+     need. Neither is a degraded version of the other.
+  */
+  /* 852px = the SVG's 844px legibility floor plus the scroller's 8px of
+     focus-ring padding. Below that there is genuinely not room to draw it, so
+     the column renders instead — which is the honest test, and one a scrollbar
+     cannot fool. The figure spans the full container box, so when the column
+     shows it puts the prose inset back on itself. */
+  @container (max-width: 851px) {
+    .arch-post .diagram-wrap {
+      display: none;
+    }
+    .arch-post .mobile-arch {
+      display: flex;
+    }
+  }
+</style>

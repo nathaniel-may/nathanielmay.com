@@ -16,6 +16,8 @@ export interface Post {
   /** Optional summary of post content. */
   excerpt?: string;
   image?: ImageMetadata | string;
+  /** Alt text for `image`. Omit for decorative images, which render alt="". */
+  imageAlt?: string;
 
   category?: Taxonomy;
   tags?: Taxonomy[];

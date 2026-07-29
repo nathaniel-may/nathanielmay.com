@@ -1,0 +1,27 @@
+---
+/**
+ * The list that holds <Role> cards. Layout only — every word lives in the post.
+ *
+ * This was a four-column table with a second stacked layout below 900px. It is
+ * cards now: unlike the figure, this content genuinely reflows, so it needs one
+ * layout rather than two. Dropping `<table>` also drops `display: block` on
+ * table/tr/td, which strips table semantics in some assistive tech.
+ *
+ * `not-prose` keeps Tailwind Typography off the cards; the post body is `prose`
+ * and would otherwise restyle the slotted markdown inside them.
+ */
+---
+
+<div class="not-prose breakout roles"><slot /></div>
+
+<style>
+  .roles {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    /* block only — the post's wide container centres its children with
+       `margin-inline: auto`, and a shorthand here would out-specify it and
+       pin the list to the left edge */
+    margin-block: 2rem;
+  }
+</style>
