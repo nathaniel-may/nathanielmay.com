@@ -30,7 +30,7 @@ I want the benefits of a world-class data pipeline for myself, without any of th
 
 **Team development makes no sense.** I develop locally by restoring from a backup and running my models on my machine. If the data gets too big, or there are team members trying to cooperate on multi-day git branches, dbt's elegant schema isolation on live warehouses doesn't help me at all.
 
-**Super fresh data is expensive.** Publish frequency is bounded in practice by Netlify credits. My legacy free tier covers twice a day easily. The current free tier only covers building every other day, and deploying every 30m would require the $95/mo plan.
+**Super fresh data is expensive.** Publish frequency is bounded in practice by Netlify credits. My legacy free tier covers twice a day easily. The current free tier only covers building every other day, and deploying every 30m would require the $95/mo plan. I currently hash the deploy artifacts so it's possible to skip if there's no new data. High-volume data sources would cause that optimization to miss every time.
 
 ## The Stack
 
@@ -123,7 +123,7 @@ Handles user management and sessions. It runs in a Netlify edge function ahead o
 
 <Role role="Durability" choice="restic → Backblaze B2">
 
-Before shipping the backup, everything is encrypted client-side with AES-256. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
+Before shipping the backup, everything is encrypted client-side with AES-256. This protects the raw data, but I make no attempts to protect railway instance while it's running since that window is so small. Ransomeware attacks are prevented with B2 object lock on the bucket since pull-based backups aren't feasible with this architecture. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
 
 <Fragment slot="when">
   Neither has any alternatives compelling enough to switch to for this use case. If for some reason I started using my
