@@ -50,11 +50,11 @@ I own the process and the data cheaply. I could have used SQLite or even Postgre
 
 <Role role="Compute" choice="Railway cron job">
 
-Railway is unfathomably inexpensive and a joy to build on. Everything can be committed as config, it integrates with everything you'd expect it to, and the important stuff like rollbacks and debugging logs are one-click solutions. Best $5 I never spent (I'm on a free hobby plan for early adopters that normally costs $5/mo). Even so, the usage for this project is under $0.03/mo so the Railway free tier will work for anyone with less than 500Mb of data. I can't stress enough that this is worth paying for.
+Railway is unfathomably inexpensive and a joy to build on. Everything can be committed as config, it integrates with everything you'd expect it to, and the important stuff like rollbacks and debugging logs are one-click solutions. Even though I'm on a zero cost legacy plan, Railway is absolutely worth paying for. The usage for this project is under $0.03/mo so the Railway free tier will work for anyone with less than 500Mb of data.
 
 <Fragment slot="when">
-  If I start caring about uptime SLAs, or the project stops using infrequent bursts of compute and the pay-as-you-go
-  starts to rack up. At that point I'd go for something from DigitalOcean.
+  If I start caring about uptime SLAs, if the project stops using infrequent bursts of compute and the pay-as-you-go
+  starts to rack up, or I start working with more than 1Tb of data. At that point I'd go for something from DigitalOcean.
 </Fragment>
 
 </Role>
@@ -84,7 +84,7 @@ Ordinary staging → intermediate → marts models with tests.
 
 <Role role="Extract" choice="Observable Framework">
 
-Turns a warehouse into a website with no database behind it by writing data to files at build time. Configuring new charts is both simple and highly customizable when something highly specific is called for. Makes deployment practically an automated copy-paste.
+Turns a warehouse into a website with no database behind it by writing data to files at build time. Configuring new charts is both simple and highly customizable when something unique is called for. Makes deployment practically an automated copy-paste.
 
 <Fragment slot="when">
   If the lack of an interactive exploratory data UI is more painful than maintaining another live service I'd go for
