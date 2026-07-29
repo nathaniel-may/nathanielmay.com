@@ -36,7 +36,8 @@ I want the benefits of a world-class data pipeline for myself, without any of th
 
 <RoleTable>
 
-<Role role="Warehouse" choice="Local DuckDB">
+<Role role="Warehouse">
+  <Fragment slot="choice">Local [DuckDB](https://duckdb.org)</Fragment>
 
 I own the process and the data cheaply. I could have used SQLite or even Postgres, but DuckDB is the lightest weight and most optimized for analytical workloads.
 

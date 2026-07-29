@@ -23,17 +23,19 @@
  */
 interface Props {
   role: string;
-  choice: string;
+  /** Plain text. Use the `choice` slot instead when it needs a link. */
+  choice?: string;
 }
 
 const { role, choice } = Astro.props;
+const hasChoice = Astro.slots.has('choice');
 const hasWhen = Astro.slots.has('when');
 ---
 
 <article class="role">
   <h3 class="role-head">
     <span class="role-name">{role}</span>
-    <span class="role-choice">{choice}</span>
+    <span class="role-choice">{hasChoice ? <slot name="choice" /> : choice}</span>
   </h3>
   <div class="role-body">
     <div>
@@ -88,6 +90,19 @@ const hasWhen = Astro.slots.has('when');
     letter-spacing: -0.01em;
     line-height: 1.2;
     color: var(--color-foreground);
+  }
+
+  /* Subdued: eight cards of gold headings would shout. The link colours on
+     hover instead, so the heading reads as a heading first. */
+  .role-choice :global(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--color-surface);
+    text-underline-offset: 3px;
+  }
+
+  .role-choice :global(a:hover) {
+    text-decoration-color: var(--color-primary);
   }
 
   .role-body {
