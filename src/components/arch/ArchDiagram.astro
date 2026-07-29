@@ -511,12 +511,23 @@
 
   /* ---------- figures ---------- */
 
+  /* Two across or four across, never three. `auto-fit` took whatever count
+     fitted, which between 480px and 640px of container meant three columns and
+     a stranded fourth tile. There are four figures, so only the divisors of
+     four read as deliberate. 640px is where four tiles clear the ~160px each
+     needs before "~2 min" starts wrapping. */
   .arch-post .figures {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1px;
     background: var(--arch-line-soft);
     border-block: 1px solid var(--arch-line-soft);
+  }
+
+  @container (min-width: 640px) {
+    .arch-post .figures {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 
   .arch-post .figure {
