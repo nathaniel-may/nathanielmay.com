@@ -20,7 +20,7 @@ If I'm going to put thousands of microscopic details about my entire life in a w
 
 When a cron job requests fresh source data and inserts it into DuckDB, it runs `dbt build`, creates the BI from only the pre-computed models it needs, then publishes those to Netlify before shutting down the container and data volume. Nothing in the system ever accepts a query, because nothing ever listens. Unless I'm choosing to actively work on it, the warehouse file isn't mounted anywhere at all for 99.86% of the day. The offsite backups are protected by client-side AES-256.
 
-I want the benefits of a world-class data pipeline for myself, without any of the downsides. I only have a few hours a week to work on projects and I'd much rather be building something new. The majority of the maintenance burden is refreshing a particular OAuth token in my browser with an aggressive expiration policy. This manual process will be eliminated when I get a new fitness tracker. (Don't get Whoop if you want to process your own data.) If a source API changes, it's only a handful of lines of TypeScript and a staging model to make an update. Doable in minutes with a capable agent.
+I want the benefits of a world-class data pipeline for myself, without any of the downsides. I only have a few hours a week to work on projects and I'd much rather be building something new. The majority of the maintenance burden is using my browser to refresh one particular OAuth token with an aggressive expiration policy. This manual process will be eliminated when I get a new fitness tracker. (Don't get Whoop if you want to process your own data.) If a source API changes, it's only a handful of lines of TypeScript and a staging model to make an update. Doable in minutes with a capable agent.
 
 <ArchDiagram />
 
@@ -77,7 +77,7 @@ A small custom TypeScript app maps API endpoints to source tables in DuckDB. Eve
 <Role role="Model">
   <Fragment slot="choice">[dbt-core](https://github.com/dbt-labs/dbt-core) + [dbt-duckdb](https://github.com/duckdb/dbt-duckdb)</Fragment>
 
-Industry standard for sql modeling, with a huge and active community. I have models for staging → intermediate → marts with tests.
+Models my data in SQL with an industry standard tool that has a large and active community. I have models for staging → intermediate → marts, all with tests.
 
 <Fragment slot="when">
   If my project starts turning into Jinja soup I might add some external tooling like [SQLGlot](https://sqlglot.com), or
@@ -91,7 +91,7 @@ Industry standard for sql modeling, with a huge and active community. I have mod
 <Role role="Build">
   <Fragment slot="choice">[Observable Framework](https://observablehq.com/framework/)</Fragment>
 
-BI as code is very compelling. I never want to fiddle with someone else's UI to make my graphs right ever again. The build process queries the warehouse for only what it needs and creates a beautiful front end. Configuring new charts is both simple and highly customizable when something unique is called for. Makes deployment practically an automated copy-paste.
+BI as code is very compelling. I never want to fiddle with someone else's UI to get my graphs looking right again. The build process copies data out of the warehouse to create a beautiful front end that needs no warehouse. Configuring new charts is both simple and highly customizable when something unique is called for. Makes deployment practically an automated copy-paste.
 
 <Fragment slot="when">
   If the lack of an interactive exploratory data UI is more painful than maintaining another live service and juggling
@@ -108,7 +108,7 @@ BI as code is very compelling. I never want to fiddle with someone else's UI to 
 <Role role="Hosting">
   <Fragment slot="choice">[Netlify](https://www.netlify.com)</Fragment>
 
-Serves a static directory, and integrates auth in an edge function. Netlify has always been extremely easy to use and I've had no complaints in the many years I've used it for free.
+Serves a static directory and integrates auth in an edge function. Netlify has always been extremely easy to use and I've had no complaints in the many years I've been on the free tier."
 
 <Fragment slot="when">
   If the cost got too high I might see if [Cloudflare Pages](https://pages.cloudflare.com) could do it cheaper. If I
@@ -121,7 +121,7 @@ Serves a static directory, and integrates auth in an edge function. Netlify has 
 <Role role="Auth">
   <Fragment slot="choice">[Clerk](https://clerk.com)</Fragment>
 
-Handles user management and sessions. It runs in a Netlify edge function ahead of every path, and it is the only real server-side logic in the read path. It has a generous free tier and a great UI for managing users plus all the api bits you could ask for.
+Handles user management and sessions. It runs in a Netlify edge function ahead of every path, and it is the only real server-side logic in the read path. It has a generous free tier, a great UI for managing users, and all the API bits you could ask for.
 
 <Fragment slot="when">
   If I ever leave my legacy free tier plan I would just use [Netlify
