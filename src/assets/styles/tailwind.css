@@ -60,7 +60,7 @@
    not draw itself below 844px of room, falling back to a column layout
    instead, and the inset is what decides when that happens. */
 @utility measure-wide {
-  @apply mx-auto w-full max-w-255 px-6;
+  @apply mx-auto w-full max-w-300 px-6;
 }
 
 /* Text is still text: every direct child sits at the reading measure, and only
@@ -75,14 +75,11 @@
   @apply mx-auto max-w-180;
 }
 
-/* Breakout elements ignore the reading measure and the container's inset, so
-   they span the full container box. `-mx-6` mirrors the container's `px-6` and
-   so tracks the root font size, which the site steps up at 2xl. Unconditional
-   on purpose: a breakout element's width has to be stable for a container
-   query inside it to mean anything. Anything that should stay inset at some
-   widths puts the inset back on itself. */
+/* Breakout elements ignore the reading measure and fill the container instead.
+   They keep the container's inset, so they line up with the prose on a narrow
+   screen and only widen where there is room to widen. */
 .post-wide > .breakout {
-  @apply max-w-none -mx-6;
+  @apply max-w-none;
 }
 
 @utility icon-btn {
