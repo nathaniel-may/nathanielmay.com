@@ -50,7 +50,7 @@ I own the process and the data cheaply. I could have used SQLite or even Postgre
 
 <Role role="Compute" choice="Railway cron job">
 
-Railway is unfathomably inexpensive and a joy to build on. Everything can be committed as config, it integrates with everything you'd expect it to, and the important stuff like rollbacks and debugging logs are one-click solutions. Best $5 I never spent (I'm on a free hobby plan).
+Railway is unfathomably inexpensive and a joy to build on. Everything can be committed as config, it integrates with everything you'd expect it to, and the important stuff like rollbacks and debugging logs are one-click solutions. Best $5 I never spent (I'm on a free hobby plan for early adopters that normally costs $5/mo). Even so, the usage for this project is under $0.03/mo so the Railway free tier will work for anyone with less than 500Mb of data. I can't stress enough that this is worth paying for.
 
 <Fragment slot="when">
   If I start caring about uptime SLAs, or the project stops using infrequent bursts of compute and the pay-as-you-go
@@ -84,7 +84,7 @@ Ordinary staging → intermediate → marts models with tests.
 
 <Role role="Extract" choice="Observable Framework">
 
-Turns a warehouse into a website with no database behind it by writing data to files at build time. Configuring new charts is both simple and highly configurable when something highly specific is called for. Makes deployment practically an automated copy-paste.
+Turns a warehouse into a website with no database behind it by writing data to files at build time. Configuring new charts is both simple and highly customizable when something highly specific is called for. Makes deployment practically an automated copy-paste.
 
 <Fragment slot="when">
   If the lack of an interactive exploratory data UI is more painful than maintaining another live service I'd go for
@@ -97,7 +97,7 @@ Turns a warehouse into a website with no database behind it by writing data to f
 
 </Role>
 
-<Role role="Deploy" choice="Netlify">
+<Role role="Hosting" choice="Netlify">
 
 Serves a static directory, and integrates auth in an edge function.
 
@@ -121,7 +121,7 @@ Handles user management and sessions. It runs in a Netlify edge function ahead o
 
 <Role role="Durability" choice="restic → Backblaze B2">
 
-Before shipping the backup, everything is encrypted client-side with AES-256 first. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
+Before shipping the backup, everything is encrypted client-side with AES-256. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
 
 <Fragment slot="when">
   Neither has simple, low-cost alternatives. If for some reason I started using my bucket for more egress than storage
