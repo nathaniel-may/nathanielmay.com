@@ -57,6 +57,10 @@ const postCollection = defineCollection({
     title: z.string(),
     excerpt: z.string().optional(),
     image: z.string().optional(),
+    // Describe the image only when it carries information the prose doesn't.
+    // Header photos are decorative: leaving this unset renders alt="" so
+    // screen readers skip them.
+    imageAlt: z.string().optional(),
 
     category: z.string().optional(),
     tags: z.array(z.string()).optional(),
