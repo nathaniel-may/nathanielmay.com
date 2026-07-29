@@ -17,15 +17,17 @@ When was the last time you went to the gym, changed your air filters, or had eno
 
 I'm allergic to all kinds of maintenance, and software is no exception. When I get a haircut I schedule the next one before I leave. When my PlayStation controller dies I unplug the other and plug in the dead one. When there's no toilet paper left, I leave the cardboard tube on the lid while I get more from the closet. I've systematized so many small choices over the years that whole classes of problems just aren't something I think about anymore.
 
-If I'm going to put thousands of microscopic details about my entire life in a warehouse, what I really don't want is my security system to be personal due diligence wrapped in a crumpled collection of calendar reminders. That pretty much rules out all the major warehouse providers like BigQuery. With DuckDB, I can own the data and the process and secure it by making it completely unavailable. When a cron job requests fresh source data and inserts it into DuckDB, it runs `dbt build`, creates the BI from only the pre-computed models it needs, then publishes those to Netlify before shutting down the container and data volume. Unless I'm choosing to actively work on it, no one can even attempt to gain access to my granular data 99.86% of the time.
+If I'm going to put thousands of microscopic details about my entire life in a warehouse, what I really don't want is my security system to be personal due diligence wrapped in a crumpled collection of calendar reminders. That pretty much rules out all the major warehouse providers like BigQuery. With DuckDB, I can own the data and the process with no exploitable endpoint or address for the warehouse to reside.
 
-I want the benefits of a world-class data pipeline for myself, without any of the downsides. I only have a few hours a week to maintain or build new projects and I'd much rather be building something new. The majority of the maintenance burden is keeping up with my source APIs. It's only a handful of lines of TypeScript and a staging model to make an update. Doable in minutes with a capable agent.
+When a cron job requests fresh source data and inserts it into DuckDB, it runs `dbt build`, creates the BI from only the pre-computed models it needs, then publishes those to Netlify before shutting down the container and data volume. Unless I'm choosing to actively work on it, no one can even attempt to gain access to my granular data 99.86% of the time.
+
+I want the benefits of a world-class data pipeline for myself, without any of the downsides. I only have a few hours a week to work on projects and I'd much rather be building something new. The majority of the maintenance burden is keeping up with my source APIs. It's only a handful of lines of TypeScript and a staging model to make an update. Doable in minutes with a capable agent.
 
 <ArchDiagram />
 
 ## Tradeoffs
 
-**No ad-hoc queries.** The published data holds answers, not a database. I can restore from backups to my laptop to explore the raw data with ad-hoc queries but it's a sit-down workflow not something I can do on the fly. If I wanted to use some of the cooler BI tech out there like [Hex](https://hex.tech) I'd move to MotherDuck instead. The upside is that all the data the UI needs is co-located and super fast.
+**No ad-hoc queries.** The published data holds answers, not enough to ask new questions. I can restore from backups to my laptop to explore the raw data with ad-hoc queries but it's a sit-down workflow not something I can do on the fly. If I wanted to use some of the cooler BI tech out there like [Hex](https://hex.tech) I'd move to MotherDuck instead. The upside is that all the data the UI needs is co-located and super fast.
 
 **Team development makes no sense.** I develop locally by restoring from a backup and running my models on my machine. If the data gets too big, or there are team members trying to cooperate on multi-day git branches, dbt's elegant schema isolation on live warehouses doesn't help me at all.
 
@@ -119,7 +121,7 @@ Handles user management and sessions. It runs in a Netlify edge function ahead o
 
 <Role role="Durability" choice="restic → Backblaze B2">
 
-Restic is an absolute joy to use and Backblaze B2 is just a bucket that Bezos doesn't own.
+Before shipping the backup, everything is encrypted with AES-256 before anything leaves the machine. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
 
 <Fragment slot="when">
   Neither have simple, low-cost alternatives. If for some reason I started using my bucket for more egress than storage
