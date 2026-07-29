@@ -7,11 +7,15 @@
  * SVG shows the whole shape at once; below that a single-column HTML/CSS layout
  * reads as a traversal. The SVG has a fixed viewBox, so on a phone it could
  * only shrink below legibility or scroll — hence the second asset rather than
- * a rearrangement. Which one renders is a container query on this element, not
- * a media query: the viewport is only a proxy for the room the figure has, and
- * scrollbars, zoom and device pixel ratio all pull the two apart. Both pull their detail prose from the same DATA object, and
+ * a rearrangement. Both pull their detail prose from the same DATA object, and
  * both carry the same `data-key` set, so a node added to one and forgotten in
  * the other is a visible bug.
+ *
+ * Which of the two renders is a container query on this element rather than a
+ * media query. The viewport is only a proxy for the room the figure actually
+ * has, and a scrollbar, browser zoom and device pixel ratio all pull the two
+ * apart — so the figure asks its container directly and can never choose an
+ * asset that does not fit.
  *
  * This component is the figure and nothing else. The prose that used to sit
  * under it — "what this costs", and the role/choice table — now lives in the
@@ -939,11 +943,10 @@
     gap: 18px;
   }
 
-  /* Kept as a genuine last resort only. The figure escapes the container's
-     inset (see `.post-wide > .breakout`), so it clears its 844px floor at every
-     width where it renders — including a 900px window whose classic scrollbar
-     the media query does not account for. Nothing announces a sideways scroll
-     any more, because one can no longer happen. */
+  /* Unreachable in practice, and kept only as a guard. The container query
+     below draws the SVG only when there is room for it, so this never has
+     anything to scroll. Nothing announces a sideways scroll any more because
+     one can no longer happen. */
   .arch-post .scroller {
     overflow-x: auto;
     overflow-y: hidden;
@@ -955,11 +958,14 @@
     padding: 4px;
   }
 
-  /* The figure's legibility floor. The column layout handles every width below
-     the 900px swap point, and at that point the wide container gives the figure
-     852px (900 - 48 of inset), so on desktop it never scrolls sideways. The old
-     865px floor predates the swap and cost a 21px sideways scroll at 900px to
-     buy 0.3px of glyph. */
+  /* The figure's legibility floor, and a guard rather than a working
+     constraint: the container query below refuses to draw the SVG unless there
+     is at least 844px for it, so this never binds. It is kept because it states
+     the number the swap threshold is derived from — change one and the other is
+     wrong. Worth knowing the floor is softer than it looks: it was originally
+     reverse-engineered from the layout rather than measured, and at 844px the
+     smallest labels land at 7.5px. They are 9.1px at the width the figure
+     actually gets today. */
   .arch-post svg.arch {
     display: block;
     width: 100%;
@@ -1138,7 +1144,8 @@
      A second asset, not a reflow of the first. The concentric figure is an
      SVG with a fixed viewBox, so on a phone it can only shrink below
      legibility or scroll sideways. Here the diagram is real page text at a
-     fixed size — identical at 375 px and 899 px — and the layout reflows.
+     fixed size — identical at every width it renders at — and the layout
+     reflows.
 
        bar 9 + gutter 21 + card = 30 px of left inset on the rail
        every card is one width: whatever the column gives it
