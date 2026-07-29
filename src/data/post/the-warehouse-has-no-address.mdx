@@ -123,7 +123,7 @@ Handles user management and sessions. It runs in a Netlify edge function ahead o
 
 <Role role="Durability" choice="restic → Backblaze B2">
 
-Before shipping the backup, everything is encrypted client-side with AES-256. This protects the raw data, but I make no attempts to protect railway instance while it's running since that window is so small. Ransomeware attacks are prevented with B2 object lock on the bucket since pull-based backups aren't feasible with this architecture. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
+Before shipping the backup, everything is encrypted client-side with AES-256. This protects the raw data, but I make no attempts to protect against a compromised image nor do I add anything extra for what's on my laptop. Ransomeware attacks are prevented with B2 object lock on the bucket since pull-based backups aren't feasible with this architecture. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
 
 <Fragment slot="when">
   Neither has any alternatives compelling enough to switch to for this use case. If for some reason I started using my
