@@ -260,8 +260,6 @@
       </svg>
     </div>
 
-    <p class="scroll-hint">The diagram scrolls sideways →</p>
-
     <p class="legend">
       <span><em>Dashed</em> — exists only while the job runs</span>
       <span><em>The rail</em> — every step opens the same one file</span>
@@ -932,10 +930,19 @@
     gap: 18px;
   }
 
+  /* Kept as a genuine last resort only. The figure escapes the container's
+     inset (see `.post-wide > .breakout`), so it clears its 844px floor at every
+     width where it renders — including a 900px window whose classic scrollbar
+     the media query does not account for. Nothing announces a sideways scroll
+     any more, because one can no longer happen. */
   .arch-post .scroller {
     overflow-x: auto;
     overflow-y: hidden;
-    margin-inline: -4px;
+    /* Padding keeps focus rings off the clip edge. It used to be cancelled by a
+       matching -4px margin, which the container's inset absorbed — but the
+       figure is flush with the container box now, so that margin escaped the
+       viewport and scrolled the page by 4px. The figure sits 4px inside its
+       band instead, which it can afford. */
     padding: 4px;
   }
 
@@ -1115,14 +1122,6 @@
   .arch-post .legend em {
     font-style: normal;
     color: var(--arch-text);
-  }
-
-  /* The diagram has a legibility floor; below it, scroll rather than shrink. */
-  .arch-post .scroll-hint {
-    display: none;
-    font-family: var(--arch-mono);
-    font-size: 11px;
-    color: var(--arch-dim);
   }
 
   /* ---------- mobile column diagram ----------
@@ -1571,14 +1570,20 @@
     }
   }
 
-  /* Insurance, not the normal case. Media queries count the classic scrollbar
-     in the viewport width but the layout does not get it, so a 900px window on
-     a platform with non-overlay scrollbars is ~15px short and the figure does
-     scroll. It cannot happen wider than this. (The old ≤780px rule for the
-     hint is gone: below 900px there is no figure to scroll.) */
-  @media (min-width: 900px) and (max-width: 920px) {
-    .arch-post .scroll-hint {
-      display: block;
+  /* Above the swap the SVG renders, and it has a hard 844px floor. Media
+     queries are evaluated against the window width while the layout only gets
+     window-minus-scrollbar, so a 900px window with a classic 15px scrollbar
+     hands the figure an 885px layout — 7px short once the container's 24px
+     inset is taken, which is why it used to scroll there. Taking the inset back
+     moves the requirement from `layout >= 892` to `layout >= 844`.
+
+     `1.5rem` mirrors the container's `px-6` so it tracks the root font size,
+     which the site steps up at 2xl. Scoped to the swap point on purpose: the
+     column below it reflows to any width and should stay inset like the prose
+     rather than running to the screen edges on a phone. */
+  @media (min-width: 900px) {
+    .arch-post.breakout {
+      margin-inline: -1.5rem;
     }
   }
 

@@ -75,6 +75,11 @@
   @apply mx-auto max-w-180;
 }
 
+/* Breakout elements ignore the reading measure. They still sit inside the
+   container's inset; an element that also needs those 24px can take them with
+   a negative inline margin of its own, scoped to the widths where it needs
+   them — see the architecture figure, which does exactly that above its swap
+   point and stays inset below it. */
 .post-wide > .breakout {
   @apply max-w-none;
 }
