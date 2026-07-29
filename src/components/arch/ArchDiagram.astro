@@ -216,7 +216,7 @@
         </g>
         <g class="grp" id="g-build">
           <rect class="node-rect" x="540" y="228" width="126" height="60" rx="7"></rect>
-          <text class="n-title" x="603" y="254" text-anchor="middle">Extract</text>
+          <text class="n-title" x="603" y="254" text-anchor="middle">Build</text>
           <text class="n-sub" x="603" y="272" text-anchor="middle">Observable FW</text>
         </g>
         <g class="grp" id="g-publish">
@@ -273,12 +273,6 @@
         </g>
       </svg>
     </div>
-
-    <p class="legend">
-      <span><em>Dashed</em> — exists only while the job runs</span>
-      <span><em>The rail</em> — every step opens the same one file</span>
-      <span><em>Nothing outside the job band has a path into the core.</em></span>
-    </p>
   </div>
 
   <!-- The narrow-screen asset. Same content, different drawing: one column,
@@ -370,7 +364,7 @@
 
           <div class="mcard" id="m-build">
             <div class="mcard-head">
-              <span class="mcard-name">Extract</span>
+              <span class="mcard-name">Build</span>
               <span class="mcard-vendor">Observable FW</span>
               <span class="mcard-rel">reads, read-only</span>
             </div>
@@ -690,20 +684,6 @@
   }
   .arch-post .tick.lit {
     fill: var(--arch-amber);
-  }
-
-  .arch-post .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 26px;
-    font-family: var(--arch-ui);
-    font-size: 12.5px;
-    color: var(--arch-muted);
-    padding-top: 2px;
-  }
-  .arch-post .legend em {
-    font-style: normal;
-    color: var(--arch-text);
   }
 
   /* ---------- mobile column diagram ----------
