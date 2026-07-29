@@ -287,7 +287,7 @@
       </div>
 
       <div class="mgroup">
-        <p class="mgroup-label">Sources — swap these for whatever you care about</p>
+        <p class="mgroup-label">Sources</p>
 
         <div class="mcard" id="m-src1">
           <div class="mcard-head">
@@ -388,10 +388,6 @@
             <span class="mcard-rel">reads dashboard/dist off disk</span>
           </div>
         </div>
-
-        <p class="mjob-note">
-          The one step with no connection to the bar. Its input is a directory, not the warehouse.
-        </p>
       </div>
 
       <div class="mgroup">
@@ -430,12 +426,6 @@
         </div>
       </div>
     </div>
-
-    <p class="mlegend">
-      <span><em>Dashed rules</em> — the job exists only between them</span>
-      <span><em>The bar</em> — the warehouse, mounted; it begins and ends inside the job</span>
-      <span><em>Outside the rules the bar does not exist.</em> Nothing out there has a path to it.</span>
-    </p>
   </div>
 </div>
 
@@ -886,13 +876,6 @@
     margin-left: 30px;
   }
 
-  .arch-post .mjob-note {
-    margin: -4px 0 0 30px;
-    font-family: var(--arch-ui);
-    font-size: 12px;
-    color: var(--arch-muted);
-  }
-
   /* ---- 24-hour strip ---- */
 
   /* one mark per hour, spanning the column: the run fits inside one of them
@@ -912,19 +895,6 @@
   }
 
   /* ---- interaction: opacity and colour, plus the one thing that moves ---- */
-
-  .arch-post .mlegend {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    font-family: var(--arch-ui);
-    font-size: 12.5px;
-    color: var(--arch-muted);
-  }
-  .arch-post .mlegend em {
-    font-style: normal;
-    color: var(--arch-text);
-  }
 
   /* ---------- the swap ----------
 
