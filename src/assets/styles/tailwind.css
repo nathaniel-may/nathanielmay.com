@@ -75,13 +75,14 @@
   @apply mx-auto max-w-180;
 }
 
-/* Breakout elements ignore the reading measure. They still sit inside the
-   container's inset; an element that also needs those 24px can take them with
-   a negative inline margin of its own, scoped to the widths where it needs
-   them — see the architecture figure, which does exactly that above its swap
-   point and stays inset below it. */
+/* Breakout elements ignore the reading measure and the container's inset, so
+   they span the full container box. `-mx-6` mirrors the container's `px-6` and
+   so tracks the root font size, which the site steps up at 2xl. Unconditional
+   on purpose: a breakout element's width has to be stable for a container
+   query inside it to mean anything. Anything that should stay inset at some
+   widths puts the inset back on itself. */
 .post-wide > .breakout {
-  @apply max-w-none;
+  @apply max-w-none -mx-6;
 }
 
 @utility icon-btn {

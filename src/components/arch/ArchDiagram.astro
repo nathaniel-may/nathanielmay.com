@@ -3,11 +3,13 @@
  * The architecture figure, carried over from the standalone `arch.html` built
  * in the pipeline repo (nathaniel-may/personal-analytics @ e7878ab).
  *
- * Two assets, not one drawing that reflows. Above 900px the concentric SVG
- * shows the whole shape at once; below it a single-column HTML/CSS layout
+ * Two assets, not one drawing that reflows. Given at least 852px the concentric
+ * SVG shows the whole shape at once; below that a single-column HTML/CSS layout
  * reads as a traversal. The SVG has a fixed viewBox, so on a phone it could
  * only shrink below legibility or scroll — hence the second asset rather than
- * a rearrangement. Both pull their detail prose from the same DATA object, and
+ * a rearrangement. Which one renders is a container query on this element, not
+ * a media query: the viewport is only a proxy for the room the figure has, and
+ * scrollbars, zoom and device pixel ratio all pull the two apart. Both pull their detail prose from the same DATA object, and
  * both carry the same `data-key` set, so a node added to one and forgotten in
  * the other is a visible bug.
  *
@@ -29,10 +31,10 @@
  *  - Styles are `is:global` rather than Astro-scoped on purpose: the mobile
  *    card bodies are built by the script at runtime, and scoped styles only
  *    reach markup that existed at build time.
- *  - `breakout` opts the figure out of the reading measure it is nested in, so
- *    it spans the full wide container (see `wide` in the post's frontmatter).
- *    The figure is the only thing on the page that needs that width; its 844px
- *    floor is checked against the container's inset in tailwind.css.
+ *  - `breakout` opts the figure out of the reading measure and the container's
+ *    inset, so it spans the full container box (see `wide` in the post's
+ *    frontmatter). That width has to be unconditional for the container query
+ *    to mean anything, so the column puts the prose inset back on itself.
  *
  * Dark-only by design, which matches the site. Domain-neutral by design: the
  * real pipeline is health and training data, deliberately scrubbed.
@@ -842,6 +844,13 @@
      amber's complement, so the resting focal colour never competes with the
      interaction colour. Its 16px glow is deliberate; keep it. */
   .arch-post {
+    /* The swap below keys off this element's width rather than the viewport's.
+       They are not the same number: media queries are evaluated against the
+       window, but the layout only gets window-minus-scrollbar, and zoom and
+       device pixel ratio move them apart further. Asking the container how much
+       room it actually has removes the whole class of mismatch. */
+    container-type: inline-size;
+
     --arch-ink: #080b0d;
     --arch-shell: #111a21;
     --arch-job: #0a0f12;
@@ -1560,7 +1569,12 @@
      column reads as a traversal, which is exactly what a desktop doesn't
      need. Neither is a degraded version of the other.
   */
-  @media (max-width: 899px) {
+  /* 852px = the SVG's 844px legibility floor plus the scroller's 8px of
+     focus-ring padding. Below that there is genuinely not room to draw it, so
+     the column renders instead — which is the honest test, and one a scrollbar
+     cannot fool. The figure spans the full container box, so when the column
+     shows it puts the prose inset back on itself. */
+  @container (max-width: 851px) {
     .arch-post .diagram-wrap,
     .arch-post .panel {
       display: none;
@@ -1568,22 +1582,9 @@
     .arch-post .mobile-arch {
       display: flex;
     }
-  }
-
-  /* Above the swap the SVG renders, and it has a hard 844px floor. Media
-     queries are evaluated against the window width while the layout only gets
-     window-minus-scrollbar, so a 900px window with a classic 15px scrollbar
-     hands the figure an 885px layout — 7px short once the container's 24px
-     inset is taken, which is why it used to scroll there. Taking the inset back
-     moves the requirement from `layout >= 892` to `layout >= 844`.
-
-     `1.5rem` mirrors the container's `px-6` so it tracks the root font size,
-     which the site steps up at 2xl. Scoped to the swap point on purpose: the
-     column below it reflows to any width and should stay inset like the prose
-     rather than running to the screen edges on a phone. */
-  @media (min-width: 900px) {
-    .arch-post.breakout {
-      margin-inline: -1.5rem;
+    .arch-post .figures,
+    .arch-post .mobile-arch {
+      margin-inline: 1.5rem;
     }
   }
 
