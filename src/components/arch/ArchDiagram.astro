@@ -36,9 +36,10 @@
  *    card bodies are built by the script at runtime, and scoped styles only
  *    reach markup that existed at build time.
  *  - `breakout` opts the figure out of the reading measure and the container's
- *    inset, so it spans the full container box (see `wide` in the post's
- *    frontmatter). That width has to be unconditional for the container query
- *    to mean anything, so the column puts the prose inset back on itself.
+ *    inset, so it spans the full container box. Every post body is such a
+ *    container, so this needs nothing from the post's frontmatter. That width
+ *    has to be unconditional for the container query to mean anything, so the
+ *    column puts the prose inset back on itself.
  *
  * Dark-only by design, which matches the site. Domain-neutral by design: the
  * real pipeline is health and training data, deliberately scrubbed.
