@@ -27,7 +27,7 @@ I want the benefits of a world-class data pipeline for myself, without any of th
 
 ## Tradeoffs
 
-**No ad-hoc queries.** The published data holds pre-computed answers which isn't enough to ask new questions. I can restore from backups to my laptop to explore the raw data with ad-hoc queries but it's a sit-down workflow not something I can do on the fly. If I wanted to use some of the cooler BI tech out there like [Hex](https://hex.tech) I'd move to MotherDuck instead. The upside is that all the data the UI needs is co-located and super fast.
+**No ad-hoc queries.** The published data holds pre-computed answers, which aren't enough to ask new questions. I can restore from backups to my laptop to explore the raw data with ad-hoc queries but it's a sit-down workflow not something I can do on the fly. If I wanted to use some of the cooler BI tech out there like [Hex](https://hex.tech) I'd move to MotherDuck instead. The upside is that all the data the UI needs is co-located and super fast.
 
 **Team development makes no sense.** I develop locally by restoring from a backup and running my models on my machine. If the data gets too big, or there are team members trying to cooperate on multi-day git branches, dbt's elegant schema isolation on live warehouses doesn't help me at all.
 
@@ -88,11 +88,11 @@ Turns a warehouse into a website with no database behind it by writing data to f
 
 <Fragment slot="when">
   If the lack of an interactive exploratory data UI is more painful than maintaining another live service I'd go for
-  Streamlit. As much as I love Metabase as BI, backing up a Postgres instance instead of committing source is an architectural
-  blunder I don't plan on repeating or paying to compensate for. If Observable Framework completely abandoned their OSS
-  offering like [Evidence](https://evidence.dev) did ([last meaningful release from the Core team was in January
-  2025](https://github.com/evidence-dev/evidence/pull/3017)) then there's no great client-side alternative. I'd probably
-  hand-roll something in TS and Vega-Lite and cry.
+  Streamlit. As much as I love Metabase as BI, backing up a Postgres instance instead of committing source is an
+  architectural blunder I don't plan on repeating or paying to compensate for. If Observable Framework completely
+  abandoned their OSS offering like [Evidence](https://evidence.dev) did ([last meaningful release from the Core team
+  was in January 2025](https://github.com/evidence-dev/evidence/pull/3017)) then there's no great client-side
+  alternative. I'd probably hand-roll something in TS and Vega-Lite and cry.
 </Fragment>
 
 </Role>
@@ -114,7 +114,7 @@ Handles user management and sessions. It runs in a Netlify edge function ahead o
 
 <Fragment slot="when">
   If I ever leave my legacy free tier plan I would just use Netlify Identity. Anyone with a normal credit-based plan
-  should should just use Netlify Identity.
+  should just use Netlify Identity.
 </Fragment>
 
 </Role>
@@ -124,8 +124,8 @@ Handles user management and sessions. It runs in a Netlify edge function ahead o
 Before shipping the backup, everything is encrypted client-side with AES-256. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
 
 <Fragment slot="when">
-  Neither has simple, low-cost alternatives. If for some reason I started using my bucket for more egress than storage
-  I could consider Cloudflare R2.
+  Neither has simple, low-cost alternatives. If for some reason I started using my bucket for more egress than storage I
+  could consider Cloudflare R2.
 </Fragment>
 
 </Role>
