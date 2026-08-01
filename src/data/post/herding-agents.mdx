@@ -1,7 +1,7 @@
 ---
 publishDate: 2026-07-28T00:00:00Z
 title: 'Herding Agents'
-excerpt: 'Every agent I run gets a disposable machine, one repo, and nothing else — not to keep it on a leash, but because a smaller world is one it can actually finish work in.'
+excerpt: 'Every agent I run is in an ephemeral microVM, not to keep it on a leash but because a smaller world is one where it can finish work rapidly while reserving my time and attention for design and strategy.'
 category: 'Practical Engineering'
 tags:
   - ai
@@ -9,9 +9,6 @@ author: 'Nathaniel May'
 wide: true
 draft: true
 ---
-
-{/* OUTLINE ONLY — sections and bullets. Prose to be written by Nate.
-    Visual elements deliberately unspecified; figure placeholders marked FIGURE. */}
 
 ## Thesis
 
@@ -23,7 +20,7 @@ I love Zed so much, its a popular tool for multi-plexing across agents for good 
 
 ## The stack
 
-{/* FIGURE: the layer diagram — laptop → VPN → ssh → herdr → sbx-new → agent → skills → subagents → GitHub. */}
+{/* TODO FIGURE: the layer diagram — laptop → VPN → ssh → herdr → sbx-new → agent → skills → subagents → GitHub. */}
 
 My dev stack for agents keeps them each in their own Docker sbx sandbox. The tool is specifically for agents building a microVM for each and has great features like like credential substitution in the network proxy. What's in these sandboxes is determined by Docker sbx kits and what they can reach is determined by an sbx network policy. Where I deviate from their operational model is that I make these environments ephemeral by construction. sbx gives you the tools to make them each a special snowflake, but state management is complex and annoying so I choose to eliminate it when I can.
 
@@ -53,111 +50,59 @@ When I leave the house, I turn on caffeine, shut off the screen and walk out the
 
 Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping to fold [`mosh`](https://mosh.org) into the stack to protect against unnecessary disconnects. Unfortunately, until [this issue](https://github.com/mobile-shell/mosh/issues/1364) is resolved I'll have to live with occassional disconnections. In practice on my outings I get maybe one disconnect an hour which is tolerable.
 
-## Watching six things at once
+## Watching six workers at once
 
-Here's how this usually goes: I sit down with one or two big ideas I want to implement. Maybe write a new blog post on my AI workflow and add a new graph to my personal analytics BI that shows how many commits I've used agents for over time. Analytics I split up into "Add personal GitHub commits as a source" and "model commits by agent or human author over time through to BI." The blog post I split into a research task and a collaborative outline creation. Now I have two workstreams with blocking and subsequent tasks which is easy to keep in my head. I fire the first two off, and I realize TODO what dotfiles do I kick off??
+Here's how this usually goes: I sit down with one or two big ideas I want to implement. Say write a new blog post on my AI workflow and add a new graph to my personal analytics BI. Analytics I split into "Add personal GitHub commits as a source" and "model commits by agent or human author over time through to BI." The blog post I split into a research task and a collaborative outline creation. Now I have two workstreams with blocking and subsequent tasks which is easy to keep in my head. I fire the first two off, and after working for a bit I realize there's some silly mac files creating token waste when my agents go to push, so I spin up a new agent in my dotfiles repo to investigate and make a fix. The agent from my github source project realizes my source freshness table only surfaces successful runs, but this agent was hoping to use it to detect failed runs as well- very reasonable. I spin up another to merge that first so my source work can rebase on top of it.
 
-- One to six concurrent agents, most commonly three.
-- Supervision is not watching code scroll by. It is: making decisions at human gates, answering questions, and choosing which threads to continue and which to kill.
-- `herdr` is where work is supervised. GitHub is where it's resolved. Final coordination — merging — happens in the GitHub UI, not the terminal.
-- The integration problem worth describing: the agent doesn't run in the pane, it runs inside a VM. Without a bridge, herdr sees a pane running a sandbox and has no idea whether the agent inside is blocked on a question.
-  - The fix is a hook inside the sandbox writing state to a directory bind-mounted at the identical path on both sides, plus a watcher on the host that translates it.
-  - It's a complete no-op outside a herdr pane. Optional layers have to be true no-ops or they become mandatory by accident.
+This can easily feel like it's spinning out of control. However, what's actually happening is that I have the freedom and time to solve workflow and system tech debt before shipping features which has historically been viewed as impractical yak-shaving.
 
-## The session follows you
+To keep track of this growing dependency tree, I'm currently experimenting with using a little mermaid diagram for each day. I am currently using a POC that's not even vibe coded: it's a directory, justfile, and AGENTS.md to see how I like the workflow. After updating the graph with an agent a few times, it outputs something like this:
 
-{/* Second spine. Frame as reclaiming time, not as being on call. */}
+```
+TODO ascii example here
+```
 
-- [Termux](https://termux.dev) → ssh → herdr from the phone. Because the sessions live on the laptop, walking in the door and sitting down resumes the exact same panes. Mobile isn't a second workflow; it's the same one, continued.
-- The real argument: I don't want to plan my gym trip around when my usage window resets. Downtime — a waiting room, a train, the ten minutes before something starts — is time I was already going to spend on my phone. Fiddling on your phone during down time is not something AI companies invented. I'd just rather spend it moving my work forward than scrolling.
-- Most real work still happens at the laptop. The phone covers the in-between.
-- What actually breaks, and it isn't "AI is hard" — it's a mouse-mode negotiation bug three layers down:
-  - [`mosh`](https://mosh.org) would give me roaming and resumption over a flaky mobile link. I can't use it.
-  - Zellij-style clients request mutually exclusive mouse modes in ascending order of preference, relying on emulators to ignore what they don't support and stay put. mosh instead disables the previous mode and stores only the most recent.
-  - Termux doesn't support any-event mode. So the request goes through, mosh turns off the working mode, Termux won't honor the new one, and all mouse reporting dies. Terminal.app is fine — it supports the mode.
-  - I filed [a confirmation upstream](https://github.com/mobile-shell/mosh/issues/1364) and live with plain ssh. It drops once or twice on a typical outing; herdr's detach/reattach absorbs most of it.
+If I use this enough to find value in it, I'll code up a minimal cli in Rust, commit it as a tool and use it going forward. If it still feels like it's missing something I may try using beads or another built-for purpose tracking system. But POCs like this take minutes to build, and I get to test the userflow before getting into the weeds of implementation.
 
-## The loop
+## The work
 
-{/* /dev-workflow. Stage-by-stage but compressed — the gate and the kills are the parts that matter. */}
+Work is scoped to small meaningful changes that make progress on their own. Standard engineering stuff. Poorly defined work often gets split up into smaller manageable pieces when those poor definitions are revealed during a design discussion. In practice, these chunks of work take between 20m and 1hr for my workflow to complete. It's not a target I aim for, just a consequence of tightly scoped work.
 
-- Invoked explicitly. It never fires on an ordinary coding request.
-- **Setup.** Detect the real base branch. Open a GitHub issue titled with the run ID — that issue is the run's durable log. Clone the base into a temp standalone clone on a `wip/` branch. Run state goes in the local exclude, never `.gitignore`, so it can't pollute the diff.
-- **Design.** A designer subagent writes a design doc, then a critic loop: a reviewer appends a structured verdict to a journal, a reviser makes surgical edits on `blocking`. Capped rounds, journal compacted partway through.
-- **The human gate.** The one place human judgment is mandatory. I see the summary and the open questions in chat — I never open a file in a temp clone to approve something.
-  - Small tasks: rarely bites. Anything bigger: almost always two to five rounds of feedback before I approve.
-  - That number is the argument for putting the only mandatory gate at design rather than at code review. Feedback on a design costs a paragraph. The same correction after implementation costs a rewrite.
-- **Where runs die, and why that's the payoff.** Killing a thread is normal supervision, and it almost always happens at or right after design — before any code exists.
-  - The design work found a hard blocker; an API simply can't do the thing.
-  - The premise wasn't well founded.
-  - The task is really blocked behind tech debt, so the run gets shelved, the debt becomes its own run, and the original comes back after.
-  - Reframe: design isn't only a quality filter on *how* something gets built. It's a cheap discovery mechanism for *whether* it should be. Ten minutes of agent time to establish "the API can't do this" is a bargain, and it's the strongest counter to the idea that agent workflows are just about typing faster.
-- **Plan.** Same critic loop, no human gate. Deliberate — design is where my input changes the outcome; the plan stage exists to iron out detail.
-- **Implementation.** An implementor writes code, commits, and runs the repo's quality gate. Then the orchestrator enforces a contract on every exit: working tree clean, gate results present, and the gate's timestamp not older than the last commit — it has to have actually run after the final change. Violations trigger a bounded respawn with a specific correction.
-  - Efficiency detail worth including: the implementor stays warm across fix rounds rather than being respawned cold, because a cold start re-reads the plan and re-explores the codebase every time. That's the dominant avoidable cost of the loop.
-- **History rewrite.** The messy trail gets squashed into a handful of clean, well-titled commits before review. Readable history is written before anyone reads it, not after.
-- **PR.** Push, open with `Closes #<issue>`, post a recap: rounds and verdict per stage, which model reviewed what, how many commits.
-- **On scoping, which is not a workflow thing.** I don't size tasks to fit a run. I size them the way you're supposed to size any commit: a small, iterable chunk that makes real progress on its own. Standard engineering.
-  - It just turns out that a well-defined chunk of that shape takes twenty to sixty minutes here. That's an observation about the work, not a target I aim at.
-  - A poorly defined one doesn't take longer — it spins off the other work that had to happen first. That work gets done, then the original comes back and finishes normally.
-  - This is why three concurrent agents is manageable, and it's the same mechanism as the kills above, seen from the other side.
+Within a single workstream, I use exactly two skills to orchestrate development for both claude and codex: `dev-workflow` and `pr-review`. There's nothing novel about my skill, but it automates something I used to do manually when I first started developing with agents: implementor - reviewer feedback loops. The idea is sound, but copy-pasting back and forth is a waste of my time. I may replace these with more widely shared skills like [superpowers](https://github.com/obra/superpowers) or keep the control and update my own with the good ideas I find in the open.
 
-### The mechanisms that make it trustworthy
+Because my environments are ephemeral, I need my workflow to be resumable in a new enviroment. The point of truth for integration I've chosen is Github issues and PRs. Because I care about these operating quickly without guzzling token limits, I use smaller models for longer work and bigger models with higher resoning for reviews.
 
-- **The GitHub issue is the state store.** Design and plan are posted as issue comments with markers. Resume reads which markers exist, infers the stage, and reconstructs the artifacts — it can even re-clone the branch if the temp clone is gone. No database, no checkpoint files. Just artifacts a human can read.
-- **Anti-sycophancy.** A reviewer can't approve without enumerating at least one specific, falsifiable objection it checked for and found absent or resolved. An approval with an empty considered-section is malformed and gets respawned. The prompt discourages rubber-stamping; the orchestrator validates that it did.
-- **Boundary crossings.** If a change touches serialization, FFI, IPC, a worker, or the network, green unit tests are explicitly declared insufficient — the reviewer has to look for a test that exercises the real boundary.
-- **Post-validation over trust.** Every subagent's output is structurally checked. Malformed output means a respawn with an exact correction, and it doesn't consume a round. Prompts set intent; the harness enforces it.
-- **Escalate, don't guess.** Every loop has a round cap. On exhaustion it stops and asks me, showing what's unresolved.
+Here's what `dev-workflow` does today:
+1. **Setup.** A Claude Sonnet or Codex Terra agent becomes the orchestrator. It creates the random run ID, new wip branch off main, and a local journal file for recording state and history. 
+2. **Design.** A Claude Sonnet or Codex Terra subagent gets fired off to investigate the current state and write a design doc, collecting questions to ask me along the way. The larger same-family reviewer, Claude Opus or Codex Sol, then reviews. There's some fuzzy optimizations in here like capping rounds and periodically clearing context history for the reviewer that could still use some data-driven fine tuning.
+3. **Human Gate.** This is where my time is most valuable. I review the summary of the design and answer any open questions from the designer. For small tasks, it usually gets it right the first time and I rubber stamp it. For anything larger I always have feedback- often for several rounds while we hammer out my own assumptions and the details for what implementation I want to see. This is often where work will get split into smaller chunks and the order of which agents I choose to execute shifts. This isn't just a phase to decide how something should be built, but also a cheap mechanism for deciding whether it should be built at all. Almost every time I choose not to pull on a thread it's because of this step here. I rarely need to see the code to decide it was a bad idea and shouldn't be merged. Once approved, the design gets posted as a comment on the issue so I can resume from another session cleanly.
+4. **Plan.** Same reviewer loop for a more detailed document on implementation with no human gate. This is where I choose to inject intelligence from the larger models while letting token output for the code and comments come from a smaller model. Once approved, the plan gets posted as a comment on the issue so I can resume from another session cleanly.
+5. **Implementation.** Actually write the code, use a mirror of CI steps for cheap and deterministic feedback before tapping in the reviewer. Just like with human development, this is where we find hidden assumptions that don't hold up, and those end up as comments for the reviewer to see. New commits appear for each round of fixes from the reviewer. The implementor keeps its context for the duration to conserve tokens.
+6. **History rewrite.** I don't care about the details of this process leaking out, so I have it rewrite history into a set of well-titled commits before the review.
+7. **PR.** Open with a description and a terse recap of the number of rounds of review each stage went though.
+8. **Cross Family Review.** The orchestrator has the ability to spin up another reviewer in a separate sandbox from another family of models. Claude asks for a Codex review, and Codex asks for a Claude review. I have never seen a meaninful change not have something significant caught by the cross-family review so have it automatically triggred every time. Like the previous review loops, this continues until both families are satisfied or the cap is reached and a conflict is raised to me. Because this does leave a bit of a mess for contentious PRs, I'll probably move the history rewrite step here to close this pr and open a fresh branch with all the process obfuscated.
+9. **Merge Decision.** My review. For very small tasks the code usually looks perfect and I just merge it. For larger tasks I have to decide if the part of the codebase I'm working on is ok with a little vibe bloat or if I want to start reading for questionable decisions. For critical parts of my codebases I still read every line and push my own commits for fixes. This is where I'll often opt to make an update to my AGENTS.md like `Bash is only for justfile glue not application logic. Use TypeScript only for core logic and tests.`
 
-## Two model families, on purpose
+This process only has one human input and one human gate right at the front. Once the design is approved I can move on to spinning up another work item and juggle them with ease. Just like human development, the big thing to watch out for is scope creep. If 5 of these PRs land and they're each 10k lines, you have to choose between blindly accepting bloat or doing some real work to carve them down to size.
 
-- Both Claude and Codex do primary work, genuinely alternating. Claude runs until its usage window saturates, then work shifts. Each serves as the cross-reviewer for the other.
-- Before the PR, the diff gets read by the other family — an independent, read-only second opinion, up to a few rounds. Blocking findings go back to the implementor.
-- It earns its keep: nearly every run turns up something.
-  - The effect is strongest at near-parity with different results. Codex 5.6 against Opus 4.8 were close in quality and consistently disagreed in useful ways. When one family is clearly ahead the exchange is less symmetric, but the second pass still catches things.
-  - This is a better argument than the usual ensemble hand-wave: near-parity plus different failure modes is what makes a second opinion worth anything. Two instances of the same model mostly agree with themselves.
-- Safeguards, because I'm handing my working tree to another vendor's agent:
-  - Read-only where supported, but the guaranteed protection is a worktree-integrity check after every invocation — if the sibling touched anything, hard reset and warn.
-  - The stage never blocks the run. On any failure it logs why, warns loudly, and continues.
-  - (Optional color: the verdict parser had to take the *last* sentinel pair, because `codex exec` echoes its own prompt back to stdout.)
-- **What it costs.** Two Pro plans ran this whole flow, and ran it well. That's about forty dollars a month for what the workflow was already giving me, which is extremely modest. I only recently moved up to Max 200. Worth saying plainly, because the setup reads more expensive than it is.
+For a while this helped me effeciently balance two $20 plans: Claude pro and Codex Plus. When my Claude session limit was more than half I'd swap my next few runs to Codex implementors and switch back. For any craft I'm learning, I want to outgrow my tools before I buy the expensive ones. That way I know what I need from them, which ones to buy, and how to wield them. The limitations of the $20 plans helped me develop this process, and makes my current usage of the max plans much more intentional.
 
-## Auth is an integration constraint now
+## Tradeoffs
 
-{/* The Gemini beat. Make the general argument, not a vendor complaint. */}
+### Auth is an integration constraint now
 
-- I cancelled Gemini Pro because I couldn't integrate the CLI. The interesting part is *why*, and it isn't model quality.
-- It works fine with an API key. The problem is subscription auth: it needs a browser login, which doesn't work headlessly in a sandbox — and would have to be redone on every launch.
-- (Optional, one line, only to keep two separate things straight for readers who follow this: the other well-known Antigravity gap is [no ACP mode](https://github.com/google-antigravity/antigravity-cli/issues/31), which killed it as a [Zed](https://github.com/zed-industries/agent-client-protocol) agent. That's orthogonal here — this workflow never speaks ACP, it shells out directly.)
-- A workflow whose whole premise is a fresh disposable VM per task cannot absorb a per-launch interactive browser handshake. That's not an inconvenience, it's a structural mismatch.
-- Compare what works: Claude's subscription OAuth state is captured once on the host and reused by every later sandbox. Same for the OpenAI secret. The requirement isn't a protocol — it's auth state that can be captured once and injected into a fresh machine.
-- The general point, and the one I'd want a reader to take away: as disposable agent environments become normal, *how a vendor lets you authenticate becomes a first-class integration constraint* — as important as model quality. A browser-only login is soft lock-in to long-lived, hand-configured machines.
+I cancelled my Gemini Pro plan because I can't use it in this workflow since the move to Antigravity. If I wanted to use an API key it would work great, but I can't leverage my subscription limits. This is because unlike Claude which uses persisted OAuth state, and Codex which uses a persisted secret, Antigravity requires a browser login that can't be done in a headless environment. Even if it could, I'd have to run this browser flow with every invocation because of the ephemeral nature of my environments.
 
-## GitHub is the interface
+The argument for ephemeral development environments has only gotten stronger since agents came on the scene and the product landscape is only growing. Because Antigravity's auth is structurally at odds with ephemeral environments I have no plans to add Gemini to my workflow regardless of the quality of their models.
 
-- One issue per run, one PR per change, reviews signed with the model that wrote them so cross-model review is visible in the conversation.
-- The strategic point: GitHub is deliberately the coordination surface, not the tooling. A collaborator can run a completely different setup — different editor, different agent, no agent at all — and this workflow never has to know.
-- Forcing tool uniformity is the failure mode. A shared artifact layer is the fix, and it's the only thing that works across company boundaries.
-- Narrative spine worth using: the dotfiles repo is developed *with* this workflow. Its history is full of merges from its own `wip/dev-workflow-<id>` branches. The workflow builds and improves itself.
+### One point of failure
 
-## What running agents taught me about my own hygiene
+All of this depends on a laptop left awake at home. Lid closed, power blip, or ISP down and there is no workflow at all till I get home. Using Claude dispatch with a higher plan limit is a much nicer experience than Termux + ssh, but robs me of my cross-model iteractions, and the ability to spin up new independent threads on whatever code I want to. (<- reviewer: I have never used this feature so double check me here). There are also plenty of built-for purpose platforms like Runloop and fly.io sprites that can provide nearly exactly what I need but for a price: I'm seeing roughly $50 - $500 a month depending on which platform you pick and how heavy your usage is. Relying on my laptop works for me for now.
 
-- No incident. But I had to rotate several API keys, because of how aggressively agents grep through a filesystem.
-- The response wasn't to clamp down on the agents. It was to fix the underlying bad practice: every key now lives in the macOS keyring, none in plaintext `.env` files — the way it always should have been, and the way most developers still don't do it.
-- The line to land: the agent didn't create the exposure, it revealed it. Running agents on your machine is an honest audit of your own secret hygiene.
+### The tools are never finished
 
-## What this costs
-
-{/* Same register as the warehouse post — name the limits plainly, don't soften them. */}
-
-- **One machine, one point of failure.** All of it hangs off a laptop left awake at home. Lid closed, power blip, or ISP down and there is no workflow at all.
-- **The tools are never finished.** But this isn't months of yak-shaving before you get to work — it's closer to an artisan sharpening tools. I make small changes nearly every day and the tooling keeps up with me. The workflow itself is what makes that sustainable: improving it is just another task that goes through it.
-- **Termux on Android is not a graceful experience.** It's the price of the thing I actually want.
-- **The nicer mobile UX costs the thing I value most.** Running it all on Max 200 with dispatch is a much better phone experience — and it breaks the two-pane, multi-agent shape that is the entire reason this works. I keep the rougher path on purpose.
+Owning so much of my dev stack means I am developing it frequently. Agents give me the ability to do so, but if I needed even more throughput, I would consider paying for tools I don't have to build.
 
 ## Closing
 
-- Restate the spine: less access, more output. The isolation is what let me stop supervising and start managing.
-- Note honestly that everything quantitative here is my experience, not measurement.
-- The workflow only recently started recording per-stage rounds, verdicts, models, and durations. There isn't enough history yet to say anything real. When there is, that's the follow-up post — and "here is measured data from N runs of my own agent workflow" is a claim almost nobody in this genre can make.
+When I restrict my agents to ephemeral enviroments that only have what they need to get work done, I have the freedom to use my limited time and attention on higher-level design, product decisions, and strategic direction than I do working conversationally on my host. Investing in your tools and changing your workflow is critical to getting the most out of your agents.
