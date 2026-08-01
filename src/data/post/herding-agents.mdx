@@ -59,7 +59,34 @@ This can easily feel like it's spinning out of control. However, what's actually
 To keep track of this growing dependency tree, I'm currently experimenting with using a little mermaid diagram for each day. I am currently using a POC that's not even vibe coded: it's a directory, justfile, and AGENTS.md to see how I like the workflow. After updating the graph with an agent a few times, it outputs something like this:
 
 ```
-TODO ascii example here
+┌──────────────────────────────┐     ┌───────────┐
+│       post ai workflow       │     │github data│
+└──────────────────────────────┘     └───────────┘
+                                           ▲
+                                           │
+┌──────────────────────────────┐           │
+│         remove admin         │           │
+└──────────────────────────────┘           │
+                                           │
+                                           │
+┌──────────────────────────────┐           │
+│         scratch test         ├───────────┘
+└──────────────────────────────┘
+                ▲
+                │
+┌───────────────┴──────────────┐
+│        add world seam        │
+└──────────────────────────────┘
+
+
+┌──────────────────────────────┐
+│       DONE update just       │
+└──────────────────────────────┘
+
+
+┌──────────────────────────────┐
+│DONE sbx-new image build in ci│
+└──────────────────────────────┘
 ```
 
 If I use this enough to find value in it, I'll code up a minimal cli in Rust, commit it as a tool and use it going forward. If it still feels like it's missing something I may try using beads or another built-for purpose tracking system. But POCs like this take minutes to build, and I get to test the userflow before getting into the weeds of implementation.
