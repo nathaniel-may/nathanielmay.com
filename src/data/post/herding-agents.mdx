@@ -15,76 +15,47 @@ draft: true
 
 ## Thesis
 
-{/* The opening. Lead here, before any tooling is named. */}
-
-- Endless freedom to roam my whole machine is not power, it's waste. An agent that can read anything spends its time sifting instead of working.
-- Everything my agents can reach is something they actively need. The allow list keeps growing — that's the process working, not failing. Each addition is a thing that turned out to be useful.
-- The security half is not the interesting half, but it is the enabling one: I get peace of mind without reading thousands of lines of bash. Human review of agent actions was never going to be a security model. Nobody reads that diff, and pretending otherwise is how people end up with agents they're too nervous to actually let work.
-- So the isolation isn't a leash. It's what makes the autonomy affordable. The agents write code, commit, push, and open PRs unattended — because the blast radius is bounded by construction rather than by my attention.
+Your expert attention is the most valuable resource when building with agents. When you could build anything fast, what actually gets built? Balancing product work and improving my tools in parallel gives me the best throughput. My set of tools is ever evolving, but the foundation is to maximize speed with tightly scoped work in tighly scoped enviornments. I demand productivity and focus from my agents by restricting their access to only what is needed. My agents write code, commit, push, open PRs, and request outside reviews unattended, all because they have access to everything they need and nothing more. My time and attention is spent making real decisions and shipping, not mindlessly orchestrating.
 
 ## What wasn't working
 
-{/* Brief — a problem statement, not a history section. One tight pass, then move on. */}
-
-- [Zed](https://zed.dev) was the agent host. Three specific failures:
-  - Leaving the desk meant leaving the work.
-  - No structured hand-off between reviews — I was the coordination layer.
-  - One window doing two jobs: reading code as a human and watching an agent change it, in the same panes, resized constantly.
-- The fix turned out to be a split of responsibilities, not a better window: Zed for manual inspection, something else for agent management, GitHub for coordination.
-- (Aside, one line at most: an earlier version of the loop was a [LangGraph](https://github.com/langchain-ai/langgraph) Python FSM. The stage structure and gate placement survived the port to skills; the Python didn't.)
+I love Zed so much, its a popular tool for multi-plexing across agents for good reason. I love using it to write and inspect code myself, but an agent-centric workflow uses different screenspace than a code-centric workflow. Carefully toggling back and forth became a tiresome chore. Plus I'd leave the house and my whole high velocity multi-agent workflow is stuck to my macbook while I was doing nothing on the train on way to somewhere else. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for herding agents.
 
 ## The stack
 
 {/* FIGURE: the layer diagram — laptop → VPN → ssh → herdr → sbx-new → agent → skills → subagents → GitHub. */}
 
-- One M3 MacBook, left awake with `caffeinate` and the screen off. Not a server. The one machine that holds credentials.
-- [UniFi](https://ui.com/) Teleport back into the home network, chosen because the gear was already there. [Tailscale](https://tailscale.com) would do the same job.
-- [`herdr`](https://herdr.dev) ([source](https://github.com/ogulcancelik/herdr)) as the terminal agent multiplexer — one to six agents at a glance.
-- `sbx-new`, a launcher I wrote around Anthropic's [`sbx`](https://github.com/anthropics/sbx), giving every agent session its own disposable sandbox VM.
-- Claude Code or Codex inside it, running skills, spawning subagents.
-- GitHub at the bottom, where work is resolved.
+My dev stack for agents keeps them each in their own Docker sbx sandbox. The tool is specifically for agents building a microVM for each and has great features like like credential substitution in the network proxy. What's in these sandboxes is determined by Docker sbx kits and what they can reach is determined by an sbx network policy. Where I deviate from their operational model is that I make these environments ephemeral by construction. sbx gives you the tools to make them each a special snowflake, but state management is complex and annoying so I choose to eliminate it when I can.
 
-## A disposable machine per task
+When spinning up sandboxes you have many choices to make. Each choice is very personal to each developer and organization and should be codified in an auditable way. I've concentrated all of the decisions that make up my security risk profile into a tool I wrote with the uninspiring name `sbx-new`. I'm not going to share it because I chose to collapse all the structure that would be required to express multiple people's security profiles and instead simply express what I am comfortable with. The transferable part is not the tool itself. It's that the tolerances live in one place, enforced by construction, instead of scattered across prompts, doc comments, and good intentions.
 
-{/* The spine. This is the longest section. */}
+`sbx-new` has several jobs:
+- Agent support: I use both claude and codex but will likely add more.
+- Toolchain provisioning: Done via a versioned pre-built image.
+- Coworking model: A fresh clone for branching.
+- Permissions: Check for the repo-scoped GitHub deploy key, or print the one step command to make one.
+- Hooks: Anything you want to provide it from the outside. I provide it with Herdr status hooks, and a pathway to request a cross-family review.
+- Cleanup: sbx microVMs are cheap and I drop them quickly. Every invocation cleans up old unused ones on a background thread.
 
-### It never mounts my checkout
+These definitions grow and change over time. For example, I've been doing an unusual amount of front end work lately and decided to throw playwrite and chromium into the base image. The more I work, the more the tools change to reflect my needs.
 
-- `sbx-new` makes a private standalone clone under a temp directory and mounts that. Branch switches, resets, and rebases inside the agent cannot reach my working tree.
-- Clean checkout → the clone is a snapshot of the local commit, so committed work is available.
-- Dirty, unborn, or mid-rebase → it falls back to a fresh snapshot of the remote default branch and says so. It never stashes, resets, or cleans my tree to make itself work. Never repair the human's state.
+This creates the most important primitive of the whole workflow: One disposable environment per task.
 
-### One repo's worth of credential
+Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appealing is that it has a minimal ui footprint that lets your terminal tabs span multiple workspaces while detecting and displaying the status of each agent you've launched. The layout is designed for both desktop layouts _and_ mobile layouts.
 
-- A companion tool provisions a per-repository deploy key and points that clone's `origin` at a managed SSH host alias.
-- Anything else fails closed: plain HTTPS origins, ordinary `github.com` SSH origins, arbitrary aliases.
-- Only the one relevant key goes in. Never a general-purpose `~/.ssh`.
-- Deploy keys don't bypass branch protection, which is the intent — protected branches still require the normal PR flow.
-- The sentence to land: an agent gets write access to exactly one repo, from a disposable machine, working on a copy.
+With Zed in it's own Mac workspace, I pull what the agent pushes, test, make changes and push back. It feels extremely familiar since this is how I've always worked with collaborators. I can have multiple agents from different families work on the same branch or on different branches all while clearly visible in the Herdr UI.
 
-### Everything it needs, nothing it doesn't
+# When I leave the house
 
-- A declarative kit builds a full-toolchain image once; later launches reuse a saved template. Node, Python, Rust, Haskell, PureScript, dbt, DuckDB, both agent CLIs.
-- No per-project toolchain config, no version pinning. Projects that need a specific version bring their own tooling. Opinionated defaults over a configuration surface.
-- The image is built by a disposable builder that mounts an empty workspace and gets no credentials, no skills, no hooks.
-- Runtime sandboxes get a narrow network allow list — package registries, not the internet. This is the list that keeps growing, and the point above: every entry earned its place.
-- Host-installed skills and subagent definitions are copied in before the agent starts. Without the subagent definitions the workflow reaches the sandbox but dies at the first spawn.
+With this construction it's safe to let agents work when you're not at the keyboard. That doesn't mean you should be producing maxiumum value when on dinner dates or while watching a movie. But when I'm in a waiting room or on a bus I'm usually mindlessly scrolling to pass the time. I'd much rather be building something in that time and I bet some of you would too.
 
-### Fast enough to be non-negotiable
+When I leave the house, I turn on caffeine, shut off the screen and walk out the door. I have Ubiquiti equipment at home so I can use [UniFi](https://ui.com/) Teleport to make my local network accessible to my phone. If you don't, Tailscale works just as well. I open up Termux, ssh into my laptop, type `herdr` and the whole herd is ready for me to take action. Between Herdr over ssh and the Github app I can do pretty much everything I can at home. The changes I might have pushed myself, I'll just ask the agent to do for me.
 
-- A warm pool keeps a standby sandbox per agent, replenished in the background. Launch claims the standby and injects the workspace rather than building from scratch.
-- This is the whole reason the rule survives daily use. "A fresh isolated machine per task" is a nice principle and an unbearable one if it costs ninety seconds. Instant-enough is what makes it a habit instead of a virtue.
-- Auth is checked before anything is created — missing secret means exit with the exact fix command, not a half-built sandbox.
-
-### Why I'm not publishing this one
-
-{/* Important argument — don't let it read as an apology. */}
-
-- `sbx-new` is where I encoded my security tolerances. Those are mine.
-- Adding enough levers for someone else's tolerances to be expressible would be enormous and futile. Everyone's line is somewhere different, and a config surface that tries to cover all of them stops being a boundary at all.
-- Write your own. The transferable part is not the tool — it's that the tolerances live in one place, enforced by construction, instead of scattered across prompts and good intentions.
+Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping to fold [`mosh`](https://mosh.org) into the stack to protect against unnecessary disconnects. Unfortunately, until [this issue](https://github.com/mobile-shell/mosh/issues/1364) is resolved I'll have to live with occassional disconnections. In practice on my outings I get maybe one disconnect an hour which is tolerable.
 
 ## Watching six things at once
+
+Here's how this usually goes: I sit down with one or two big ideas I want to implement. Maybe write a new blog post on my AI workflow and add a new graph to my personal analytics BI that shows how many commits I've used agents for over time. Analytics I split up into "Add personal GitHub commits as a source" and "model commits by agent or human author over time through to BI." The blog post I split into a research task and a collaborative outline creation. Now I have two workstreams with blocking and subsequent tasks which is easy to keep in my head. I fire the first two off, and I realize TODO what dotfiles do I kick off??
 
 - One to six concurrent agents, most commonly three.
 - Supervision is not watching code scroll by. It is: making decisions at human gates, answering questions, and choosing which threads to continue and which to kill.
