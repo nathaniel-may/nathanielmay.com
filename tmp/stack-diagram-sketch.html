@@ -92,8 +92,13 @@
       .edge { fill: none; stroke: var(--edge); stroke-width: 1.5; }
 
       /* ---------- lit state ---------- */
+      .stack { --anchor-dim: 1; }
       .stack .grp { transition: opacity 140ms ease; }
       .stack.engaged .grp { opacity: 0.26; }
+      /* The hub is the anchor: it's the one thing true at every step of the
+         walk, so it never recedes with the rest. Lower --anchor-dim toward
+         0.26 if it reads too loud against the lit group. */
+      .stack.engaged .grp.anchor { opacity: var(--anchor-dim); }
       .stack.engaged .grp.lit { opacity: 1; }
 
       .grp.lit .shell-rect,
@@ -187,8 +192,9 @@
             <text class="n-tag" x="220" y="409" text-anchor="middle">ssh</text>
           </g>
 
-          <!-- hub: the only object with a hue at rest -->
-          <g class="grp" data-key="hub">
+          <!-- hub: the only object with a hue at rest, and the only one that
+               never dims — see .anchor -->
+          <g class="grp anchor" data-key="hub">
             <rect class="core-rect" x="40" y="24" width="820" height="56" rx="8" />
             <text class="n-hub" x="450" y="58" text-anchor="middle">GitHub</text>
           </g>
@@ -200,15 +206,21 @@
       </figure>
 
       <figure><div class="instance" data-lit="sandbox"></div>
-        <figcaption>highlight="sandbox" — where the work happens, step one of the outward walk.</figcaption>
+        <figcaption>
+          highlight="sandbox" — where the work happens, step one of the outward walk. The hub holds its teal while
+          everything unlit recedes.
+        </figcaption>
       </figure>
 
       <figure><div class="instance" data-lit="herdr"></div>
-        <figcaption>highlight="herdr" — step two.</figcaption>
+        <figcaption>highlight="herdr" — step two. Same anchor, and herdr's route up to it goes amber with it.</figcaption>
       </figure>
 
       <figure><div class="instance" data-lit="phone hub"></div>
-        <figcaption>highlight={["phone", "hub"]} — two keys at once, for the leaving-the-house section.</figcaption>
+        <figcaption>
+          highlight={["phone", "hub"]} — two keys at once, for the leaving-the-house section. Naming the hub still
+          takes it to amber; it just never had to be named to stay visible.
+        </figcaption>
       </figure>
 
       <h2>The colour decisions</h2>
@@ -239,6 +251,13 @@
           <b>The cross-family arrow is neutral now.</b> It was red. Under the contract it can't have its own hue, so
           the relationship rests entirely on the prose — the same open question from last round, now with one fewer
           way to solve it.
+        </li>
+        <li>
+          <b>The hub never dims.</b> It's the one element true at every step, so it sits outside the
+          <code>engaged</code> fade via an <code>anchor</code> class rather than needing to be named in every
+          highlight. Teal at full strength next to an amber-lit group works because the two are complements — that's
+          the reason the analytics figure picked teal in the first place. If it still reads loud, <code>--anchor-dim</code>
+          is a single number to pull toward 0.26.
         </li>
       </ul>
 
