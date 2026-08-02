@@ -12,19 +12,19 @@ draft: true
 
 ## Thesis
 
-Your expert attention is the most valuable resource when building with agents. When you could build anything fast, what actually gets built? Balancing product work and improving my tools in parallel gives me the best throughput. My set of tools is ever evolving, but the foundation is to maximize speed with tightly scoped work in tighly scoped enviornments. I demand productivity and focus from my agents by restricting their access to only what is needed. My agents write code, commit, push, open PRs, and request outside reviews unattended, all because they have access to everything they need and nothing more. My time and attention is spent making real decisions and shipping, not mindlessly orchestrating.
+My expert attention is the most valuable resource when building with agents, and my tools are designed to preserve it. Focusing my agents through ephemeral sandboxes frees up my attention to manage the a larger herd and to improve my workflow to scale up my own throughput. My agents write code, commit, push, open PRs, and request outside reviews unattended, all because they have access to everything they need and nothing more. My time and attention is spent making real decisions and shipping, not mindlessly orchestrating.
 
 ## What wasn't working
 
-I love Zed so much, its a popular tool for multi-plexing across agents for good reason. I love using it to write and inspect code myself, but an agent-centric workflow uses different screenspace than a code-centric workflow. Carefully toggling back and forth became a tiresome chore. Plus I'd leave the house and my whole high velocity multi-agent workflow is stuck to my macbook while I was doing nothing on the train on way to somewhere else. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for herding agents.
+I love Zed so much, and it's a popular tool for multi-plexing across agents for good reason. I love using it to write and inspect code myself, but an agent-centric workflow uses different screenspace than a code-centric workflow. Carefully toggling back and forth became a tiresome chore, and when I left the house my whole high velocity multi-agent workflow is stuck to my macbook while I sat doing nothing on the train. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for herding agents.
 
 ## The stack
 
 {/* TODO FIGURE: the layer diagram — laptop → VPN → ssh → herdr → sbx-new → agent → skills → subagents → GitHub. */}
 
-My dev stack for agents keeps them each in their own Docker sbx sandbox. The tool is specifically for agents building a microVM for each and has great features like like credential substitution in the network proxy. What's in these sandboxes is determined by Docker sbx kits and what they can reach is determined by an sbx network policy. Where I deviate from their operational model is that I make these environments ephemeral by construction. sbx gives you the tools to make them each a special snowflake, but state management is complex and annoying so I choose to eliminate it when I can.
+My dev stack for agents keeps them each in their own Docker sbx sandbox. The tool is specifically for agents building a microVM for each and has great features like like credential substitution in the network proxy. What's in these sandboxes is determined by Docker sbx kits and what they can reach is determined by a network policy. Where I deviate from their operational model is that I make these environments ephemeral by construction. sbx gives you the tools to make them each a special snowflake, but state management is complex and annoying so I choose to eliminate it when I can.
 
-When spinning up sandboxes you have many choices to make. Each choice is very personal to each developer and organization and should be codified in an auditable way. I've concentrated all of the decisions that make up my security risk profile into a tool I wrote with the uninspiring name `sbx-new`. I'm not going to share it because I chose to collapse all the structure that would be required to express multiple people's security profiles and instead simply express what I am comfortable with. The transferable part is not the tool itself. It's that the tolerances live in one place, enforced by construction, instead of scattered across prompts, doc comments, and good intentions.
+When spinning up sandboxes you have many choices to make. Every choice is very personal to the needs of each organization or developer and should be codified in an auditable way. I've concentrated all of the decisions that make up my security risk profile into a tool I wrote with the uninspiring name `sbx-new`. I'm not going to share it because I chose to collapse all the structure that would be required to express multiple people's security profiles and instead simply express what I am comfortable with. The transferable part is not the tool itself. It's that the tolerances live in one place, enforced by construction, instead of scattered across prompts, doc comments, and good intentions.
 
 `sbx-new` has several jobs:
 - Agent support: I use both claude and codex but will likely add more.
@@ -40,13 +40,15 @@ This creates the most important primitive of the whole workflow: One disposable 
 
 Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appealing is that it has a minimal ui footprint that lets your terminal tabs span multiple workspaces while detecting and displaying the status of each agent you've launched. The layout is designed for both desktop layouts _and_ mobile layouts.
 
+{ TODO add screenshot of mobile and desktop }
+
 With Zed in it's own Mac workspace, I pull what the agent pushes, test, make changes and push back. It feels extremely familiar since this is how I've always worked with collaborators. I can have multiple agents from different families work on the same branch or on different branches all while clearly visible in the Herdr UI.
 
 # When I leave the house
 
-With this construction it's safe to let agents work when you're not at the keyboard. That doesn't mean you should be producing maxiumum value when on dinner dates or while watching a movie. But when I'm in a waiting room or on a bus I'm usually mindlessly scrolling to pass the time. I'd much rather be building something in that time and I bet some of you would too.
+With this construction it's safe to let agents work when you're not at the keyboard. That doesn't mean you should be valuemaxxing while on dinner dates or while watching a movie. But when I'm in a waiting room or on a bus I'm usually mindlessly scrolling to pass the time. I'd much rather be building something in that time and I bet you would too.
 
-When I leave the house, I turn on caffeine, shut off the screen and walk out the door. I have Ubiquiti equipment at home so I can use [UniFi](https://ui.com/) Teleport to make my local network accessible to my phone. If you don't, Tailscale works just as well. I open up Termux, ssh into my laptop, type `herdr` and the whole herd is ready for me to take action. Between Herdr over ssh and the Github app I can do pretty much everything I can at home. The changes I might have pushed myself, I'll just ask the agent to do for me.
+When I leave the house, I turn on caffeine, shut off the screen, and walk out the door. I have Ubiquiti equipment at home so I can use [UniFi](https://ui.com/) Teleport to make my local network accessible to my phone. If you don't, Tailscale works just as well. I open up Termux, ssh into my laptop, type `herdr` and the whole herd is ready for me to take action. Between Herdr over ssh and the Github app I can do pretty much everything I can at home. The changes I might have pushed myself, I'll just ask the agent to do for me.
 
 Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping to fold [`mosh`](https://mosh.org) into the stack to protect against unnecessary disconnects. Unfortunately, until [this issue](https://github.com/mobile-shell/mosh/issues/1364) is resolved I'll have to live with occassional disconnections. In practice on my outings I get maybe one disconnect an hour which is tolerable.
 
@@ -54,7 +56,7 @@ Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping t
 
 Here's how this usually goes: I sit down with one or two big ideas I want to implement. Say write a new blog post on my AI workflow and add a new graph to my personal analytics BI. Analytics I split into "Add personal GitHub commits as a source" and "model commits by agent or human author over time through to BI." The blog post I split into a research task and a collaborative outline creation. Now I have two workstreams with blocking and subsequent tasks which is easy to keep in my head. I fire the first two off, and after working for a bit I realize there's some silly mac files creating token waste when my agents go to push, so I spin up a new agent in my dotfiles repo to investigate and make a fix. The agent from my github source project realizes my source freshness table only surfaces successful runs, but this agent was hoping to use it to detect failed runs as well- very reasonable. I spin up another to merge that first so my source work can rebase on top of it.
 
-This can easily feel like it's spinning out of control. However, what's actually happening is that I have the freedom and time to solve workflow and system tech debt before shipping features which has historically been viewed as impractical yak-shaving.
+This can easily feel like it's spinning out of control. However, what's actually happening is that I have the freedom and time to solve workflow and system tech debt before shipping features. This was the dream that was always just out of reach without AI. These tasks were often viewed as impractical yak-shaving because of how long it took us to write, but now we can have it all.
 
 To keep track of this growing dependency tree, I'm currently experimenting with using a little mermaid diagram for each day. I am currently using a POC that's not even vibe coded: it's a directory, justfile, and AGENTS.md to see how I like the workflow. After updating the graph with an agent a few times, it outputs something like this:
 
@@ -65,7 +67,7 @@ To keep track of this growing dependency tree, I'm currently experimenting with 
                                            ▲
                                            │
 ┌──────────────────────────────┐           │
-│         remove admin         │           │
+│       add per-repo PATs      │           │
 └──────────────────────────────┘           │
                                            │
                                            │
@@ -93,9 +95,9 @@ If I use this enough to find value in it, I'll code up a minimal cli in Rust, co
 
 ## The work
 
-Work is scoped to small meaningful changes that make progress on their own. Standard engineering stuff. Poorly defined work often gets split up into smaller manageable pieces when those poor definitions are revealed during a design discussion. In practice, these chunks of work take between 20m and 1hr for my workflow to complete. It's not a target I aim for, just a consequence of tightly scoped work.
+Work is scoped to small meaningful changes that make progress on their own. Standard engineering stuff. Poorly defined work often gets split up into smaller manageable pieces when those poor definitions are revealed during a design discussion. In practice, these chunks of work take between 20m and 2hrs for my workflow to complete. It's not a target I aim for, just a consequence of tightly scoped work.
 
-Within a single workstream, I use exactly two skills to orchestrate development for both claude and codex: `dev-workflow` and `pr-review`. There's nothing novel about my skill, but it automates something I used to do manually when I first started developing with agents: implementor - reviewer feedback loops. The idea is sound, but copy-pasting back and forth is a waste of my time. I may replace these with more widely shared skills like [superpowers](https://github.com/obra/superpowers) or keep the control and update my own with the good ideas I find in the open.
+Within a single workstream, I use exactly two skills to orchestrate development for both claude and codex: `dev-workflow` and `pr-review`. There's nothing novel about my skills, but it automates something I used to do manually when I first started developing with agents: implementor - reviewer feedback loops. The idea is sound, but copy-pasting back and forth is a waste of my time. I may replace these with more widely shared skills like [superpowers](https://github.com/obra/superpowers) or keep the control and update my own with the good ideas I find in the open.
 
 Because my environments are ephemeral, I need my workflow to be resumable in a new enviroment. The point of truth for integration I've chosen is Github issues and PRs. Because I care about these operating quickly without guzzling token limits, I use smaller models for longer work and bigger models with higher resoning for reviews.
 
@@ -103,24 +105,18 @@ Here's what `dev-workflow` does today:
 1. **Setup.** A Claude Sonnet or Codex Terra agent becomes the orchestrator. It creates the random run ID, new wip branch off main, and a local journal file for recording state and history. 
 2. **Design.** A Claude Sonnet or Codex Terra subagent gets fired off to investigate the current state and write a design doc, collecting questions to ask me along the way. The larger same-family reviewer, Claude Opus or Codex Sol, then reviews. There's some fuzzy optimizations in here like capping rounds and periodically clearing context history for the reviewer that could still use some data-driven fine tuning.
 3. **Human Gate.** This is where my time is most valuable. I review the summary of the design and answer any open questions from the designer. For small tasks, it usually gets it right the first time and I rubber stamp it. For anything larger I always have feedback- often for several rounds while we hammer out my own assumptions and the details for what implementation I want to see. This is often where work will get split into smaller chunks and the order of which agents I choose to execute shifts. This isn't just a phase to decide how something should be built, but also a cheap mechanism for deciding whether it should be built at all. Almost every time I choose not to pull on a thread it's because of this step here. I rarely need to see the code to decide it was a bad idea and shouldn't be merged. Once approved, the design gets posted as a comment on the issue so I can resume from another session cleanly.
-4. **Plan.** Same reviewer loop for a more detailed document on implementation with no human gate. This is where I choose to inject intelligence from the larger models while letting token output for the code and comments come from a smaller model. Once approved, the plan gets posted as a comment on the issue so I can resume from another session cleanly.
-5. **Implementation.** Actually write the code, use a mirror of CI steps for cheap and deterministic feedback before tapping in the reviewer. Just like with human development, this is where we find hidden assumptions that don't hold up, and those end up as comments for the reviewer to see. New commits appear for each round of fixes from the reviewer. The implementor keeps its context for the duration to conserve tokens.
-6. **History rewrite.** I don't care about the details of this process leaking out, so I have it rewrite history into a set of well-titled commits before the review.
-7. **PR.** Open with a description and a terse recap of the number of rounds of review each stage went though.
-8. **Cross Family Review.** The orchestrator has the ability to spin up another reviewer in a separate sandbox from another family of models. Claude asks for a Codex review, and Codex asks for a Claude review. I have never seen a meaninful change not have something significant caught by the cross-family review so have it automatically triggred every time. Like the previous review loops, this continues until both families are satisfied or the cap is reached and a conflict is raised to me. Because this does leave a bit of a mess for contentious PRs, I'll probably move the history rewrite step here to close this pr and open a fresh branch with all the process obfuscated.
-9. **Merge Decision.** My review. For very small tasks the code usually looks perfect and I just merge it. For larger tasks I have to decide if the part of the codebase I'm working on is ok with a little vibe bloat or if I want to start reading for questionable decisions. For critical parts of my codebases I still read every line and push my own commits for fixes. This is where I'll often opt to make an update to my AGENTS.md like `Bash is only for justfile glue not application logic. Use TypeScript only for core logic and tests.`
+4. **Plan.** Same reviewer loop for a more detailed document on implementation with no human gate. This is where I choose to inject intelligence from the larger models while letting token output for the code and comments come from a smaller model. Once approved, the plan gets posted as a comment on the issue so I can resume.
+5. **Implementation.** Actually write the code, and use a mirror of CI steps for cheap and deterministic feedback before tapping in the reviewer. Just like with human development, this is where we find hidden assumptions that don't hold up, and those end up as comments for the reviewer to see. New commits appear for each round of fixes from the reviewer. The implementor keeps its context for the duration to conserve tokens.
+6. **Draft PR.** Open a PR as an integration point with cross-family models.
+7. **Cross Family Review.** The orchestrator has the ability to spin up another reviewer in a separate sandbox from another family of models. Claude asks for a Codex review, and Codex asks for a Claude review. Every single non-trivial PR has had something significant caught by the cross-family review so have it automatically triggred every time. Like the previous review loops, this continues until both families are satisfied or the cap is reached and a conflict is raised to me. At this point, the draft PR is a bit of a mess with all the agent chatter.
+8. **History rewrite.** I don't care about the details of this process leaking out, so I have it close the draft pr, rewrite the commit history into a set of well-titled commits, push to a new PR and statically evaluate that both branch's end states match so I can review the final product.
+9. **Merge Decision.** My review. For very small tasks the code usually looks perfect and I just merge it. For larger tasks I have to decide if the part of the codebase I'm working on is ok with a little vibe bloat or if I want to start reading for questionable decisions. For critical parts of my codebases I still read every line and push my own commits for fixes. This is where I may opt to make an update to my AGENTS.md like `Bash is only for justfile glue not application logic. Use TypeScript only for core logic and tests.`
 
 This process only has one human input and one human gate right at the front. Once the design is approved I can move on to spinning up another work item and juggle them with ease. Just like human development, the big thing to watch out for is scope creep. If 5 of these PRs land and they're each 10k lines, you have to choose between blindly accepting bloat or doing some real work to carve them down to size.
 
-For a while this helped me effeciently balance two $20 plans: Claude pro and Codex Plus. When my Claude session limit was more than half I'd swap my next few runs to Codex implementors and switch back. For any craft I'm learning, I want to outgrow my tools before I buy the expensive ones. That way I know what I need from them, which ones to buy, and how to wield them. The limitations of the $20 plans helped me develop this process, and makes my current usage of the max plans much more intentional.
+For a while this helped me very effeciently balance two $20 plans: Claude pro and Codex Plus. When my Claude session limit was more than half I'd swap my next few runs to Codex implementors and switch back. I was able to completely saturate my weekly limits on both which made me feel like I earned the need for the max plans. For any craft I'm learning, I want to outgrow my tools before I buy the expensive ones so I know what I need from them, which ones to buy, and how to wield them. The limitations of the $20 plans helped me develop this process, and makes my current usage of the max plans much more intentional.
 
 ## Tradeoffs
-
-### Auth is an integration constraint now
-
-I cancelled my Gemini Pro plan because I can't use it in this workflow since the move to Antigravity. If I wanted to use an API key it would work great, but I can't leverage my subscription limits. This is because unlike Claude which uses persisted OAuth state, and Codex which uses a persisted secret, Antigravity requires a browser login that can't be done in a headless environment. Even if it could, I'd have to run this browser flow with every invocation because of the ephemeral nature of my environments.
-
-The argument for ephemeral development environments has only gotten stronger since agents came on the scene and the product landscape is only growing. Because Antigravity's auth is structurally at odds with ephemeral environments I have no plans to add Gemini to my workflow regardless of the quality of their models.
 
 ### One point of failure
 
@@ -130,6 +126,12 @@ All of this depends on a laptop left awake at home. Lid closed, power blip, or I
 
 Owning so much of my dev stack means I am developing it frequently. Agents give me the ability to do so, but if I needed even more throughput, I would consider paying for tools I don't have to build.
 
+### Auth is an integration constraint now
+
+I cancelled my Gemini Pro plan because I can't use it in this workflow since the move to Antigravity. If I wanted to use an API key it would work great, but I can't leverage my subscription limits. This is because unlike Claude which uses persisted OAuth state, and Codex which uses a persisted secret, Antigravity requires a browser login that can't be done in a headless environment.
+
+The argument for ephemeral development environments has only gotten stronger since agents came on the scene and the product landscape is growing rapidly to reflect that (TODO list products?). Because Antigravity's auth is structurally at odds with ephemeral environments I have no plans to add Gemini to my workflow regardless of the quality of their models.
+
 ## Closing
 
-When I restrict my agents to ephemeral enviroments that only have what they need to get work done, I have the freedom to use my limited time and attention on higher-level design, product decisions, and strategic direction than I do working conversationally on my host. Investing in your tools and changing your workflow is critical to getting the most out of your agents.
+Preserving my attention by leveraging focused, ephemeral agent environments gives me the freedom to spend my time on higher-level design, product decisions, and strategic direction. Investing in your tools and changing your workflow is critical to getting the most out of your agents.
