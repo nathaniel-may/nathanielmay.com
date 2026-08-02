@@ -69,40 +69,9 @@ Here's how this usually goes: I sit down with one or two big ideas I want to imp
 
 This can easily feel like it's spinning out of control. However, what's actually happening is that I have the freedom and time to solve workflow and system tech debt before shipping features. This was the dream that was always just out of reach without AI. These tasks were often viewed as impractical yak-shaving because of how long it took us to write, but now we can have it all.
 
-To keep track of this growing dependency tree, I'm currently experimenting with using a little mermaid diagram for each day. I am currently using a POC that's not even vibe coded: it's a directory, justfile, and AGENTS.md to see how I like the workflow. After updating the graph with an agent a few times, it outputs something like this:
+To keep track of this growing dependency tree, I'm currently experimenting with using a little mermaid diagram for each day. I am currently using a POC that's not even vibe coded: it's a directory, justfile, and AGENTS.md to see how I like the workflow. After updating the graph with an agent a few times, I can request my state and view a little ascii chart right in my terminal.
 
-```
-┌──────────────────────────────┐     ┌───────────┐
-│       post ai workflow       │     │github data│
-└──────────────────────────────┘     └───────────┘
-                                           ▲
-                                           │
-┌──────────────────────────────┐           │
-│       add per-repo PATs      │           │
-└──────────────────────────────┘           │
-                                           │
-                                           │
-┌──────────────────────────────┐           │
-│         scratch test         ├───────────┘
-└──────────────────────────────┘
-                ▲
-                │
-┌───────────────┴──────────────┐
-│        add world seam        │
-└──────────────────────────────┘
-
-
-┌──────────────────────────────┐
-│       DONE update just       │
-└──────────────────────────────┘
-
-
-┌──────────────────────────────┐
-│DONE sbx-new image build in ci│
-└──────────────────────────────┘
-```
-
-If I use this enough to find value in it, I'll code up a minimal cli in Rust, commit it as a tool and use it going forward. If it still feels like it's missing something I may try using beads or another built-for purpose tracking system. But POCs like this take minutes to build, and I get to test the userflow before getting into the weeds of implementation.
+If I find value in using this, I'll code it up as a minimal cli in Rust or maybe as a herdr extension and bake it into my workflow without the extra token usage. If it still feels like it's missing something I may try using beads or another built-for purpose tracking system. But POCs like this take minutes to build, and I get to test the userflow before getting into the weeds of implementation.
 
 ## When I leave the house
 
