@@ -15,7 +15,9 @@ My expert attention is the most valuable resource when building with agents, and
 
 I fire off workflows on top of tools that save my attention on several fronts: I front-load human judgement with a long unsupervised tail for implementation and automated reviews, I have have status at a glance across agents, and sandboxes make not-watching safe by construction while eliminating the chore of local state management. This posts walks through my stack so you can see the attenion savings, and take the ideas that resonate for your own workflow.
 
-## IDE
+<StackDiagram />
+
+## Two jobs, two tools
 
 <StackDiagram highlight="zed" />
 
@@ -114,7 +116,7 @@ When I leave the house, I turn on caffeine, shut off the screen, and walk out th
 
 Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping to fold [`mosh`](https://mosh.org) into the stack to protect against unnecessary disconnects. Unfortunately, until [this issue](https://github.com/mobile-shell/mosh/issues/1364) is resolved I'll have to live with occassional disconnections. In practice on my outings I get maybe one disconnect an hour which is tolerable.
 
-## Tradeoffs
+## What this costs
 
 All of this depends on a laptop left awake at home. Lid closed, power blip, or ISP down and there is no workflow at all till I get home. Using Claude dispatch with a higher plan limit is a much nicer experience than Termux + ssh, but robs me of my cross-model iteractions, and the ability to spin up new independent threads on whatever code I want to. (\<- reviewer: I have never used this feature so double check me here). There are also plenty of built-for purpose platforms like Runloop and fly.io sprites that can provide nearly exactly what I need but for a price: I'm seeing roughly $50 - $500 a month depending on which platform you pick and how heavy your usage is. Relying on my laptop works for me for now.
 
