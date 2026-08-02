@@ -63,6 +63,8 @@ Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appeal
 
 With Zed in it's own Mac workspace, I pull what the agent pushes, test, make changes and push back. It feels extremely familiar since this is how I've always worked with collaborators. I can have multiple agents from different families work on the same branch or on different branches all while clearly visible in the Herdr UI.
 
+## When I leave the house
+
 {
   TODO FIGURE: highlight only mobile
 }
@@ -72,6 +74,8 @@ With this construction it's safe to let agents work when you're not at the keybo
 When I leave the house, I turn on caffeine, shut off the screen, and walk out the door. I have Ubiquiti equipment at home so I can use [UniFi](https://ui.com/) Teleport to make my local network accessible to my phone. If you don't, Tailscale works just as well. I open up Termux, ssh into my laptop, type `herdr` and the whole herd is ready for me to take action. Between Herdr over ssh and the Github app I can do pretty much everything I can at home. The changes I might have pushed myself, I'll just ask the agent to do for me.
 
 Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping to fold [`mosh`](https://mosh.org) into the stack to protect against unnecessary disconnects. Unfortunately, until [this issue](https://github.com/mobile-shell/mosh/issues/1364) is resolved I'll have to live with occassional disconnections. In practice on my outings I get maybe one disconnect an hour which is tolerable.
+
+## Running several at once
 
 Here's how this usually goes: I sit down with one or two big ideas I want to implement. Say write a new blog post on my AI workflow and add a new graph to my personal analytics BI. Analytics I split into "Add personal GitHub commits as a source" and "model commits by agent or human author over time through to BI." The blog post I split into a research task and a collaborative outline creation. Now I have two workstreams with blocking and subsequent tasks which is easy to keep in my head. I fire the first two off, and after working for a bit I realize there's some silly mac files creating token waste when my agents go to push, so I spin up a new agent in my dotfiles repo to investigate and make a fix. The agent from my github source project realizes my source freshness table only surfaces successful runs, but this agent was hoping to use it to detect failed runs as well- very reasonable. I spin up another to merge that first so my source work can rebase on top of it.
 
@@ -112,6 +116,8 @@ To keep track of this growing dependency tree, I'm currently experimenting with 
 
 If I use this enough to find value in it, I'll code up a minimal cli in Rust, commit it as a tool and use it going forward. If it still feels like it's missing something I may try using beads or another built-for purpose tracking system. But POCs like this take minutes to build, and I get to test the userflow before getting into the weeds of implementation.
 
+## The work
+
 {
   TODO FIGURE: highlight only skill
 }
@@ -136,6 +142,8 @@ Here's what `dev-workflow` does today:
 This process only has one human input and one human gate right at the front. Once the design is approved I can move on to spinning up another work item and juggle them with ease. Just like human development, the big thing to watch out for is scope creep. If 5 of these PRs land and they're each 10k lines, you have to choose between blindly accepting bloat or doing some real work to carve them down to size.
 
 For a while this helped me very effeciently balance two $20 plans: Claude pro and Codex Plus. When my Claude session limit was more than half I'd swap my next few runs to Codex implementors and switch back. I was able to completely saturate my weekly limits on both which made me feel like I earned the need for the max plans. For any craft I'm learning, I want to outgrow my tools before I buy the expensive ones so I know what I need from them, which ones to buy, and how to wield them. The limitations of the $20 plans helped me develop this process, and makes my current usage of the max plans much more intentional.
+
+## Tradeoffs
 
 This system has clear tradeoffs. All of this depends on a laptop left awake at home. Lid closed, power blip, or ISP down and there is no workflow at all till I get home. Using Claude dispatch with a higher plan limit is a much nicer experience than Termux + ssh, but robs me of my cross-model iteractions, and the ability to spin up new independent threads on whatever code I want to. (<- reviewer: I have never used this feature so double check me here). There are also plenty of built-for purpose platforms like Runloop and fly.io sprites that can provide nearly exactly what I need but for a price: I'm seeing roughly $50 - $500 a month depending on which platform you pick and how heavy your usage is. Relying on my laptop works for me for now.
 
