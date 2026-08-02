@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Herding Agents — stack diagram sketch (DRAFT, remove before merge)</title>
+    <style>
+      :root {
+        --bg: #0b0e14;
+        --panel: #10141d;
+        --line: #2a3344;
+        --text: #e6e9ef;
+        --muted: #8b95a8;
+        --dim: #5c6678;
+        --blue: #7aa2f7;
+        --green: #9ece6a;
+        --red: #f7768e;
+        --gold: #e0af68;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 40px 24px 80px;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      main { max-width: 1000px; margin: 0 auto; }
+      h1 { font-size: 24px; margin: 0 0 4px; letter-spacing: -0.01em; }
+      h2 { font-size: 18px; margin: 48px 0 4px; letter-spacing: -0.01em; }
+      .sub { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+      .banner {
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        border-radius: 6px;
+        padding: 10px 14px;
+        font-size: 13px;
+        margin-bottom: 32px;
+      }
+      figure {
+        margin: 0 0 8px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px;
+      }
+      svg { display: block; width: 100%; height: auto; }
+      figcaption { color: var(--muted); font-size: 13px; margin-top: 12px; }
+      ul { color: var(--muted); font-size: 14px; padding-left: 20px; }
+      li { margin-bottom: 10px; }
+      li b { color: var(--text); font-weight: 600; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; color: var(--blue); }
+      .box { fill: none; stroke: var(--line); }
+      .lbl { fill: var(--text); font: 600 13px ui-sans-serif, system-ui, sans-serif; }
+      .lbl-sm { fill: var(--muted); font: 400 11px ui-sans-serif, system-ui, sans-serif; }
+      .lbl-xs { fill: var(--dim); font: 400 10px ui-sans-serif, system-ui, sans-serif; }
+      .edge { fill: none; stroke: var(--dim); stroke-width: 1.5; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="banner">DRAFT SKETCH — scratch file for the figure discussion. Delete before merging.</div>
+
+      <h1>What the prose actually describes</h1>
+      <p class="sub">
+        Derived from the body text, not from the <code>laptop → VPN → ssh → herdr → sbx-new → agent → skills →
+        subagents → GitHub</code> comment. The list is a single chain; the prose isn't.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 940 590" role="img" aria-label="Topology derived from the post's prose">
+          <defs>
+            <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 z" fill="#5c6678" />
+            </marker>
+            <marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 z" fill="#9ece6a" />
+            </marker>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 z" fill="#f7768e" />
+            </marker>
+            <marker id="ay" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 z" fill="#e0af68" />
+            </marker>
+          </defs>
+
+          <!-- access column -->
+          <rect class="box" x="20" y="120" width="130" height="88" rx="6" />
+          <text class="lbl" x="36" y="146">Phone</text>
+          <text class="lbl-sm" x="36" y="166">Termux → ssh</text>
+          <text class="lbl-sm" x="36" y="184">GitHub app</text>
+
+          <rect class="box" x="20" y="300" width="130" height="68" rx="6" />
+          <text class="lbl" x="36" y="326">At the desk</text>
+          <text class="lbl-sm" x="36" y="346">Terminal.app</text>
+
+          <!-- macbook -->
+          <rect class="box" x="250" y="45" width="430" height="505" rx="10" stroke-dasharray="5 4" />
+          <text class="lbl" x="266" y="70">MacBook — awake, screen off</text>
+
+          <!-- zed -->
+          <rect class="box" x="272" y="88" width="180" height="56" rx="6" />
+          <text class="lbl" x="288" y="112">Zed</text>
+          <text class="lbl-sm" x="288" y="131">I read and write code here</text>
+
+          <!-- herdr -->
+          <rect class="box" x="272" y="170" width="390" height="360" rx="8" stroke="#7aa2f7" />
+          <text class="lbl" x="288" y="193" fill="#7aa2f7">herdr — one pane per agent</text>
+          <text class="lbl-xs" x="650" y="193" text-anchor="end">◀ status hooks</text>
+
+          <!-- sandbox A -->
+          <rect class="box" x="300" y="215" width="320" height="118" rx="6" />
+          <text class="lbl-sm" x="312" y="237" fill="#e6e9ef">sbx microVM — disposable</text>
+          <rect class="box" x="312" y="253" width="92" height="28" rx="4" />
+          <text class="lbl-xs" x="358" y="271" text-anchor="middle" fill="#8b95a8">Claude Code</text>
+          <path class="edge" d="M406,267 L412,267" marker-end="url(#a)" />
+          <rect class="box" x="414" y="253" width="96" height="28" rx="4" />
+          <text class="lbl-xs" x="462" y="271" text-anchor="middle" fill="#8b95a8">dev-workflow</text>
+          <path class="edge" d="M512,267 L518,267" marker-end="url(#a)" />
+          <rect class="box" x="520" y="253" width="88" height="28" rx="4" />
+          <text class="lbl-xs" x="564" y="271" text-anchor="middle" fill="#8b95a8">subagents</text>
+          <text class="lbl-xs" x="312" y="310">one-repo PAT · read-only mounts · network allow list</text>
+
+          <!-- sandbox B -->
+          <rect class="box" x="300" y="365" width="320" height="118" rx="6" />
+          <text class="lbl-sm" x="312" y="387" fill="#e6e9ef">sbx microVM — disposable</text>
+          <rect class="box" x="312" y="403" width="92" height="28" rx="4" />
+          <text class="lbl-xs" x="358" y="421" text-anchor="middle" fill="#8b95a8">Codex</text>
+          <path class="edge" d="M406,417 L412,417" marker-end="url(#a)" />
+          <rect class="box" x="414" y="403" width="96" height="28" rx="4" />
+          <text class="lbl-xs" x="462" y="421" text-anchor="middle" fill="#8b95a8">dev-workflow</text>
+          <path class="edge" d="M512,417 L518,417" marker-end="url(#a)" />
+          <rect class="box" x="520" y="403" width="88" height="28" rx="4" />
+          <text class="lbl-xs" x="564" y="421" text-anchor="middle" fill="#8b95a8">subagents</text>
+          <text class="lbl-xs" x="312" y="460">one-repo PAT · read-only mounts · network allow list</text>
+
+          <!-- cross family -->
+          <path class="edge" stroke="#f7768e" d="M620,300 C650,318 650,392 622,408" marker-end="url(#ar)" />
+          <text class="lbl-xs" x="312" y="352" fill="#f7768e">cross-family review spawns its own sandbox</text>
+
+          <!-- status hook -->
+          <path class="edge" stroke="#e0af68" stroke-dasharray="4 3" d="M620,240 L642,240 L642,202" marker-end="url(#ay)" />
+
+          <!-- ghost -->
+          <rect class="box" x="300" y="500" width="320" height="26" rx="4" stroke-dasharray="4 4" />
+          <text class="lbl-xs" x="460" y="517" text-anchor="middle">… 1–6 at a time, usually 3</text>
+
+          <!-- github -->
+          <rect class="box" x="750" y="248" width="165" height="112" rx="8" stroke="#9ece6a" />
+          <text class="lbl" x="768" y="280" fill="#9ece6a">GitHub</text>
+          <text class="lbl-sm" x="768" y="302">issues · PRs · reviews</text>
+          <text class="lbl-xs" x="768" y="326">the point of truth —</text>
+          <text class="lbl-xs" x="768" y="341">everything converges here</text>
+
+          <!-- edges in -->
+          <path class="edge" d="M150,164 L244,164" marker-end="url(#a)" />
+          <rect x="152" y="152" width="92" height="22" rx="11" fill="#10141d" stroke="#2a3344" />
+          <text class="lbl-xs" x="198" y="167" text-anchor="middle">ssh over VPN</text>
+          <path class="edge" d="M150,334 L266,334" marker-end="url(#a)" />
+
+          <!-- edges out to github -->
+          <path class="edge" stroke="#9ece6a" d="M620,272 L744,288" marker-end="url(#ag)" />
+          <path class="edge" stroke="#9ece6a" d="M620,450 L746,340" marker-end="url(#ag)" />
+          <path class="edge" stroke="#9ece6a" d="M452,105 C600,92 700,118 752,258" marker-end="url(#ag)" />
+          <text class="lbl-xs" x="470" y="88" fill="#9ece6a">I pull, test, push back</text>
+          <path
+            class="edge"
+            stroke="#9ece6a"
+            stroke-dasharray="5 4"
+            d="M85,118 C120,18 600,12 812,242"
+            marker-end="url(#ag)"
+          />
+          <text class="lbl-xs" x="360" y="28" fill="#9ece6a">GitHub app — bypasses the laptop entirely</text>
+
+          <text class="lbl-xs" x="700" y="410">three independent paths</text>
+          <text class="lbl-xs" x="700" y="425">reach GitHub, not one</text>
+        </svg>
+        <figcaption>
+          Same components as the arrow list, but the shape is a hub with branches — not a chain. Colour is only for
+          legibility here, not a proposal.
+        </figcaption>
+      </figure>
+
+      <h2>What the list gets wrong</h2>
+      <ul>
+        <li>
+          <b>GitHub is a hub, not a terminus.</b> The list ends there as if it were the bottom of the stack. The prose
+          has it reached by at least three independent paths: the agent pushing from inside a sandbox, you pulling and
+          pushing from Zed on the host, and the GitHub app on your phone that never touches the laptop at all. That
+          matters for the ordering question — a spine that "walks out" has no natural endpoint if the thing everything
+          converges on sits off to the side.
+        </li>
+        <li>
+          <b>Zed is a sibling of herdr, not a layer above or below it.</b> "With Zed in it's own Mac workspace, I pull
+          what the agent pushes" puts Zed on the host, parallel to herdr, talking to GitHub directly. In the list it
+          doesn't appear at all — but it's the tool the whole "what wasn't working" section is about.
+        </li>
+        <li>
+          <b>There are N sandboxes, not one.</b> The list shows a single chain, which quietly contradicts the section
+          about running several at once. The multiplexing isn't a layer — it's a cardinality.
+        </li>
+        <li>
+          <b>Cross-family review is a lateral edge.</b> A sandbox spawning a sibling sandbox from another model family
+          is the most distinctive thing in the post and it has no representation in a linear list at all.
+        </li>
+        <li>
+          <b>Status flows back up.</b> herdr only knows an agent is blocked because a hook inside the sandbox reports
+          outward. Every edge in the list points one way.
+        </li>
+      </ul>
+
+      <h2>Reduced — the version that could actually ship as a figure</h2>
+      <p class="sub">
+        The faithful graph is too busy for a blog figure. This is the same topology collapsed to nested shells, which
+        also happens to visualise Option A: the numbers are the reading order.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 940 440" role="img" aria-label="Nested shell version of the stack">
+          <defs>
+            <marker id="b" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 z" fill="#9ece6a" />
+            </marker>
+          </defs>
+
+          <rect class="box" x="40" y="30" width="700" height="380" rx="12" />
+          <text class="lbl-sm" x="60" y="56">5 · access — phone over VPN, or just sitting down</text>
+
+          <rect class="box" x="80" y="80" width="620" height="300" rx="10" stroke="#7aa2f7" />
+          <text class="lbl-sm" x="100" y="106" fill="#7aa2f7">4 · herdr — several of these at once, usually three</text>
+
+          <rect class="box" x="125" y="130" width="530" height="220" rx="10" />
+          <text class="lbl-sm" x="145" y="156">3 · sbx sandbox — one disposable environment per task</text>
+
+          <rect class="box" x="175" y="180" width="430" height="140" rx="10" />
+          <text class="lbl-sm" x="195" y="206">2 · the agent — Claude Code or Codex</text>
+
+          <rect class="box" x="225" y="230" width="330" height="66" rx="8" stroke="#e0af68" />
+          <text class="lbl" x="390" y="258" text-anchor="middle" fill="#e0af68">1 · the work</text>
+          <text class="lbl-xs" x="390" y="278" text-anchor="middle">dev-workflow · subagents · the human gate</text>
+
+          <rect class="box" x="790" y="175" width="120" height="90" rx="8" stroke="#9ece6a" />
+          <text class="lbl" x="850" y="207" text-anchor="middle" fill="#9ece6a">GitHub</text>
+          <text class="lbl-xs" x="850" y="228" text-anchor="middle">issues · PRs</text>
+          <text class="lbl-xs" x="850" y="245" text-anchor="middle">reviews</text>
+
+          <path class="edge" stroke="#9ece6a" d="M555,255 L784,205" marker-end="url(#b)" />
+          <text class="lbl-xs" x="620" y="232" fill="#9ece6a">the agent pushes</text>
+          <path class="edge" stroke="#9ece6a" d="M740,330 L800,272" marker-end="url(#b)" />
+          <text class="lbl-xs" x="700" y="352" fill="#9ece6a">I review and merge</text>
+        </svg>
+        <figcaption>
+          Read 1 → 5 and it's the walk you described: start where the work happens, step out one shell at a time, end
+          at the multiplexing and the way in. GitHub sits outside the shells because it's the one thing both the
+          innermost and outermost layers touch directly.
+        </figcaption>
+      </figure>
+
+      <h2>The thing worth deciding</h2>
+      <ul>
+        <li>
+          The nested version makes your outward walk obvious and readable — but it can only do that by
+          <b>dropping the three branches that make the real topology interesting</b>: Zed as a sibling, the lateral
+          cross-family edge, and the phone's direct path to GitHub. Two of those three are load-bearing arguments in the
+          post.
+        </li>
+        <li>
+          One resolution: use the nested figure as the recurring section marker (highlight ring 1, then 2, then 3…) and
+          give the branchy version a single full-width appearance in the cross-family review passage, where the lateral
+          edge is the whole point. The reader gets the clean spine <em>and</em> the full picture, at the two different
+          moments each one is actually useful.
+        </li>
+      </ul>
+    </main>
+  </body>
+</html>
