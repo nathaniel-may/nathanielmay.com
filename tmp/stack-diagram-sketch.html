@@ -27,7 +27,7 @@
       }
       main { max-width: 1040px; margin: 0 auto; }
       h1 { font-size: 24px; margin: 0 0 4px; letter-spacing: -0.01em; }
-      h2 { font-size: 18px; margin: 48px 0 4px; letter-spacing: -0.01em; }
+      h2 { font-size: 18px; margin: 44px 0 4px; letter-spacing: -0.01em; }
       .sub { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
       .banner {
         border: 1px solid var(--gold);
@@ -42,19 +42,18 @@
         background: var(--panel);
         border: 1px solid var(--line);
         border-radius: 10px;
-        padding: 16px;
+        padding: 20px;
       }
-      figure.archived { opacity: 0.55; }
       svg { display: block; width: 100%; height: auto; }
-      figcaption { color: var(--muted); font-size: 13px; margin-top: 12px; }
+      figcaption { color: var(--muted); font-size: 13px; margin-top: 14px; }
       ul { color: var(--muted); font-size: 14px; padding-left: 20px; }
       li { margin-bottom: 10px; }
       li b { color: var(--text); font-weight: 600; }
       code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; color: var(--blue); }
       .box { fill: none; stroke: var(--line); }
-      .lbl { fill: var(--text); font: 600 13px ui-sans-serif, system-ui, sans-serif; }
-      .lbl-sm { fill: var(--muted); font: 400 11px ui-sans-serif, system-ui, sans-serif; }
-      .lbl-xs { fill: var(--dim); font: 400 10px ui-sans-serif, system-ui, sans-serif; }
+      .node { fill: var(--text); font: 600 13px ui-sans-serif, system-ui, sans-serif; }
+      .chip { fill: var(--muted); font: 400 11px ui-sans-serif, system-ui, sans-serif; }
+      .tag { fill: var(--dim); font: 400 11px ui-sans-serif, system-ui, sans-serif; }
       .edge { fill: none; stroke: var(--dim); stroke-width: 1.5; }
     </style>
   </head>
@@ -62,14 +61,14 @@
     <main>
       <div class="banner">DRAFT SKETCH — scratch file for the figure discussion. Delete before merging.</div>
 
-      <h1>Hub on top, two devices below</h1>
+      <h1>Stripped to process relationships</h1>
       <p class="sub">
-        GitHub as the bar everything converges on. Underneath it, only two top-level boxes — the two devices — and
-        their separate paths up to the work.
+        Every label that restated prose is gone. What's left is eleven node names and two edge labels — the rest is
+        carried by position and direction.
       </p>
 
       <figure>
-        <svg viewBox="0 0 940 660" role="img" aria-label="GitHub hub above two devices">
+        <svg viewBox="0 0 900 560" role="img" aria-label="GitHub hub above two devices, reduced">
           <defs>
             <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
               <path d="M0,0 L7,3 L0,6 z" fill="#5c6678" />
@@ -80,185 +79,125 @@
             <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
               <path d="M0,0 L7,3 L0,6 z" fill="#f7768e" />
             </marker>
-            <marker id="ay" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-              <path d="M0,0 L7,3 L0,6 z" fill="#e0af68" />
-            </marker>
           </defs>
 
-          <!-- ============ GITHUB HUB ============ -->
-          <rect class="box" x="40" y="26" width="860" height="72" rx="10" stroke="#9ece6a" />
-          <text x="64" y="58" fill="#9ece6a" font="600 17px ui-sans-serif" style="font: 600 17px ui-sans-serif, system-ui, sans-serif">GitHub</text>
-          <text class="lbl-sm" x="64" y="80">issues · PRs · reviews — the point of truth, and the only thing both devices touch directly</text>
-          <text class="lbl-xs" x="876" y="58" text-anchor="end">three independent paths converge here</text>
+          <!-- hub -->
+          <rect class="box" x="40" y="24" width="820" height="56" rx="8" stroke="#9ece6a" />
+          <text class="node" x="450" y="58" text-anchor="middle" fill="#9ece6a">GitHub</text>
 
-          <!-- ============ PHONE ============ -->
-          <rect class="box" x="40" y="180" width="170" height="250" rx="10" />
-          <text class="lbl" x="58" y="208">Phone</text>
-          <text class="lbl-sm" x="58" y="226">away from the desk</text>
+          <!-- phone -->
+          <rect class="box" x="40" y="160" width="160" height="230" rx="10" />
+          <text class="node" x="58" y="188">Phone</text>
+          <rect class="box" x="56" y="206" width="128" height="44" rx="6" stroke="#9ece6a" />
+          <text class="chip" x="120" y="233" text-anchor="middle" fill="#e6e9ef">GitHub app</text>
+          <rect class="box" x="56" y="280" width="128" height="44" rx="6" />
+          <text class="chip" x="120" y="307" text-anchor="middle" fill="#e6e9ef">Termux</text>
 
-          <rect class="box" x="56" y="244" width="138" height="56" rx="6" stroke="#9ece6a" />
-          <text class="lbl-sm" x="70" y="266" fill="#e6e9ef">GitHub app</text>
-          <text class="lbl-xs" x="70" y="284">review · comment · merge</text>
+          <!-- macbook -->
+          <rect class="box" x="250" y="160" width="610" height="380" rx="10" stroke-dasharray="5 4" />
+          <text class="node" x="270" y="188">MacBook</text>
 
-          <rect class="box" x="56" y="320" width="138" height="70" rx="6" />
-          <text class="lbl-sm" x="70" y="342" fill="#e6e9ef">Termux → ssh</text>
-          <text class="lbl-xs" x="70" y="360">over UniFi Teleport</text>
-          <text class="lbl-xs" x="70" y="376">(or Tailscale)</text>
-
-          <text class="lbl-xs" x="58" y="412">the same herdr session, continued</text>
-
-          <!-- ============ MACBOOK ============ -->
-          <rect class="box" x="270" y="180" width="630" height="430" rx="10" stroke-dasharray="5 4" />
-          <text class="lbl" x="290" y="208">MacBook — awake, screen off</text>
-
-          <!-- zed -->
-          <rect class="box" x="560" y="228" width="200" height="58" rx="6" />
-          <text class="lbl-sm" x="576" y="252" fill="#e6e9ef">Zed</text>
-          <text class="lbl-xs" x="576" y="270">I read and write code here myself</text>
+          <rect class="box" x="560" y="206" width="180" height="44" rx="6" />
+          <text class="chip" x="650" y="233" text-anchor="middle" fill="#e6e9ef">Zed</text>
 
           <!-- herdr -->
-          <rect class="box" x="292" y="306" width="586" height="290" rx="8" stroke="#7aa2f7" />
-          <text class="lbl" x="310" y="330" fill="#7aa2f7">herdr — one pane per agent</text>
-          <text class="lbl-xs" x="866" y="330" text-anchor="end">◀ status hooks report outward</text>
+          <rect class="box" x="272" y="270" width="566" height="250" rx="8" stroke="#7aa2f7" />
+          <text class="node" x="290" y="294" fill="#7aa2f7">herdr</text>
 
           <!-- sandbox A -->
-          <rect class="box" x="312" y="344" width="470" height="100" rx="6" />
-          <text class="lbl-sm" x="324" y="366" fill="#e6e9ef">sbx microVM — disposable</text>
-          <rect class="box" x="324" y="378" width="100" height="28" rx="4" />
-          <text class="lbl-xs" x="374" y="396" text-anchor="middle" fill="#8b95a8">Claude Code</text>
-          <path class="edge" d="M428,392 L433,392" marker-end="url(#a)" />
-          <rect class="box" x="438" y="378" width="108" height="28" rx="4" />
-          <text class="lbl-xs" x="492" y="396" text-anchor="middle" fill="#8b95a8">dev-workflow</text>
-          <path class="edge" d="M550,392 L555,392" marker-end="url(#a)" />
-          <rect class="box" x="560" y="378" width="96" height="28" rx="4" />
-          <text class="lbl-xs" x="608" y="396" text-anchor="middle" fill="#8b95a8">subagents</text>
-          <text class="lbl-xs" x="324" y="430">one-repo PAT · read-only mounts · network allow list</text>
+          <rect class="box" x="292" y="308" width="440" height="72" rx="6" />
+          <text class="tag" x="304" y="326" fill="#8b95a8">sandbox</text>
+          <rect class="box" x="304" y="336" width="96" height="28" rx="4" />
+          <text class="chip" x="352" y="354" text-anchor="middle">Claude Code</text>
+          <path class="edge" d="M404,350 L409,350" marker-end="url(#a)" />
+          <rect class="box" x="414" y="336" width="100" height="28" rx="4" />
+          <text class="chip" x="464" y="354" text-anchor="middle">dev-workflow</text>
+          <path class="edge" d="M518,350 L523,350" marker-end="url(#a)" />
+          <rect class="box" x="528" y="336" width="88" height="28" rx="4" />
+          <text class="chip" x="572" y="354" text-anchor="middle">subagents</text>
 
           <!-- cross family -->
-          <text class="lbl-xs" x="324" y="459" fill="#f7768e">cross-family review spawns its own sandbox →</text>
+          <text class="tag" x="304" y="394" fill="#f7768e">cross-family review</text>
+          <path class="edge" stroke="#f7768e" d="M732,344 C768,364 768,416 734,436" marker-end="url(#ar)" />
 
           <!-- sandbox B -->
-          <rect class="box" x="312" y="466" width="470" height="100" rx="6" />
-          <text class="lbl-sm" x="324" y="488" fill="#e6e9ef">sbx microVM — disposable</text>
-          <rect class="box" x="324" y="500" width="100" height="28" rx="4" />
-          <text class="lbl-xs" x="374" y="518" text-anchor="middle" fill="#8b95a8">Codex</text>
-          <path class="edge" d="M428,514 L433,514" marker-end="url(#a)" />
-          <rect class="box" x="438" y="500" width="108" height="28" rx="4" />
-          <text class="lbl-xs" x="492" y="518" text-anchor="middle" fill="#8b95a8">dev-workflow</text>
-          <path class="edge" d="M550,514 L555,514" marker-end="url(#a)" />
-          <rect class="box" x="560" y="500" width="96" height="28" rx="4" />
-          <text class="lbl-xs" x="608" y="518" text-anchor="middle" fill="#8b95a8">subagents</text>
-          <text class="lbl-xs" x="324" y="552">one-repo PAT · read-only mounts · network allow list</text>
+          <rect class="box" x="292" y="400" width="440" height="72" rx="6" />
+          <text class="tag" x="304" y="418" fill="#8b95a8">sandbox</text>
+          <rect class="box" x="304" y="428" width="96" height="28" rx="4" />
+          <text class="chip" x="352" y="446" text-anchor="middle">Codex</text>
+          <path class="edge" d="M404,442 L409,442" marker-end="url(#a)" />
+          <rect class="box" x="414" y="428" width="100" height="28" rx="4" />
+          <text class="chip" x="464" y="446" text-anchor="middle">dev-workflow</text>
+          <path class="edge" d="M518,442 L523,442" marker-end="url(#a)" />
+          <rect class="box" x="528" y="428" width="88" height="28" rx="4" />
+          <text class="chip" x="572" y="446" text-anchor="middle">subagents</text>
 
-          <!-- ghost -->
-          <rect class="box" x="312" y="572" width="470" height="20" rx="4" stroke-dasharray="4 4" />
-          <text class="lbl-xs" x="547" y="586" text-anchor="middle">… 1–6 at a time, usually 3</text>
+          <!-- more panes -->
+          <rect class="box" x="292" y="486" width="440" height="18" rx="4" stroke-dasharray="4 4" />
+          <text class="tag" x="512" y="499" text-anchor="middle">…</text>
 
-          <!-- cross-family curve -->
-          <path class="edge" stroke="#f7768e" d="M782,412 C812,432 812,478 784,500" marker-end="url(#ar)" />
+          <!-- paths up to the hub -->
+          <path class="edge" stroke="#9ece6a" d="M120,206 L120,86" marker-end="url(#ag)" />
+          <path class="edge" stroke="#9ece6a" d="M650,206 L650,86" marker-end="url(#ag)" />
+          <path class="edge" stroke="#9ece6a" d="M732,320 L848,320" />
+          <path class="edge" stroke="#9ece6a" d="M732,460 L848,460" />
+          <path class="edge" stroke="#9ece6a" d="M848,460 L848,86" marker-end="url(#ag)" />
 
-          <!-- status hook -->
-          <path class="edge" stroke="#e0af68" stroke-dasharray="4 3" d="M782,372 L800,372 L800,340" marker-end="url(#ay)" />
-
-          <!-- ============ PATHS UP TO GITHUB ============ -->
-          <!-- 1. phone github app -->
-          <path class="edge" stroke="#9ece6a" d="M125,244 L125,106" marker-end="url(#ag)" />
-          <text class="lbl-xs" x="140" y="150" fill="#9ece6a">direct from the phone —</text>
-          <text class="lbl-xs" x="140" y="164" fill="#9ece6a">never touches the laptop</text>
-
-          <!-- 2. zed -->
-          <path class="edge" stroke="#9ece6a" d="M660,228 L660,106" marker-end="url(#ag)" />
-          <text class="lbl-xs" x="660" y="155" text-anchor="middle" fill="#9ece6a">I pull, test, push back</text>
-
-          <!-- 3. agents -->
-          <path class="edge" stroke="#9ece6a" d="M782,392 L886,392" />
-          <path class="edge" stroke="#9ece6a" d="M782,514 L886,514" />
-          <path class="edge" stroke="#9ece6a" d="M886,514 L886,106" marker-end="url(#ag)" />
-          <text class="lbl-xs" x="890" y="150" text-anchor="end" fill="#9ece6a">agents push,</text>
-          <text class="lbl-xs" x="890" y="164" text-anchor="end" fill="#9ece6a">open PRs, request reviews</text>
-
-          <!-- phone into the macbook -->
-          <path class="edge" d="M194,355 L286,355" marker-end="url(#a)" />
-          <rect x="214" y="344" width="52" height="22" rx="11" fill="#10141d" stroke="#2a3344" />
-          <text class="lbl-xs" x="240" y="359" text-anchor="middle">ssh · VPN</text>
+          <!-- phone into the laptop -->
+          <path class="edge" d="M184,302 L266,302" marker-end="url(#a)" />
+          <rect x="205" y="291" width="34" height="20" rx="10" fill="#10141d" stroke="#2a3344" />
+          <text class="tag" x="222" y="305" text-anchor="middle">ssh</text>
         </svg>
         <figcaption>
-          Two devices, three paths up. The phone has one of its own that skips the laptop entirely; the laptop has two,
-          one human (Zed) and one agent (the sandboxes). Colour is only for legibility here, not a proposal.
+          Eleven nodes, two edge labels. Colour is still only for legibility, not a proposal.
         </figcaption>
       </figure>
 
-      <h2>What this shape says that the arrow list can't</h2>
+      <h2>What came out</h2>
       <ul>
         <li>
-          <b>GitHub is a hub, not a terminus.</b> The list ends there as if it were the bottom of the stack. Putting it
-          on top as a bar makes the convergence the first thing a reader sees, and it's the honest picture: it's the one
-          thing both devices reach directly.
+          <b>Permission and data detail.</b> The PAT, read-only mounts, and allow list are now a single sentence in the
+          prose at <code>:44</code> and don't need restating. Same for "review · comment · merge" under the GitHub app,
+          and the status-hook edge — that was a data flow, not a process relationship.
         </li>
         <li>
-          <b>Two devices, not one chain.</b> The top level is now a claim about your setup rather than a sequence — this
-          is a workflow that lives on two devices and follows you between them. That reads in about a second.
+          <b>Descriptive subtitles.</b> "awake, screen off", "away from the desk", "one pane per agent", "I read and
+          write code here", "the same herdr session, continued" — all prose, all cut.
         </li>
         <li>
-          <b>Zed is a sibling of herdr.</b> It sits on the laptop beside herdr with its own path to GitHub. It's absent
-          from the arrow list entirely, despite being what the whole opening section is about.
+          <b>Path annotations.</b> "never touches the laptop", "I pull, test, push back", "agents push, open PRs" — the
+          arrows point at GitHub and the box at each tail says who's doing it. The labels were narrating a picture that
+          already reads.
         </li>
         <li>
-          <b>Multiplexing is a cardinality, not a layer.</b> Stacked sandboxes inside herdr say "several at once"
-          structurally, where a linear list has to say it in a caption.
-        </li>
-        <li>
-          <b>Cross-family review is a lateral edge</b>, and status hooks flow back up. Neither has any representation in
-          a list where every arrow points the same way.
+          <b>Kept:</b> <code>ssh</code>, because it's the only edge that doesn't point at the hub, and
+          <code>cross-family review</code>, because a sandbox spawning a sibling sandbox is the one relationship
+          geometry alone won't explain.
         </li>
       </ul>
 
-      <h2>How it could work as the recurring marker</h2>
+      <h2>What this leaves for the layout work</h2>
       <ul>
         <li>
-          The nesting still encodes your outward walk — <code>the work → agent → sandbox → herdr → the way in</code> —
-          it's just read inside-out rather than top-down. So the progressive-highlight idea survives: dim everything,
-          light up the sandbox interior first, then the sandbox boundary, then herdr, then the phone and the ssh edge.
+          The three-chip row inside each sandbox is the first thing that will overflow at narrow widths. Options:
+          stack them vertically on mobile, or drop to just <code>agent → dev-workflow</code> and let the subagents live
+          in prose.
         </li>
         <li>
-          The GitHub bar stays lit the whole way through. That's a feature — it's the one element that's true at every
-          stage, and it keeps reminding the reader where all of this is headed while you walk them out.
+          Stacking the two devices vertically on mobile turns the <code>ssh</code> edge from horizontal to vertical,
+          which actually reads better — the phone sits above the laptop, and both still point up at the bar.
         </li>
         <li>
-          At small widths this degrades better than the nested rings did: the bar stays, and the two devices stack
-          vertically instead of shrinking.
+          The cross-family curve needs the right-hand margin it currently has. On mobile it probably wants to become a
+          short vertical arrow in the gap between the two stacked sandboxes instead.
+        </li>
+        <li>
+          The hub bar is the one element that survives every breakpoint unchanged, which makes it a good anchor for the
+          progressive-highlight idea across both layouts.
         </li>
       </ul>
 
-      <h2>Archived — the pure nest</h2>
-      <p class="sub">Kept only for reference. Reads as a taxonomy rather than a system.</p>
-
-      <figure class="archived">
-        <svg viewBox="0 0 940 440" role="img" aria-label="Rejected nested-shell version">
-          <defs>
-            <marker id="b" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-              <path d="M0,0 L7,3 L0,6 z" fill="#9ece6a" />
-            </marker>
-          </defs>
-          <rect class="box" x="40" y="30" width="700" height="380" rx="12" />
-          <text class="lbl-sm" x="60" y="56">5 · access — phone over VPN, or just sitting down</text>
-          <rect class="box" x="80" y="80" width="620" height="300" rx="10" stroke="#7aa2f7" />
-          <text class="lbl-sm" x="100" y="106" fill="#7aa2f7">4 · herdr — several of these at once, usually three</text>
-          <rect class="box" x="125" y="130" width="530" height="220" rx="10" />
-          <text class="lbl-sm" x="145" y="156">3 · sbx sandbox — one disposable environment per task</text>
-          <rect class="box" x="175" y="180" width="430" height="140" rx="10" />
-          <text class="lbl-sm" x="195" y="206">2 · the agent — Claude Code or Codex</text>
-          <rect class="box" x="225" y="230" width="330" height="66" rx="8" stroke="#e0af68" />
-          <text class="lbl" x="390" y="258" text-anchor="middle" fill="#e0af68">1 · the work</text>
-          <text class="lbl-xs" x="390" y="278" text-anchor="middle">dev-workflow · subagents · the human gate</text>
-          <rect class="box" x="790" y="175" width="120" height="90" rx="8" stroke="#9ece6a" />
-          <text class="lbl" x="850" y="207" text-anchor="middle" fill="#9ece6a">GitHub</text>
-          <text class="lbl-xs" x="850" y="228" text-anchor="middle">issues · PRs</text>
-          <path class="edge" stroke="#9ece6a" d="M555,255 L784,205" marker-end="url(#b)" />
-          <path class="edge" stroke="#9ece6a" d="M740,330 L800,272" marker-end="url(#b)" />
-        </svg>
-        <figcaption>Legible, but it drops Zed, the lateral cross-family edge, and the phone's direct path.</figcaption>
-      </figure>
+      <p class="sub">The archived nested-shell version is in git history at <code>fe45478</code> if it's ever wanted.</p>
     </main>
   </body>
 </html>
