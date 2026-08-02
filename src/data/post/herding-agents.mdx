@@ -15,11 +15,13 @@ My expert attention is the most valuable resource when building with agents, and
 
 I fire off workflows on top of tools that save my attention on several fronts: I front-load human judgement with a long unsupervised tail for implementation and automated reviews, I have have status at a glance across agents, and sandboxes make not-watching safe by construction while eliminating the chore of local state management. This posts walks through my stack so you can see the attenion savings, and take the ideas that resonate for your own workflow.
 
+## IDE
+
 <StackDiagram highlight="zed" />
 
-At first I used Zed, and I still love Zed so much. It's a popular tool for multi-plexing across agents for good reason, but it was doing too much with too little screenspace. I love using it to write and inspect code myself, but an agent-centric workflow needs a different layout than a code-centric workflow. Carefully toggling back and forth became a tiresome chore, and when I left the house my whole high velocity multi-agent workflow was stuck to my macbook while I sat doing nothing on the train. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for herding agents.
+At first I used Zed as both my IDE and as my hub for agent management. It's become a popular tool for multi-plexing across agents for a good reason, but it was doing too much with too little screenspace. I love using it to write and inspect code myself, but an agent-centric workflow needs a different layout than a code-centric workflow. Carefully toggling back and forth became a tiresome chore, and when I left the house my whole high velocity multi-agent workflow was stuck to my macbook while I sat doing nothing on the train. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for multiplexing agents.
 
-With Zed in it's own Mac workspace, I pull what the agent pushes, test, make changes and push back. It feels extremely familiar since this is how I've always worked with collaborators. I can have multiple agents from different families work on the same branch or on different branches all while clearly visible in the Herdr UI.
+With Zed in it's own Mac workspace, I pull what the agent pushes, test, make changes and push back. It feels extremely familiar since this is how I've always worked with collaborators. I get to keep using my favorite tools the way I always have, all while multiple agents from different families work with me.
 
 ## The work
 
