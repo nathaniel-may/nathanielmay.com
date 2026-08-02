@@ -1,7 +1,7 @@
 ---
 publishDate: 2026-07-28T00:00:00Z
 title: 'Herding Agents'
-excerpt: 'Every agent I run is in an ephemeral microVM, not to keep it on a leash but because a smaller world is one where it can finish work rapidly while reserving my time and attention for design and strategy.'
+excerpt: 'My expert attention is the most valuable resource when building with agents, and my tools are designed to preserve it.'
 category: 'Practical Engineering'
 tags:
   - ai
@@ -10,19 +10,34 @@ wide: true
 draft: true
 ---
 
-## Thesis
+Attention savers:
+- design gate front-loading judgment
+- automated implementor↔reviewer
+- loops replacing copy-paste (:100)
+- cross-family review substituting for your own read
+- herdr's status at a glance.
+  Sandboxes contribute indirectly
+    - not-watching is safe
+    - remove state management as a chore
 
 My expert attention is the most valuable resource when building with agents, and my tools are designed to preserve it. Focusing my agents through ephemeral sandboxes frees up my attention to manage the a larger herd and to improve my workflow to scale up my own throughput. My agents write code, commit, push, open PRs, and request outside reviews unattended, all because they have access to everything they need and nothing more. My time and attention is spent making real decisions and shipping, not mindlessly orchestrating.
 
-## What wasn't working
+I fire off workflows on top of tools that save my attention on several fronts: I front-load human judgement with a long unsupervised tail for implementation and automated reviews, I have have status at a glance across agents, and sandboxes make not-watching safe by construction while eliminating the chore of local state management. This posts walks through my stack so you can see the attenion savings, and take the ideas that resonate for your own workflow. 
 
-I love Zed so much, and it's a popular tool for multi-plexing across agents for good reason. I love using it to write and inspect code myself, but an agent-centric workflow uses different screenspace than a code-centric workflow. Carefully toggling back and forth became a tiresome chore, and when I left the house my whole high velocity multi-agent workflow is stuck to my macbook while I sat doing nothing on the train. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for herding agents.
+At first I used Zed, and I still love Zed so much. It's a popular tool for multi-plexing across agents for good reason, but it was doing too much with too little screenspace. I love using it to write and inspect code myself, but an agent-centric workflow needs a different layout than a code-centric workflow. Carefully toggling back and forth became a tiresome chore, and when I left the house my whole high velocity multi-agent workflow was stuck to my macbook while I sat doing nothing on the train. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for herding agents.
 
 ## The stack
 
-{/* TODO FIGURE: the layer diagram — laptop → VPN → ssh → herdr → sbx-new → agent → skills → subagents → GitHub. */}
+{
+  TODO FIGURE: the layer diagram — laptop → VPN → ssh → herdr → sbx-new → agent → skills → subagents → GitHub. 
+  highlight only sbx & agent
+}
 
 My dev stack for agents keeps them each in their own Docker sbx sandbox. The tool is specifically for agents building a microVM for each and has great features like like credential substitution in the network proxy. What's in these sandboxes is determined by Docker sbx kits and what they can reach is determined by a network policy. Where I deviate from their operational model is that I make these environments ephemeral by construction. sbx gives you the tools to make them each a special snowflake, but state management is complex and annoying so I choose to eliminate it when I can.
+
+{
+  TODO FIGURE: highlight only sbx-new
+}
 
 When spinning up sandboxes you have many choices to make. Every choice is very personal to the needs of each organization or developer and should be codified in an auditable way. I've concentrated all of the decisions that make up my security risk profile into a tool I wrote with the uninspiring name `sbx-new`. I'm not going to share it because I chose to collapse all the structure that would be required to express multiple people's security profiles and instead simply express what I am comfortable with. The transferable part is not the tool itself. It's that the tolerances live in one place, enforced by construction, instead of scattered across prompts, doc comments, and good intentions.
 
@@ -30,13 +45,17 @@ When spinning up sandboxes you have many choices to make. Every choice is very p
 - Agent support: I use both claude and codex but will likely add more.
 - Toolchain provisioning: Done via a versioned pre-built image.
 - Coworking model: A fresh clone for branching.
-- Permissions: Check for the repo-scoped GitHub deploy key, or print the one step command to make one.
-- Hooks: Anything you want to provide it from the outside. I provide it with Herdr status hooks, and a pathway to request a cross-family review.
-- Cleanup: sbx microVMs are cheap and I drop them quickly. Every invocation cleans up old unused ones on a background thread.
+- Permissions: How to access GitHub.
+- Hooks: Anything you want to provide it from the outside.
+- Cleanup: So instances don't stick around.
 
-These definitions grow and change over time. For example, I've been doing an unusual amount of front end work lately and decided to throw playwrite and chromium into the base image. The more I work, the more the tools change to reflect my needs.
+The implementations of these roles grow and change over time. For example, I've been doing an unusual amount of front end work lately and decided to throw playwrite and chromium into the base image. The more I work, the more the tools change to reflect my needs.
 
 This creates the most important primitive of the whole workflow: One disposable environment per task.
+
+{
+  TODO FIGURE: highlight only herdr
+}
 
 Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appealing is that it has a minimal ui footprint that lets your terminal tabs span multiple workspaces while detecting and displaying the status of each agent you've launched. The layout is designed for both desktop layouts _and_ mobile layouts.
 
@@ -44,15 +63,15 @@ Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appeal
 
 With Zed in it's own Mac workspace, I pull what the agent pushes, test, make changes and push back. It feels extremely familiar since this is how I've always worked with collaborators. I can have multiple agents from different families work on the same branch or on different branches all while clearly visible in the Herdr UI.
 
-# When I leave the house
+{
+  TODO FIGURE: highlight only mobile
+}
 
-With this construction it's safe to let agents work when you're not at the keyboard. That doesn't mean you should be valuemaxxing while on dinner dates or while watching a movie. But when I'm in a waiting room or on a bus I'm usually mindlessly scrolling to pass the time. I'd much rather be building something in that time and I bet you would too.
+With this construction it's safe to let agents work when you're not at the keyboard. That doesn't mean you should be valuemaxxing while on dinner dates or while watching a movie with friends. But when I'm in a waiting room or on a bus I'm usually mindlessly scrolling to pass the time. I'd much rather be building something and I bet you would too.
 
 When I leave the house, I turn on caffeine, shut off the screen, and walk out the door. I have Ubiquiti equipment at home so I can use [UniFi](https://ui.com/) Teleport to make my local network accessible to my phone. If you don't, Tailscale works just as well. I open up Termux, ssh into my laptop, type `herdr` and the whole herd is ready for me to take action. Between Herdr over ssh and the Github app I can do pretty much everything I can at home. The changes I might have pushed myself, I'll just ask the agent to do for me.
 
 Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping to fold [`mosh`](https://mosh.org) into the stack to protect against unnecessary disconnects. Unfortunately, until [this issue](https://github.com/mobile-shell/mosh/issues/1364) is resolved I'll have to live with occassional disconnections. In practice on my outings I get maybe one disconnect an hour which is tolerable.
-
-## Watching six workers at once
 
 Here's how this usually goes: I sit down with one or two big ideas I want to implement. Say write a new blog post on my AI workflow and add a new graph to my personal analytics BI. Analytics I split into "Add personal GitHub commits as a source" and "model commits by agent or human author over time through to BI." The blog post I split into a research task and a collaborative outline creation. Now I have two workstreams with blocking and subsequent tasks which is easy to keep in my head. I fire the first two off, and after working for a bit I realize there's some silly mac files creating token waste when my agents go to push, so I spin up a new agent in my dotfiles repo to investigate and make a fix. The agent from my github source project realizes my source freshness table only surfaces successful runs, but this agent was hoping to use it to detect failed runs as well- very reasonable. I spin up another to merge that first so my source work can rebase on top of it.
 
@@ -93,7 +112,9 @@ To keep track of this growing dependency tree, I'm currently experimenting with 
 
 If I use this enough to find value in it, I'll code up a minimal cli in Rust, commit it as a tool and use it going forward. If it still feels like it's missing something I may try using beads or another built-for purpose tracking system. But POCs like this take minutes to build, and I get to test the userflow before getting into the weeds of implementation.
 
-## The work
+{
+  TODO FIGURE: highlight only skill
+}
 
 Work is scoped to small meaningful changes that make progress on their own. Standard engineering stuff. Poorly defined work often gets split up into smaller manageable pieces when those poor definitions are revealed during a design discussion. In practice, these chunks of work take between 20m and 2hrs for my workflow to complete. It's not a target I aim for, just a consequence of tightly scoped work.
 
@@ -116,22 +137,10 @@ This process only has one human input and one human gate right at the front. Onc
 
 For a while this helped me very effeciently balance two $20 plans: Claude pro and Codex Plus. When my Claude session limit was more than half I'd swap my next few runs to Codex implementors and switch back. I was able to completely saturate my weekly limits on both which made me feel like I earned the need for the max plans. For any craft I'm learning, I want to outgrow my tools before I buy the expensive ones so I know what I need from them, which ones to buy, and how to wield them. The limitations of the $20 plans helped me develop this process, and makes my current usage of the max plans much more intentional.
 
-## Tradeoffs
-
-### One point of failure
-
-All of this depends on a laptop left awake at home. Lid closed, power blip, or ISP down and there is no workflow at all till I get home. Using Claude dispatch with a higher plan limit is a much nicer experience than Termux + ssh, but robs me of my cross-model iteractions, and the ability to spin up new independent threads on whatever code I want to. (<- reviewer: I have never used this feature so double check me here). There are also plenty of built-for purpose platforms like Runloop and fly.io sprites that can provide nearly exactly what I need but for a price: I'm seeing roughly $50 - $500 a month depending on which platform you pick and how heavy your usage is. Relying on my laptop works for me for now.
-
-### The tools are never finished
+This system has clear tradeoffs. All of this depends on a laptop left awake at home. Lid closed, power blip, or ISP down and there is no workflow at all till I get home. Using Claude dispatch with a higher plan limit is a much nicer experience than Termux + ssh, but robs me of my cross-model iteractions, and the ability to spin up new independent threads on whatever code I want to. (<- reviewer: I have never used this feature so double check me here). There are also plenty of built-for purpose platforms like Runloop and fly.io sprites that can provide nearly exactly what I need but for a price: I'm seeing roughly $50 - $500 a month depending on which platform you pick and how heavy your usage is. Relying on my laptop works for me for now.
 
 Owning so much of my dev stack means I am developing it frequently. Agents give me the ability to do so, but if I needed even more throughput, I would consider paying for tools I don't have to build.
 
-### Auth is an integration constraint now
+Auth is an integration constraint. I cancelled my Gemini Pro plan because I can't use it in this workflow since the move to Antigravity. If I wanted to use an API key it would work great, but I can't leverage my subscription limits. This is because unlike Claude which uses persisted OAuth state, and Codex which uses a persisted secret, Antigravity requires a browser login that can't be done in a headless environment. I value this workflow more than I value the gemini family of models so this is a tradeoff I accept.
 
-I cancelled my Gemini Pro plan because I can't use it in this workflow since the move to Antigravity. If I wanted to use an API key it would work great, but I can't leverage my subscription limits. This is because unlike Claude which uses persisted OAuth state, and Codex which uses a persisted secret, Antigravity requires a browser login that can't be done in a headless environment.
-
-The argument for ephemeral development environments has only gotten stronger since agents came on the scene and the product landscape is growing rapidly to reflect that (TODO list products?). Because Antigravity's auth is structurally at odds with ephemeral environments I have no plans to add Gemini to my workflow regardless of the quality of their models.
-
-## Closing
-
-Preserving my attention by leveraging focused, ephemeral agent environments gives me the freedom to spend my time on higher-level design, product decisions, and strategic direction. Investing in your tools and changing your workflow is critical to getting the most out of your agents.
+Preserving my attention by leveraging focused, ephemeral agent environments gives me the freedom to spend my time on higher-level design, product decisions, and strategic direction. Investing in my tools and changing my workflow lets me get the most out of my agents.
