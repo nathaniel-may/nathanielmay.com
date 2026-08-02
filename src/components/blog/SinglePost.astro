@@ -15,12 +15,15 @@ export interface Props {
 
 const { post } = Astro.props;
 
-// A wide post widens only its container, not its text: `post-wide` keeps every
-// child at the reading measure and lets elements marked `breakout` — in
-// practice, one figure — span the full width. The header is unaffected, so the
-// title still lines up with the body.
+// The body is a wide container whose children sit at the reading measure, so
+// text renders identically to a narrow one and elements marked `breakout` — in
+// practice, one figure — can span the full width. The header is unaffected, so
+// the title still lines up with the body.
+//
+// Unconditional rather than opt-in: gating this on frontmatter made a figure's
+// width depend on a flag five files away, and every link in that chain failed
+// silently and identically, by handing the figure the reading measure.
 // `prose` would otherwise override the measure's max-width; see AGENTS.md.
-const proseMeasure = post.wide ? 'measure-wide max-w-255 post-wide' : 'measure max-w-3xl';
 ---
 
 {
@@ -77,7 +80,7 @@ const proseMeasure = post.wide ? 'measure-wide max-w-255 post-wide' : 'measure m
             class="max-w-full lg:max-w-225 mx-auto mb-6 sm:rounded-md bg-surface"
             widths={[400, 900]}
             sizes="(max-width: 900px) 400px, 900px"
-            alt={post?.excerpt || ''}
+            alt={post.imageAlt ?? ''}
             width={900}
             height={506}
             format="webp"
@@ -92,7 +95,7 @@ const proseMeasure = post.wide ? 'measure-wide max-w-255 post-wide' : 'measure m
       }
     </header>
     <div
-      class={`${proseMeasure} prose lg:prose-xl prose-invert prose-headings:heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-header prose-li:my-0`}
+      class={`measure-wide max-w-300 post-wide prose lg:prose-xl prose-invert prose-headings:heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-header prose-li:my-0`}
     >
       <slot />
     </div>

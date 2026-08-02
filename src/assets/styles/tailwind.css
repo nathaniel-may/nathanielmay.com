@@ -50,39 +50,36 @@
   @apply mx-auto w-full max-w-3xl px-6;
 }
 
-/* Wide measure, for posts built around a figure that a reading column cannot
-   hold. The inset matches `measure` so that a wide post's title and its body
-   text still line up at widths below the max.
+/* The container every post body sits in. Wider than the reading measure so a
+   figure can break out of the text column; the text itself is held at the
+   reading measure by `.post-wide > *` below, so prose renders identically to a
+   narrow container. The inset matches `measure` so a post's title and its body
+   text line up at widths below the max.
 
-   Check the figure before changing it: the architecture diagram has a
-   legibility floor of 844px and swaps to its column layout at 900px, so the
-   tightest it ever gets is 900 - 2*24 = 852px, 8px above the floor. A larger
-   inset here eats that margin. */
+   Check the figure before widening this inset: the architecture diagram will
+   not draw itself below 844px of room, falling back to a column layout
+   instead, and the inset is what decides when that happens. */
 @utility measure-wide {
-  @apply mx-auto w-full max-w-255 px-6;
+  @apply mx-auto w-full max-w-300 px-6;
 }
 
-/* The container is wide so a figure can break out, but text is still text: every
-   direct child sits at the reading measure other posts use, and only elements
-   marked `breakout` span the full width. Done with the container wide and the
-   children narrow — rather than the reverse, with the figure escaping via
-   `100vw` — because `vw` counts the scrollbar the layout does not get, which is
-   the exact off-by-a-scrollbar that the figure's own swap band guards against. */
-/* 720px, not max-w-3xl: `measure` is a 768px box with a 24px inset, so its text
+/* Text is still text: every direct child sits at the reading measure, and only
+   elements marked `breakout` span the full width. Done with the container wide
+   and the children narrow rather than the reverse — a figure escaping a narrow
+   container needs `100vw`, which counts the scrollbar the layout does not get.
+
+   720px, not max-w-3xl: `measure` is a 768px box with a 24px inset, so its text
    runs to 720. These children carry no inset of their own, and anything wider
    would sit out of line with the post's own title. */
 .post-wide > * {
   @apply mx-auto max-w-180;
 }
 
-/* Breakout elements ignore the reading measure and the container's inset, so
-   they span the full container box. `-mx-6` mirrors the container's `px-6` and
-   so tracks the root font size, which the site steps up at 2xl. Unconditional
-   on purpose: a breakout element's width has to be stable for a container
-   query inside it to mean anything. Anything that should stay inset at some
-   widths puts the inset back on itself. */
+/* Breakout elements ignore the reading measure and fill the container instead.
+   They keep the container's inset, so they line up with the prose on a narrow
+   screen and only widen where there is room to widen. */
 .post-wide > .breakout {
-  @apply max-w-none -mx-6;
+  @apply max-w-none;
 }
 
 @utility icon-btn {

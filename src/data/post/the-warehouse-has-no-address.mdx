@@ -1,43 +1,46 @@
 ---
 publishDate: 2026-07-29T00:00:00Z
 title: 'The warehouse has no address.'
-excerpt: 'My personal analytics architecture designed for low maintenance, for high security, and for a budget of mere pennies a year.'
+excerpt: 'My personal analytics architecture designed for low maintenance, high security, and a budget of mere pennies a year.'
+image: '~/assets/images/posts/the-warehouse-has-no-address.jpg'
 category: 'Practical Engineering'
 tags:
   - analytics engineering
 author: 'Nathaniel May'
-wide: true
 ---
 
 import ArchDiagram from '~/components/arch/ArchDiagram.astro';
 import RoleTable from '~/components/arch/RoleTable.astro';
 import Role from '~/components/arch/Role.astro';
 
+_image: ["Rubber Duck in Seoul"](https://www.flickr.com/photos/99958070@N02/15348035017) by travel oriented, featuring Florentijn Hofman's Rubber Duck. Licensed under [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)._
+
 When was the last time you went to the gym, changed your air filters, or had enough water to drink? Sometimes it feels like it's been two weeks when it's really been two months. I track everything in a central place under my control, surfacing the charts and graphs that are important to me, with nearly zero maintenance, nearly zero risk, and nearly zero cost.
 
 I'm allergic to all kinds of maintenance, and software is no exception. When I get a haircut I schedule the next one before I leave. When my PlayStation controller dies I unplug the other and plug in the dead one. When there's no toilet paper left, I leave the cardboard tube on the lid while I get more from the closet. I've systematized so many small choices over the years that whole classes of problems just aren't something I think about anymore.
 
-If I'm going to put thousands of microscopic details about my entire life in a warehouse, what I really don't want is my security system to be personal due diligence wrapped in a crumpled collection of calendar reminders. That pretty much rules out all the major warehouse providers like BigQuery. With DuckDB, I can own the data and the process with no exploitable endpoint for my raw data since the warehouse has no address.
+If I'm going to put thousands of microscopic details about my entire life in a warehouse, what I really don't want is my security system to be personal due diligence wrapped in a crumpled collection of calendar reminders. That pretty much rules out all the major warehouse providers like [BigQuery](https://cloud.google.com/bigquery). With DuckDB, I can own the data and the process with no exploitable endpoint for my raw data since the warehouse has no address.
 
-When a cron job requests fresh source data and inserts it into DuckDB, it runs `dbt build`, creates the BI from only the pre-computed models it needs, then publishes those to Netlify before shutting down the container and data volume. Nothing in the system ever accepts a query, because nothing ever listens — and unless I'm choosing to actively work on it, the warehouse file isn't mounted anywhere at all for 99.86% of the day. The offsite backups are protected by client-side AES-256.
+When a cron job requests fresh source data and inserts it into DuckDB, it runs `dbt build`, creates the BI from only the pre-computed models it needs, then publishes those to Netlify before shutting down the container and data volume. Nothing in the system ever accepts a query, because nothing ever listens. Unless I'm choosing to actively work on it, the warehouse file isn't mounted anywhere at all for 99.86% of the day. The offsite backups are protected by client-side AES-256.
 
-I want the benefits of a world-class data pipeline for myself, without any of the downsides. I only have a few hours a week to work on projects and I'd much rather be building something new. The majority of the maintenance burden is refreshing an OAuth token with an aggressive expiration policy in my browser. This manual process will be eliminated when I get a new fitness tracker. (Don't get Whoop if you want your own data.) If a source API changes, it's only a handful of lines of TypeScript and a staging model to make an update. Doable in minutes with a capable agent.
+I want the benefits of a world-class data pipeline for myself, without any of the downsides. I only have a few hours a week to work on projects and I'd much rather be building something new. The majority of the maintenance burden is opening my browser every two weeks to refresh one particular OAuth token with an aggressive expiration policy. This manual process will be eliminated when I get a new fitness tracker. (Don't get Whoop if you want to process your own data.) If a source API changes, it's only a handful of lines of TypeScript and a staging model to make an update. Doable in minutes with a capable agent.
 
 <ArchDiagram />
 
 ## Tradeoffs
 
-**No ad-hoc queries.** The published data holds pre-computed answers, which aren't enough to ask new questions. I can restore from backups to my laptop to explore the raw data with ad-hoc queries but it's a sit-down workflow not something I can do on the fly. If I wanted to use some of the cooler BI tech out there like [Hex](https://hex.tech) I'd move to MotherDuck and juggle live warehouse keys. The upside is that all the data the UI needs is co-located and super fast.
+**No ad-hoc queries.** The published data holds pre-computed answers, which aren't enough to ask new questions. I can restore from backups to my laptop to explore the raw data with ad-hoc queries but it's a sit-down workflow not something I can do on the fly. If I wanted to use some of the cooler BI tech out there like [Hex](https://hex.tech) I'd move to [MotherDuck](https://motherduck.com) and juggle live warehouse keys. The upside is that all the data the UI needs is co-located and super fast.
 
 **Team development makes no sense.** I develop locally by restoring from a backup and running my models on my machine. If the data gets too big, or there are team members trying to cooperate on multi-day git branches, dbt's elegant schema isolation on live warehouses doesn't help me at all.
 
-**Super fresh data is expensive.** Publish frequency is bounded in practice by Netlify credits. My legacy free tier covers twice a day easily. The current free tier only covers building every other day, and deploying every 30m would require the $95/mo plan.
+**Super fresh data is expensive.** Publish frequency is bounded in practice by Netlify credits. My legacy free tier covers twice a day easily. The current free tier only covers building every other day, and deploying every 30m would require the [$95/mo plan](https://www.netlify.com/pricing/). I currently hash the deploy artifacts so it's possible to skip if there's no new data. High-volume data sources would cause that optimization to miss every time.
 
 ## The Stack
 
 <RoleTable>
 
-<Role role="Warehouse" choice="Local DuckDB">
+<Role role="Warehouse">
+  <Fragment slot="choice">Local [DuckDB](https://duckdb.org)</Fragment>
 
 I own the process and the data cheaply. I could have used SQLite or even Postgres, but DuckDB is the lightest weight and most optimized for analytical workloads.
 
@@ -49,86 +52,98 @@ I own the process and the data cheaply. I could have used SQLite or even Postgre
 
 </Role>
 
-<Role role="Compute" choice="Railway cron job">
+<Role role="Compute">
+  <Fragment slot="choice">[Railway](https://railway.app) cron job</Fragment>
 
-Railway is unfathomably inexpensive and a joy to build on. Everything can be committed as config, it integrates with everything you'd expect it to, and the important stuff like rollbacks and debugging logs are one-click solutions. Even though I'm on a zero cost legacy plan, Railway is absolutely worth paying for. The usage for this project is under $0.03/mo so the currently available Railway free tier will work for anyone with less than 500MB of data.
+Railway is unfathomably inexpensive and a joy to build on. Everything can be committed as config, it integrates with everything you'd expect it to, and the important things like rollbacks and debugging logs are one-click solutions. Even though I'm on a zero cost legacy plan, Railway is absolutely worth paying for. The usage for this project is under $0.03/mo so the currently available Railway free tier will work for anyone with less than 500MB of data.
 
 <Fragment slot="when">
   If I start caring about uptime SLAs, if the project stops using infrequent bursts of compute and the pay-as-you-go
   starts to rack up, or I start working with more than 1TB of data. At that point I'd go for something from
-  DigitalOcean.
+  [DigitalOcean](https://www.digitalocean.com).
 </Fragment>
 
 </Role>
 
-<Role role="Load" choice="Node.js">
+<Role role="Load">
+  <Fragment slot="choice">[Node.js](https://nodejs.org)</Fragment>
 
 A small custom TypeScript app maps API endpoints to source tables in DuckDB. Every source table has the same schema: `id | inserted_at | batch_id | json`. Many sources have a JS or TS SDK generated from their API spec which makes this even easier.
 
 <Fragment slot="when">
   If I start adding dozens of sources, experience frequent flaky ingest runs, or the volume of code becomes too big.
-  Then I might swap my custom code for dlt or Meltano.
+  Then I might swap my custom code for [dlt](https://dlthub.com) or [Meltano](https://meltano.com).
 </Fragment>
 
 </Role>
 
-<Role role="Model" choice="dbt-core + dbt-duckdb">
+<Role role="Model">
+  <Fragment slot="choice">[dbt-core](https://github.com/dbt-labs/dbt-core) + [dbt-duckdb](https://github.com/duckdb/dbt-duckdb)</Fragment>
 
-Ordinary staging → intermediate → marts models with tests.
+Models my data in SQL with an industry-standard tool that has a large and active community. I have models for staging → intermediate → marts, all with tests.
 
 <Fragment slot="when">
-  If my project starts turning into Jinja soup I might add some external tooling like SQLGlot, or custom code gen. If
-  runtime or cloud warehouse costs get too high, or I have critical reliance on snapshot tables I'd consider SQLMesh.
-  And if I start adding complex AI inference models I might use something like Dagster to orchestrate dbt.
+  If my project starts turning into Jinja soup I might add some external tooling like [SQLGlot](https://sqlglot.com), or
+  custom code gen. If runtime or cloud warehouse costs get too high, or I have critical reliance on snapshot tables I'd
+  consider [SQLMesh](https://sqlmesh.com). And if I start adding complex AI inference models I might use something like
+  [Dagster](https://dagster.io) to orchestrate dbt.
 </Fragment>
 
 </Role>
 
-<Role role="Extract" choice="Observable Framework">
+<Role role="Build">
+  <Fragment slot="choice">[Observable Framework](https://observablehq.com/framework/)</Fragment>
 
-Turns a warehouse into a website with no database behind it by writing data to files at build time. Configuring new charts is both simple and highly customizable when something unique is called for. Makes deployment practically an automated copy-paste.
+BI as code is very compelling. I never want to fiddle with someone else's UI to get my graphs looking right again. The build process copies data out of the warehouse to create a beautiful front end that needs no live data. Configuring new charts is both simple and highly customizable when something unique is called for. Makes deployment practically an automated copy-paste.
 
 <Fragment slot="when">
   If the lack of an interactive exploratory data UI is more painful than maintaining another live service and juggling
-  warehouse keys, I'd go for Streamlit. As much as I love Metabase as BI, backing up a Postgres instance instead of
-  committing source is an architectural blunder I don't plan on repeating or paying to compensate for. If Observable
-  Framework stalled development of their OSS offering, there would be no reasonable client-side alternatives, so I'd
-  probably hand-roll something in TS and Vega-Lite and cry. [Evidence](https://evidence.dev) used to occupy this space,
-  but release volume has dropped by over 90% since 2024 and [security
-  issues](https://github.com/evidence-dev/evidence/issues/3302) go unanswered for months.
+  warehouse keys, I'd go for [Streamlit](https://streamlit.io). As much as I love [Metabase](https://www.metabase.com)
+  as BI, backing up a Postgres instance instead of committing source is an architectural blunder I don't plan on
+  repeating or paying to compensate for. If Observable Framework stalled development of their OSS offering, there would
+  be no reasonable client-side alternatives, so I'd probably hand-roll something in TS and Vega-Lite and cry.
+  [Evidence](https://evidence.dev) used to occupy this space, but release volume has dropped by over 90% since 2024 and
+  [security issues](https://github.com/evidence-dev/evidence/issues/3302) go unanswered for months.
 </Fragment>
 
 </Role>
 
-<Role role="Hosting" choice="Netlify">
+<Role role="Hosting">
+  <Fragment slot="choice">[Netlify](https://www.netlify.com)</Fragment>
 
-Serves a static directory, and integrates auth in an edge function.
+Serves a static directory and integrates auth in an edge function. Netlify has always been extremely easy to use, and I've had no complaints in the many years I've been on the free tier.
 
 <Fragment slot="when">
-  If the cost got too high I might see if Cloudflare Pages could do it cheaper. If I started hosting BI server apps
-  instead, I could cut this out of the stack entirely since wherever BI is hosted is my real front end.
+  If the cost got too high I might see if [Cloudflare Pages](https://pages.cloudflare.com) could do it cheaper. If I
+  started hosting BI server apps instead, I could cut this out of the stack entirely since wherever BI is hosted is my
+  real front end.
 </Fragment>
 
 </Role>
 
-<Role role="Auth" choice="Clerk">
+<Role role="Auth">
+  <Fragment slot="choice">[Clerk](https://clerk.com)</Fragment>
 
-Handles user management and sessions. It runs in a Netlify edge function ahead of every path, and it is the only real server-side logic in the read path.
+Handles user management and sessions. It runs in a Netlify edge function ahead of every path, and it is the only real server-side logic in the read path. It has a generous free tier, a great UI for managing users, and all the API bits you could ask for.
 
 <Fragment slot="when">
-  If I ever leave my legacy free tier plan I would just use Netlify Identity. Anyone with a normal credit-based plan
-  should just use Netlify Identity.
+  If I ever leave my legacy free tier plan I would just use [Netlify
+  Identity](https://docs.netlify.com/manage/security/secure-access-to-sites/identity/). Anyone with a normal
+  credit-based plan should just use Netlify Identity.
 </Fragment>
 
 </Role>
 
-<Role role="Durability" choice="restic → Backblaze B2">
+<Role role="Durability">
+  <Fragment slot="choice">[restic](https://restic.net) → [Backblaze B2](https://www.backblaze.com/cloud-storage)</Fragment>
 
-Before shipping the backup, everything is encrypted client-side with AES-256. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
+Before shipping the backup, everything is encrypted client-side with AES-256. This protects the raw data, but I make no
+attempt to protect against a compromised image, and I do nothing extra to protect what's on my laptop. Ransomware attacks are prevented with B2 [Object Lock](https://www.backblaze.com/docs/cloud-storage-object-lock) on the bucket, since pull-based backups aren't feasible with this architecture. Restic does one job and does it really well. Backblaze B2 is dead simple to configure while being unbelievably inexpensive.
 
 <Fragment slot="when">
   Neither has any alternatives compelling enough to switch to for this use case. If for some reason I started using my
-  bucket for more egress than storage I could consider Cloudflare R2.
+  bucket for more egress than storage I could consider [Cloudflare
+  R2](https://www.cloudflare.com/developer-platform/products/r2/).
 </Fragment>
 
 </Role>

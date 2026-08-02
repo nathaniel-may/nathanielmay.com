@@ -16,9 +16,8 @@ export interface Post {
   /** Optional summary of post content. */
   excerpt?: string;
   image?: ImageMetadata | string;
-
-  /** Render at the wide measure rather than the prose measure. */
-  wide?: boolean;
+  /** Alt text for `image`. Omit for decorative images, which render alt="". */
+  imageAlt?: string;
 
   category?: Taxonomy;
   tags?: Taxonomy[];

@@ -23,17 +23,19 @@
  */
 interface Props {
   role: string;
-  choice: string;
+  /** Plain text. Use the `choice` slot instead when it needs a link. */
+  choice?: string;
 }
 
 const { role, choice } = Astro.props;
+const hasChoice = Astro.slots.has('choice');
 const hasWhen = Astro.slots.has('when');
 ---
 
 <article class="role">
   <h3 class="role-head">
     <span class="role-name">{role}</span>
-    <span class="role-choice">{choice}</span>
+    <span class="role-choice">{hasChoice ? <slot name="choice" /> : choice}</span>
   </h3>
   <div class="role-body">
     <div>
@@ -75,7 +77,7 @@ const hasWhen = Astro.slots.has('when');
 
   .role-name {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     font-weight: 400;
@@ -83,11 +85,24 @@ const hasWhen = Astro.slots.has('when');
   }
 
   .role-choice {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.2;
     color: var(--color-foreground);
+  }
+
+  /* Subdued: eight cards of gold headings would shout. The link colours on
+     hover instead, so the heading reads as a heading first. */
+  .role-choice :global(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--color-surface);
+    text-underline-offset: 3px;
+  }
+
+  .role-choice :global(a:hover) {
+    text-decoration-color: var(--color-primary);
   }
 
   .role-body {
@@ -111,7 +126,7 @@ const hasWhen = Astro.slots.has('when');
   .role-label {
     margin: 0 0 5px;
     font-family: var(--font-mono);
-    font-size: 9.5px;
+    font-size: 10.5px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     font-weight: 400;
@@ -119,7 +134,7 @@ const hasWhen = Astro.slots.has('when');
   }
 
   .role-prose {
-    font-size: 15.5px;
+    font-size: 18px;
     line-height: 1.55;
     color: var(--color-muted);
   }
