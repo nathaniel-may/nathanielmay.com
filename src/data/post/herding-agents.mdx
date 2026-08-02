@@ -41,15 +41,7 @@ My dev stack for agents keeps them each in their own Docker sbx sandbox. The too
 
 When spinning up sandboxes you have many choices to make. Every choice is very personal to the needs of each organization or developer and should be codified in an auditable way. I've concentrated all of the decisions that make up my security risk profile into a tool I wrote with the uninspiring name `sbx-new`. I'm not going to share it because I chose to collapse all the structure that would be required to express multiple people's security profiles and instead simply express what I am comfortable with. The transferable part is not the tool itself. It's that the tolerances live in one place, enforced by construction, instead of scattered across prompts, doc comments, and good intentions.
 
-`sbx-new` has several jobs:
-- Agent support: I use both claude and codex but will likely add more.
-- Toolchain provisioning: Done via a versioned pre-built image.
-- Coworking model: A fresh clone for branching.
-- Permissions: How to access GitHub.
-- Hooks: Anything you want to provide it from the outside.
-- Cleanup: So instances don't stick around.
-
-The implementations of these roles grow and change over time. For example, I've been doing an unusual amount of front end work lately and decided to throw playwrite and chromium into the base image. The more I work, the more the tools change to reflect my needs.
+The most important part of `sbx-new` are the key limitations it asserts: access to GitHub via a limited PAT for the one repo, read-only host mounts, and internet access via an explicit network allow list.
 
 This creates the most important primitive of the whole workflow: One disposable environment per task.
 
