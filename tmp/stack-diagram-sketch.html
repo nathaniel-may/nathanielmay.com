@@ -92,13 +92,11 @@
       .edge { fill: none; stroke: var(--edge); stroke-width: 1.5; }
 
       /* ---------- lit state ---------- */
-      .stack { --anchor-dim: 1; }
+      /* The `anchor` group is lit by the render step whenever anything else is,
+         so it needs no rule of its own here. Teal at rest, amber the moment the
+         figure is making a point. */
       .stack .grp { transition: opacity 140ms ease; }
       .stack.engaged .grp { opacity: 0.26; }
-      /* The hub is the anchor: it's the one thing true at every step of the
-         walk, so it never recedes with the rest. Lower --anchor-dim toward
-         0.26 if it reads too loud against the lit group. */
-      .stack.engaged .grp.anchor { opacity: var(--anchor-dim); }
       .stack.engaged .grp.lit { opacity: 1; }
 
       .grp.lit .shell-rect,
@@ -216,10 +214,10 @@
         <figcaption>highlight="herdr" — step two. Same anchor, and herdr's route up to it goes amber with it.</figcaption>
       </figure>
 
-      <figure><div class="instance" data-lit="phone hub"></div>
+      <figure><div class="instance" data-lit="phone"></div>
         <figcaption>
-          highlight={["phone", "hub"]} — two keys at once, for the leaving-the-house section. Naming the hub still
-          takes it to amber; it just never had to be named to stay visible.
+          highlight="phone" — the leaving-the-house section. The hub is amber here without being named, same as in the
+          two above.
         </figcaption>
       </figure>
 
@@ -253,11 +251,11 @@
           way to solve it.
         </li>
         <li>
-          <b>The hub never dims.</b> It's the one element true at every step, so it sits outside the
-          <code>engaged</code> fade via an <code>anchor</code> class rather than needing to be named in every
-          highlight. Teal at full strength next to an amber-lit group works because the two are complements — that's
-          the reason the analytics figure picked teal in the first place. If it still reads loud, <code>--anchor-dim</code>
-          is a single number to pull toward 0.26.
+          <b>The hub goes amber with every highlight.</b> It carries the <code>anchor</code> class and the render step
+          lights it whenever anything else is lit, so it never has to be named. Teal at rest, amber the moment the
+          figure is making a point. Worth checking on the page: there are two amber objects now and the hub is much
+          the larger, so if it starts reading as the subject rather than the destination, dropping only its glow —
+          amber stroke, no drop-shadow — puts the emphasis back on the section's own layer.
         </li>
       </ul>
 
@@ -271,7 +269,9 @@
 // src/components/StackDiagram.astro
 interface Props { highlight?: string | string[] }
 const { highlight = [] } = Astro.props;
-const lit = new Set(Array.isArray(highlight) ? highlight : [highlight]);
+const keys = Array.isArray(highlight) ? highlight : [highlight];
+// any highlight lights the hub too — it anchors every step of the walk
+const lit = new Set(keys.length ? [...keys, 'hub'] : []);
 const grp = (k: string) =&gt; (lit.has(k) ? 'grp lit' : 'grp');
 ---
 &lt;svg class:list={['stack', lit.size &amp;&amp; 'engaged']} viewBox="0 0 900 540"&gt;
@@ -287,7 +287,7 @@ const grp = (k: string) =&gt; (lit.has(k) ? 'grp lit' : 'grp');
 &lt;StackDiagram highlight="sandbox" /&gt;
 &lt;StackDiagram highlight="herdr" /&gt;
 &lt;StackDiagram highlight="zed" /&gt;
-&lt;StackDiagram highlight={['phone', 'hub']} /&gt;</code></pre>
+&lt;StackDiagram highlight="phone" /&gt;</code></pre>
 
       <ul>
         <li>
@@ -296,8 +296,9 @@ const grp = (k: string) =&gt; (lit.has(k) ? 'grp lit' : 'grp');
         </li>
         <li>
           <b>The keys are the API.</b> <code>macbook</code>, <code>herdr</code>, <code>sandbox</code>,
-          <code>zed</code>, <code>phone</code>, <code>hub</code>. Groups are siblings rather than nested so any
-          combination can light independently — lighting <code>sandbox</code> doesn't drag <code>herdr</code> along.
+          <code>zed</code>, <code>phone</code> — <code>hub</code> is no longer among them, since it lights itself.
+          Groups are siblings rather than nested so any combination can light independently — asking for
+          <code>sandbox</code> doesn't drag <code>herdr</code> along.
         </li>
         <li>
           <b>Each path travels with its source.</b> The riser to the hub is inside the group it leaves from, so
@@ -332,6 +333,8 @@ const grp = (k: string) =&gt; (lit.has(k) ? 'grp lit' : 'grp');
         if (keys.length) {
           svg.classList.add('engaged');
           keys.forEach((k) => frag.querySelector(`g[data-key="${k}"]`)?.classList.add('lit'));
+          // any highlight lights the anchor too — never has to be asked for
+          frag.querySelector('.grp.anchor')?.classList.add('lit');
         }
         slot.appendChild(frag);
       });
