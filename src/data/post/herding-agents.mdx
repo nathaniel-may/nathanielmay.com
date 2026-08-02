@@ -11,28 +11,15 @@ draft: false
 
 import StackDiagram from '~/components/stack/StackDiagram.astro';
 
-Attention savers:
-
-- design gate front-loading judgment
-- automated implementor↔reviewer
-- loops replacing copy-paste (:100)
-- cross-family review substituting for your own read
-- herdr's status at a glance.
-  Sandboxes contribute indirectly
-  - not-watching is safe
-  - remove state management as a chore
-
 My expert attention is the most valuable resource when building with agents, and my tools are designed to preserve it. Focusing my agents through ephemeral sandboxes frees up my attention to manage the a larger herd and to improve my workflow to scale up my own throughput. My agents write code, commit, push, open PRs, and request outside reviews unattended, all because they have access to everything they need and nothing more. My time and attention is spent making real decisions and shipping, not mindlessly orchestrating.
 
 I fire off workflows on top of tools that save my attention on several fronts: I front-load human judgement with a long unsupervised tail for implementation and automated reviews, I have have status at a glance across agents, and sandboxes make not-watching safe by construction while eliminating the chore of local state management. This posts walks through my stack so you can see the attenion savings, and take the ideas that resonate for your own workflow.
 
-<StackDiagram />
+<StackDiagram highlight="zed" />
 
 At first I used Zed, and I still love Zed so much. It's a popular tool for multi-plexing across agents for good reason, but it was doing too much with too little screenspace. I love using it to write and inspect code myself, but an agent-centric workflow needs a different layout than a code-centric workflow. Carefully toggling back and forth became a tiresome chore, and when I left the house my whole high velocity multi-agent workflow was stuck to my macbook while I sat doing nothing on the train. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for herding agents.
 
 With Zed in it's own Mac workspace, I pull what the agent pushes, test, make changes and push back. It feels extremely familiar since this is how I've always worked with collaborators. I can have multiple agents from different families work on the same branch or on different branches all while clearly visible in the Herdr UI.
-
-<StackDiagram highlight="zed" />
 
 ## The work
 
@@ -59,8 +46,6 @@ Here's what `dev-workflow` does today:
 <StackDiagram highlight="cross-review" />
 
 This process only has one human input and one human gate right at the front. Once the design is approved I can move on to spinning up another work item and juggle them with ease. Just like human development, the big thing to watch out for is scope creep. If 5 of these PRs land and they're each 10k lines, you have to choose between blindly accepting bloat or doing some real work to carve them down to size.
-
-For a while this helped me very effeciently balance two $20 plans: Claude pro and Codex Plus. When my Claude session limit was more than half I'd swap my next few runs to Codex implementors and switch back. I was able to completely saturate my weekly limits on both which made me feel like I earned the need for the max plans. For any craft I'm learning, I want to outgrow my tools before I buy the expensive ones so I know what I need from them, which ones to buy, and how to wield them. The limitations of the $20 plans helped me develop this process, and makes my current usage of the max plans much more intentional.
 
 My dev stack for agents keeps them each in their own Docker sbx sandbox. The tool is specifically for agents building a microVM for each and has great features like like credential substitution in the network proxy. What's in these sandboxes is determined by Docker sbx kits and what they can reach is determined by a network policy. Where I deviate from their operational model is that I make these environments ephemeral by construction. sbx gives you the tools to make them each a special snowflake, but state management is complex and annoying so I choose to eliminate it when I can.
 
@@ -134,5 +119,7 @@ All of this depends on a laptop left awake at home. Lid closed, power blip, or I
 Owning so much of my dev stack means I am developing it frequently. Agents give me the ability to do so, but if I needed even more throughput, I would consider paying for tools I don't have to build.
 
 Auth is an integration constraint. I cancelled my Gemini Pro plan because I can't use it in this workflow since the move to Antigravity. If I wanted to use an API key it would work great, but I can't leverage my subscription limits. This is because unlike Claude which uses persisted OAuth state, and Codex which uses a persisted secret, Antigravity requires a browser login that can't be done in a headless environment. I value this workflow more than I value the gemini family of models so this is a tradeoff I accept.
+
+For a while this system helped me very effeciently balance two $20 plans: Claude pro and Codex Plus. When my Claude session limit was more than half I'd swap my next few runs to Codex implementors and switch back. I was able to completely saturate my weekly limits on both which made me feel like I earned the need for the max plans. For any craft I'm learning, I want to outgrow my tools before I buy the expensive ones so I know what I need from them, which ones to buy, and how to wield them. The limitations of the $20 plans helped me develop this process, and makes my current usage of the max plans much more intentional.
 
 Preserving my attention by leveraging focused, ephemeral agent environments gives me the freedom to spend my time on higher-level design, product decisions, and strategic direction. Investing in my tools and changing my workflow lets me get the most out of my agents.
