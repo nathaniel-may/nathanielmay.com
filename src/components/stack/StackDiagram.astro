@@ -4,6 +4,22 @@
  * with a different `highlight`, so geometry, palette and copy live in exactly
  * one place and every appearance follows an edit here.
  *
+ * Two assets, not one drawing that reflows. The wide layout is landscape and
+ * the narrow one is portrait, and no amount of CSS turns one into the other:
+ * the hub is a horizontal bar above two side-by-side devices in the first and a
+ * vertical bar beside two stacked devices in the second. Which one renders is a
+ * container query on the wrapper rather than a media query, because the figure
+ * breaks out of the reading measure and the viewport is only a proxy for the
+ * room it actually gets — a scrollbar, browser zoom and device pixel ratio all
+ * pull the two apart. Both carry the same `data-key` set, so a group added to
+ * one and forgotten in the other is a visible bug.
+ *
+ * The narrow layout drops two things the wide one says, on purpose. herdr and
+ * Zed stack instead of sitting side by side, which loses the left/right swipe
+ * the desktop composition mirrors; and the devices stack too. Legibility won:
+ * at phone width, preserving either arrangement costs the sandbox labels more
+ * room than they have.
+ *
  * Palette and the two rules behind it are borrowed from ArchDiagram.astro so
  * the two figures read as one system: amber is reserved for the lit state, and
  * exactly one object carries a hue at rest. Here that object is the GitHub bar,
@@ -12,7 +28,7 @@
  * marks the layer a section is actually about.
  *
  * Arrowheads are drawn as paths rather than <marker> elements on purpose.
- * Markers are referenced by document-global id, and this component renders five
+ * Markers are referenced by document-global id, and this component renders six
  * times on one page — every `url(#id)` would resolve to the first instance's
  * definition, which is invisible until one instance differs and then very
  * confusing. Paths have no such coupling.
@@ -39,20 +55,19 @@ const grp = (k: string) => (lit.has(k) ? 'grp lit' : 'grp');
 const aria =
   label ??
   (keys.length
-    ? `Stack diagram, highlighting ${keys.join(' and ')}: GitHub above a phone and a MacBook.`
-    : 'Stack diagram: GitHub above a phone and a MacBook.');
+    ? `Stack diagram, highlighting ${keys.join(' and ')}: GitHub, a phone and a MacBook.`
+    : 'Stack diagram: GitHub, a phone and a MacBook.');
 ---
 
-<div class="stack-fig breakout not-prose">
-  <svg class:list={['stack', keys.length && 'engaged']} viewBox="0 0 900 540" role="img" aria-label={aria}>
-    <!-- macbook shell -->
-    <g class={grp('macbook')}>
+<div class="stack-fig breakout not-prose" role="img" aria-label={aria}>
+  {/* ============ wide: hub above two side-by-side devices ============ */}
+  <svg class:list={['stack', 'stack-wide', keys.length && 'engaged']} viewBox="0 0 900 540" aria-hidden="true">
+    <g class={grp('macbook')} data-key="macbook">
       <rect class="shell-rect" x="250" y="160" width="610" height="346" rx="10"></rect>
       <text class="n-title" x="270" y="188">MacBook</text>
     </g>
 
-    <!-- herdr, and the panes that don't fit -->
-    <g class={grp('herdr')}>
+    <g class={grp('herdr')} data-key="herdr">
       <rect class="panel-rect" x="270" y="206" width="440" height="280" rx="8"></rect>
       <text class="n-title" x="288" y="232">herdr</text>
       <path class="edge" d="M620,206 L620,97"></path>
@@ -61,16 +76,14 @@ const aria =
       <text class="n-tag" x="490" y="458" text-anchor="middle">…</text>
     </g>
 
-    <!-- the workflow sandbox -->
-    <g class={grp('sandbox')}>
+    <g class={grp('sandbox')} data-key="sandbox">
       <rect class="node-rect" x="340" y="252" width="300" height="56" rx="6"></rect>
       <text class="n-tag" x="354" y="285">sbx /dev-workflow</text>
       <rect class="chip-rect" x="520" y="268" width="104" height="24" rx="4"></rect>
       <text class="n-chip" x="572" y="284" text-anchor="middle">Claude Code</text>
     </g>
 
-    <!-- the sandbox it spawns for the cross-family read -->
-    <g class={grp('cross-review')}>
+    <g class={grp('cross-review')} data-key="cross-review">
       <path class="edge" d="M490,308 L490,349"></path>
       <path class="arrow" d="M486,349 L490,356 L494,349 Z"></path>
       <rect class="node-rect" x="340" y="360" width="300" height="56" rx="6"></rect>
@@ -79,16 +92,14 @@ const aria =
       <text class="n-chip" x="572" y="392" text-anchor="middle">Codex</text>
     </g>
 
-    <!-- the other workspace -->
-    <g class={grp('zed')}>
+    <g class={grp('zed')} data-key="zed">
       <rect class="panel-rect" x="728" y="206" width="116" height="280" rx="8"></rect>
       <text class="n-title" x="786" y="351" text-anchor="middle">Zed</text>
       <path class="edge" d="M786,206 L786,97"></path>
       <path class="arrow" d="M782,97 L786,90 L790,97 Z"></path>
     </g>
 
-    <!-- the other device, and its two ways in -->
-    <g class={grp('phone')}>
+    <g class={grp('phone')} data-key="phone">
       <rect class="shell-rect" x="40" y="160" width="160" height="346" rx="10"></rect>
       <text class="n-title" x="58" y="188">Phone</text>
       <rect class="node-rect" x="56" y="262" width="128" height="56" rx="6"></rect>
@@ -103,16 +114,80 @@ const aria =
       <text class="n-tag" x="220" y="409" text-anchor="middle">ssh</text>
     </g>
 
-    <!-- the hub: the only hue at rest, and the only group that never dims -->
-    <g class="grp anchor">
+    <g class="grp anchor" data-key="hub">
       <rect class="core-rect" x="40" y="24" width="820" height="56" rx="8"></rect>
       <text class="n-hub" x="450" y="58" text-anchor="middle">GitHub</text>
+    </g>
+  </svg>
+
+  {/* ============ narrow: hub beside two stacked devices ============ */}
+  <svg class:list={['stack', 'stack-narrow', keys.length && 'engaged']} viewBox="0 0 380 663" aria-hidden="true">
+    <g class={grp('macbook')} data-key="macbook">
+      <rect class="shell-rect" x="14" y="173" width="286" height="470" rx="10"></rect>
+      <text class="n-title" x="28" y="197">MacBook</text>
+    </g>
+
+    <g class={grp('herdr')} data-key="herdr">
+      <rect class="panel-rect" x="28" y="211" width="258" height="290" rx="8"></rect>
+      <text class="n-title" x="42" y="234">herdr</text>
+      <path class="edge" d="M286,280 L313,280"></path>
+      <path class="arrow" d="M313,276 L320,280 L313,284 Z"></path>
+      <rect class="ghost-rect" x="42" y="459" width="230" height="18" rx="4"></rect>
+      <text class="n-tag" x="157" y="472" text-anchor="middle">…</text>
+    </g>
+
+    <g class={grp('sandbox')} data-key="sandbox">
+      <rect class="node-rect" x="42" y="248" width="230" height="72" rx="6"></rect>
+      <text class="n-tag" x="54" y="270">sbx /dev-workflow</text>
+      <rect class="chip-rect" x="54" y="280" width="104" height="24" rx="4"></rect>
+      <text class="n-chip" x="106" y="296" text-anchor="middle">Claude Code</text>
+    </g>
+
+    <g class={grp('cross-review')} data-key="cross-review">
+      <path class="edge" d="M157,320 L157,357"></path>
+      <path class="arrow" d="M153,357 L157,364 L161,357 Z"></path>
+      <rect class="node-rect" x="42" y="365" width="230" height="72" rx="6"></rect>
+      <text class="n-tag" x="54" y="387">sbx /pr-review</text>
+      <rect class="chip-rect" x="54" y="397" width="104" height="24" rx="4"></rect>
+      <text class="n-chip" x="106" y="413" text-anchor="middle">Codex</text>
+    </g>
+
+    <g class={grp('zed')} data-key="zed">
+      <rect class="panel-rect" x="28" y="519" width="258" height="96" rx="8"></rect>
+      <text class="n-title" x="157" y="572" text-anchor="middle">Zed</text>
+      <path class="edge" d="M286,567 L313,567"></path>
+      <path class="arrow" d="M313,563 L320,567 L313,571 Z"></path>
+    </g>
+
+    <g class={grp('phone')} data-key="phone">
+      <rect class="shell-rect" x="14" y="20" width="286" height="112" rx="10"></rect>
+      <text class="n-title" x="28" y="44">Phone</text>
+      <rect class="node-rect" x="28" y="58" width="122" height="46" rx="6"></rect>
+      <text class="n-chip" x="89" y="86" text-anchor="middle">Termux</text>
+      <rect class="node-rect" x="164" y="58" width="122" height="46" rx="6"></rect>
+      <text class="n-chip" x="225" y="86" text-anchor="middle">GitHub app</text>
+      <path class="edge" d="M286,81 L313,81"></path>
+      <path class="arrow" d="M313,77 L320,81 L313,85 Z"></path>
+      <path class="edge" d="M89,132 L89,166"></path>
+      <path class="arrow" d="M85,166 L89,173 L93,166 Z"></path>
+      <rect class="pill-rect" x="98" y="140" width="34" height="20" rx="10"></rect>
+      <text class="n-tag" x="115" y="154" text-anchor="middle">ssh</text>
+    </g>
+
+    <g class="grp anchor" data-key="hub">
+      <rect class="core-rect" x="320" y="20" width="44" height="623" rx="8"></rect>
+      <text class="n-hub" x="342" y="331" text-anchor="middle" transform="rotate(-90 342 331)">GitHub</text>
     </g>
   </svg>
 </div>
 
 <style>
   .stack-fig {
+    /* The swap keys off this element's width, not the viewport's: the figure
+       breaks out of the reading measure, and zoom and device pixel ratio move
+       the two numbers apart. Asking the container removes the mismatch. */
+    container-type: inline-size;
+
     --ink: #080b0d;
     --shell: #111a21;
     --panel: #0a0f12;
@@ -138,6 +213,22 @@ const aria =
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  /* 860px is the wide layout's legibility floor: its smallest type is 11px in a
+     900-unit viewBox, so below this it renders under ~10.5px. */
+  .stack-narrow {
+    display: none;
+  }
+  @container (max-width: 860px) {
+    .stack-wide {
+      display: none;
+    }
+    .stack-narrow {
+      display: block;
+      max-width: 420px;
+      margin-inline: auto;
+    }
   }
 
   /* Value descends inward: shells are the lit surface, panels are holes cut in
