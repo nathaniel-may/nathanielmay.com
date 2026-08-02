@@ -28,7 +28,7 @@
  * marks the layer a section is actually about.
  *
  * Arrowheads are drawn as paths rather than <marker> elements on purpose.
- * Markers are referenced by document-global id, and this component renders six
+ * Markers are referenced by document-global id, and this component renders many
  * times on one page — every `url(#id)` would resolve to the first instance's
  * definition, which is invisible until one instance differs and then very
  * confusing. Paths have no such coupling.
@@ -176,7 +176,7 @@ const aria =
 
     <g class="grp anchor" data-key="hub">
       <rect class="core-rect" x="320" y="20" width="44" height="623" rx="8"></rect>
-      <text class="n-hub" x="342" y="331" text-anchor="middle" transform="rotate(-90 342 331)">GitHub</text>
+      <text class="n-hub" x="342" y="331" text-anchor="middle" transform="rotate(90 342 331)">GitHub</text>
     </g>
   </svg>
 </div>

@@ -27,7 +27,7 @@ With Zed in it's own Mac workspace, I pull what the agent pushes, test, make cha
 
 ## The work
 
-<StackDiagram highlight="sandbox" />
+<StackDiagram highlight={['sandbox', 'cross-review']} />
 
 Work is scoped to small meaningful changes that make progress on their own. Standard engineering stuff. Poorly defined work often gets split up into smaller manageable pieces when those poor definitions are revealed during a design discussion. In practice, these chunks of work take between 20m and 2hrs for my workflow to complete. It's not a target I aim for, just a consequence of tightly scoped work.
 
@@ -46,8 +46,6 @@ Here's what `dev-workflow` does today:
 7. **Cross Family Review.** The orchestrator has the ability to spin up another reviewer in a separate sandbox from another family of models. Claude asks for a Codex review, and Codex asks for a Claude review. Every single non-trivial PR has had something significant caught by the cross-family review so have it automatically triggred every time. Like the previous review loops, this continues until both families are satisfied or the cap is reached and a conflict is raised to me. At this point, the draft PR is a bit of a mess with all the agent chatter.
 8. **History rewrite.** I don't care about the details of this process leaking out, so I have it close the draft pr, rewrite the commit history into a set of well-titled commits, push to a new PR and statically evaluate that both branch's end states match so I can review the final product.
 9. **Merge Decision.** My review. For very small tasks the code usually looks perfect and I just merge it. For larger tasks I have to decide if the part of the codebase I'm working on is ok with a little vibe bloat or if I want to start reading for questionable decisions. For critical parts of my codebases I still read every line and push my own commits for fixes. This is where I may opt to make an update to my AGENTS.md like `Bash is only for justfile glue not application logic. Use TypeScript only for core logic and tests.`
-
-<StackDiagram highlight="cross-review" />
 
 This process only has one human input and one human gate right at the front. Once the design is approved I can move on to spinning up another work item and juggle them with ease. Just like human development, the big thing to watch out for is scope creep. If 5 of these PRs land and they're each 10k lines, you have to choose between blindly accepting bloat or doing some real work to carve them down to size.
 
