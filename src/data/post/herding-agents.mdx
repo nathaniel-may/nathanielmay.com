@@ -33,7 +33,9 @@ Work is scoped to small meaningful changes that make progress on their own. Stan
 
 Within a single workstream, I use exactly two skills, `dev-workflow` and `pr-review`, to orchestrate development across any of my supported agents. Right now that's just Claude and Codex, but I plan to add open weight models using a [Pi](https://pi.dev/) or [OpenCode](https://opencode.ai/) harness in the future. There's nothing novel about my skills, but it automates something I used to do manually when I first started developing with agents: implementor - reviewer feedback loops. The idea is sound, but copy-pasting back and forth is a waste of my time. I may replace these with more widely shared skills like [superpowers](https://github.com/obra/superpowers) or keep the control and update my own with the good ideas I find in the open.
 
-Because my environments are ephemeral, I need my workflow to be resumable in a new enviroment. The point of truth for integration I've chosen is Github issues and PRs. Because I care about these operating quickly without guzzling token limits, I use smaller models for longer work and bigger models with higher resoning for reviews.
+Because my environments are ephemeral, I need my workflow to be resumable in a new enviroment. The point of truth for integration I've chosen is Github issues and PRs. This also means that when working with collaborators, we don't need our workflows to conform. Github as a boundary has always let people collaborate with different workflows and that's true for agents too.
+
+Because I care about operating quickly without guzzling token limits or cash, I've crafted the skills to use different size models and reasoning levels for each task. Smaller models are used for large exporatory work with huge input loads, as well as longer work with large output loads. Bigger models are reserved for reviewing plans and diffs made by the smaller models, and bigger models with higher resoning gate PRs with reviews. I've experimented with raising the model size and reasoning for these skills but the time spent grows with no measurable return.
 
 Here's what `dev-workflow` does today:
 
