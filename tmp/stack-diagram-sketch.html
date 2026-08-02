@@ -63,12 +63,12 @@
 
       <h1>Desktop flow</h1>
       <p class="sub">
-        herdr and Zed as equal-height panels side by side, mirroring the two Mac workspaces you swipe between. Two
-        sandboxes: one running the workflow, one running the cross review it spawned.
+        Two devices of equal weight under the hub. Inside the laptop, herdr and Zed as equal-height panels you swipe
+        between; inside herdr, a workflow and the cross review it spawned.
       </p>
 
       <figure>
-        <svg viewBox="0 0 900 520" role="img" aria-label="Desktop layout: GitHub hub above phone and MacBook">
+        <svg viewBox="0 0 900 540" role="img" aria-label="Desktop layout: GitHub hub above phone and MacBook">
           <defs>
             <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
               <path d="M0,0 L7,3 L0,6 z" fill="#5c6678" />
@@ -86,111 +86,98 @@
           <text class="node" x="450" y="58" text-anchor="middle" fill="#9ece6a">GitHub</text>
 
           <!-- phone -->
-          <rect class="box" x="40" y="160" width="160" height="230" rx="10" />
+          <rect class="box" x="40" y="160" width="160" height="346" rx="10" />
           <text class="node" x="58" y="188">Phone</text>
-          <rect class="box" x="56" y="206" width="128" height="44" rx="6" stroke="#9ece6a" />
-          <text class="chip" x="120" y="233" text-anchor="middle" fill="#e6e9ef">GitHub app</text>
-          <rect class="box" x="56" y="280" width="128" height="44" rx="6" />
-          <text class="chip" x="120" y="307" text-anchor="middle" fill="#e6e9ef">Termux</text>
+          <rect class="box" x="56" y="262" width="128" height="56" rx="6" stroke="#9ece6a" />
+          <text class="chip" x="120" y="295" text-anchor="middle" fill="#e6e9ef">GitHub app</text>
+          <rect class="box" x="56" y="378" width="128" height="56" rx="6" />
+          <text class="chip" x="120" y="411" text-anchor="middle" fill="#e6e9ef">Termux</text>
 
           <!-- macbook -->
-          <rect class="box" x="250" y="160" width="610" height="340" rx="10" stroke-dasharray="5 4" />
+          <rect class="box" x="250" y="160" width="610" height="346" rx="10" />
           <text class="node" x="270" y="188">MacBook</text>
 
           <!-- herdr panel -->
-          <rect class="box" x="270" y="206" width="440" height="278" rx="8" stroke="#7aa2f7" />
-          <text class="node" x="288" y="230" fill="#7aa2f7">herdr</text>
+          <rect class="box" x="270" y="206" width="440" height="280" rx="8" stroke="#7aa2f7" />
+          <text class="node" x="288" y="232" fill="#7aa2f7">herdr</text>
 
           <!-- sandbox A -->
-          <rect class="box" x="288" y="246" width="360" height="84" rx="6" />
-          <text class="tag" x="300" y="266" fill="#8b95a8">sbx /dev-workflow</text>
-          <rect class="box" x="300" y="278" width="96" height="28" rx="4" />
-          <text class="chip" x="348" y="296" text-anchor="middle">Claude Code</text>
-          <path class="edge" d="M400,292 L405,292" marker-end="url(#a)" />
-          <rect class="box" x="410" y="278" width="104" height="28" rx="4" />
-          <text class="chip" x="462" y="296" text-anchor="middle">/dev-workflow</text>
-          <path class="edge" d="M518,292 L523,292" marker-end="url(#a)" />
-          <rect class="box" x="528" y="278" width="84" height="28" rx="4" />
-          <text class="chip" x="570" y="296" text-anchor="middle">subagents</text>
+          <rect class="box" x="340" y="252" width="300" height="56" rx="6" />
+          <text class="tag" x="354" y="285" fill="#8b95a8">sbx /dev-workflow</text>
+          <rect class="box" x="520" y="268" width="104" height="24" rx="4" />
+          <text class="chip" x="572" y="284" text-anchor="middle">Claude Code</text>
 
           <!-- cross family -->
-          <text class="tag" x="300" y="346" fill="#f7768e">cross-family review</text>
-          <path class="edge" stroke="#f7768e" d="M648,288 C684,308 684,382 650,402" marker-end="url(#ar)" />
+          <path class="edge" stroke="#f7768e" d="M490,308 L490,354" marker-end="url(#ar)" />
 
           <!-- sandbox B -->
-          <rect class="box" x="288" y="356" width="360" height="84" rx="6" />
-          <text class="tag" x="300" y="376" fill="#8b95a8">sbx /pr-review</text>
-          <rect class="box" x="300" y="388" width="96" height="28" rx="4" />
-          <text class="chip" x="348" y="406" text-anchor="middle">Codex</text>
-          <path class="edge" d="M400,402 L405,402" marker-end="url(#a)" />
-          <rect class="box" x="410" y="388" width="90" height="28" rx="4" />
-          <text class="chip" x="455" y="406" text-anchor="middle">/pr-review</text>
+          <rect class="box" x="340" y="360" width="300" height="56" rx="6" />
+          <text class="tag" x="354" y="393" fill="#8b95a8">sbx /pr-review</text>
+          <rect class="box" x="520" y="376" width="104" height="24" rx="4" />
+          <text class="chip" x="572" y="392" text-anchor="middle">Codex</text>
 
           <!-- more panes -->
-          <rect class="box" x="288" y="456" width="360" height="18" rx="4" stroke-dasharray="4 4" />
-          <text class="tag" x="468" y="469" text-anchor="middle">…</text>
+          <rect class="box" x="340" y="444" width="300" height="20" rx="4" stroke-dasharray="4 4" />
+          <text class="tag" x="490" y="458" text-anchor="middle">…</text>
 
           <!-- zed panel -->
-          <rect class="box" x="728" y="206" width="116" height="278" rx="8" />
-          <text class="node" x="786" y="350" text-anchor="middle">Zed</text>
+          <rect class="box" x="728" y="206" width="116" height="280" rx="8" />
+          <text class="node" x="786" y="351" text-anchor="middle">Zed</text>
 
           <!-- paths up to the hub -->
-          <path class="edge" stroke="#9ece6a" d="M120,206 L120,86" marker-end="url(#ag)" />
-          <path class="edge" stroke="#9ece6a" d="M600,206 L600,86" marker-end="url(#ag)" />
+          <path class="edge" stroke="#9ece6a" d="M120,262 L120,86" marker-end="url(#ag)" />
+          <path class="edge" stroke="#9ece6a" d="M620,206 L620,86" marker-end="url(#ag)" />
           <path class="edge" stroke="#9ece6a" d="M786,206 L786,86" marker-end="url(#ag)" />
 
           <!-- phone into the laptop -->
-          <path class="edge" d="M184,302 L264,302" marker-end="url(#a)" />
-          <rect x="203" y="291" width="34" height="20" rx="10" fill="#10141d" stroke="#2a3344" />
-          <text class="tag" x="220" y="305" text-anchor="middle">ssh</text>
+          <path class="edge" d="M184,406 L264,406" marker-end="url(#a)" />
+          <rect x="203" y="395" width="34" height="20" rx="10" fill="#10141d" stroke="#2a3344" />
+          <text class="tag" x="220" y="409" text-anchor="middle">ssh</text>
         </svg>
-        <figcaption>
-          Three paths up to the hub — the phone's own, herdr's agents, and Zed. Colour is still only for legibility.
-        </figcaption>
+        <figcaption>Nine node names and one edge label. Colour is still only for legibility.</figcaption>
       </figure>
 
       <h2>What changed</h2>
       <ul>
         <li>
-          <b>Zed is now a full-height panel beside herdr</b> rather than a small box above it. Equal heights and a
-          single gap between them is the part that mirrors the swipe — they read as two workspaces, not as a hierarchy.
+          <b>Sandboxes hold one chip each.</b> The skill name moved entirely to the container, so each sandbox is now
+          "what it's running" plus "who's running it" on a single line. Side effect worth having: the review sandbox is
+          visibly lighter than the workflow one.
         </li>
         <li>
-          <b>The two sandboxes are now one workflow and its cross review</b>, labelled <code>sbx /dev-workflow</code>
-          and <code>sbx /pr-review</code>. The red edge between them stops being an abstract capability and becomes the
-          specific thing that produced the second box.
+          <b>The cross-family edge is vertical</b> and centred between the two sandboxes, which cost about forty pixels
+          of height and is the only arrow in the figure that isn't straight-and-parallel to something else.
         </li>
         <li>
-          <b>The per-sandbox egress arrows collapsed into one from herdr.</b> With Zed on the right there was no clean
-          margin for a riser, and one arrow out of herdr says the same thing — the agents inside it reach GitHub. Three
-          parallel verticals now, one per path.
+          <b>Phone and MacBook are the same height</b>, so the top level reads as two devices of equal standing rather
+          than a main one and an accessory. The phone's contents are centred in that space.
         </li>
+        <li><b>The MacBook border is solid.</b></li>
       </ul>
 
-      <h2>Two calls I made that you should check</h2>
+      <h2>One thing to watch</h2>
       <ul>
         <li>
-          <b>I dropped <code>subagents</code> from the review sandbox.</b> Your explainer describes
-          <code>/pr-review</code> as review-only, posting a comment and never fixing — so it read as single-agent next
-          to the six subagent definitions <code>/dev-workflow</code> uses. Easy to add back if it does spawn them.
-        </li>
-        <li>
-          <b>The skill name now appears twice per sandbox</b> — once on the container, once as a chip. You asked for
-          both, so I kept both, but the container label alone would carry it: <code>sbx /dev-workflow</code> holding
-          <code>Claude Code → subagents</code>, and <code>sbx /pr-review</code> holding just <code>Codex</code>. That
-          drops two chips and makes the review sandbox visibly lighter than the workflow one, which is accurate.
+          Dropping the <code>cross-family review</code> text leaves that arrow as the only unexplained relationship in
+          the figure — a reader sees one sandbox pointing at another and has to get the meaning from the prose. If it
+          turns out to need a label, the fix that answers your objection is a pill sitting <em>on</em> the arrow, the
+          way <code>ssh</code> does, rather than floating text beside it.
         </li>
       </ul>
 
       <h2>Carried forward to the mobile pass</h2>
       <ul>
         <li>
-          Side-by-side panels are the first thing to break. Stacked, herdr above Zed loses the swipe metaphor — worth
-          deciding whether mobile keeps Zed at all, since the mobile story in the post is herdr and the GitHub app.
+          Side-by-side panels break first. Stacking herdr above Zed loses the swipe metaphor, so it's worth deciding
+          whether mobile keeps Zed at all — the mobile story in the post is herdr and the GitHub app.
         </li>
-        <li>The three-chip row inside the workflow sandbox is the next thing to overflow.</li>
         <li>
-          The <code>ssh</code> edge turns vertical once the devices stack, which reads better than it does here.
+          Equal-height devices won't survive either; stacked, the phone sits above the laptop and the <code>ssh</code>
+          edge turns vertical, which reads better than it does here.
+        </li>
+        <li>
+          The hub bar is the one element that carries across both layouts unchanged, which still makes it the anchor
+          for progressive highlighting.
         </li>
       </ul>
     </main>
