@@ -4,9 +4,10 @@
  * beneath them, and a caption that can carry a source credit.
  *
  * `not-prose` is load-bearing — post bodies are `prose`, and Tailwind
- * Typography would otherwise restyle the images and the caption. `breakout`
- * opts the figure out of the reading measure so screenshots get the full
- * container width; text around it stays at the reading measure.
+ * Typography would otherwise restyle the images and the caption.
+ * `breakout-narrow` opts the figure out of the reading measure without taking
+ * the whole container, which suits a post carrying several large screenshots;
+ * text around it stays at the reading measure.
  *
  * Images are styled through `:global()` because slot children render in the
  * *parent's* scope rather than this component's, so a plain descendant
@@ -25,7 +26,7 @@ const { caption, credit, creditHref } = Astro.props;
 const hasRow = Astro.slots.has('row');
 ---
 
-<figure class="fig breakout not-prose">
+<figure class="fig breakout-narrow not-prose">
   <slot />
   {
     hasRow && (
