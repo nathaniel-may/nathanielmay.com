@@ -14,7 +14,6 @@ import StackDiagram from '~/components/stack/StackDiagram.astro';
 import Callout from '~/components/ui/Callout.astro';
 import Figure from '~/components/ui/Figure.astro';
 import herdrDesktop from '~/assets/images/posts/herdr-desktop.png';
-import herdrMobile1 from '~/assets/images/posts/herdr-mobile-1.jpeg';
 import herdrMobile2 from '~/assets/images/posts/herdr-mobile-2.jpeg';
 
 <Callout>
@@ -80,16 +79,11 @@ Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appeal
     src={herdrDesktop}
     alt="The herdr desktop layout: a sidebar listing spaces and agents with per-agent status — working, idle, blocked, done — beside a Claude Code session paused on a permission prompt."
   />
-  <Fragment slot="row">
-    <Image
-      src={herdrMobile1}
-      alt="herdr over ssh on a phone, showing a Codex agent mid-task with context and usage meters along the bottom."
-    />
-    <Image
-      src={herdrMobile2}
-      alt="herdr's switcher on a phone, listing spaces, tabs and agents alongside their current status."
-    />
-  </Fragment>
+  <Image
+    class="fig-aside"
+    src={herdrMobile2}
+    alt="herdr over ssh on a phone, listing spaces, tabs and agents alongside their current status."
+  />
 </Figure>
 
 Here's how this usually goes: I sit down with one or two big ideas I want to implement. Say write a new blog post on my AI workflow and add a new graph to my personal analytics BI. Analytics I split into "Add personal GitHub commits as a source" and "model commits by agent or human author over time through to BI." The blog post I split into a research task and a collaborative outline creation. Now I have two workstreams with blocking and subsequent tasks which is easy to keep in my head. I fire the first two off, and after working for a bit I realize there's some silly mac files creating token waste when my agents go to push, so I spin up a new agent in my dotfiles repo to investigate and make a fix. The agent from my github source project realizes my source freshness table only surfaces successful runs, but this agent was hoping to use it to detect failed runs as well- very reasonable. I spin up another to merge that first so my source work can rebase on top of it.
