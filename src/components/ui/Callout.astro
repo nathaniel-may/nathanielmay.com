@@ -1,0 +1,64 @@
+---
+/**
+ * An inline callout for post bodies — a tinted panel with a leading emoji.
+ *
+ * `not-prose` is load-bearing: post bodies are `prose`, and Tailwind Typography
+ * would otherwise restyle the panel's children and reintroduce paragraph
+ * margins the layout removes.
+ *
+ * Colour comes from `--color-primary` rather than a literal yellow. The site is
+ * dark-only, so a filled yellow would need its own dark foreground and would sit
+ * outside the palette; a low-alpha wash of the existing gold reads as a warning
+ * and tracks the token if it ever changes.
+ *
+ * Slotted content is styled through `:global()` because slot children are
+ * rendered in the *parent's* scope, not this component's, so a plain descendant
+ * selector here would never match them.
+ */
+interface Props {
+  /** Leading emoji. Decorative — hidden from assistive tech. */
+  icon?: string;
+}
+
+const { icon = '⚠️' } = Astro.props;
+---
+
+<div class="callout not-prose" role="note">
+  <span class="callout-icon" aria-hidden="true">{icon}</span>
+  <div class="callout-body"><slot /></div>
+</div>
+
+<style>
+  .callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-block: 2rem;
+    padding: 0.875rem 1.125rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+    border-left-width: 3px;
+    border-radius: 0.5rem;
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+    color: var(--color-foreground);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .callout-icon {
+    flex: none;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .callout-body > :global(*) {
+    margin: 0;
+  }
+
+  .callout-body > :global(* + *) {
+    margin-top: 0.5rem;
+  }
+
+  .callout-body :global(a) {
+    color: var(--color-primary);
+  }
+</style>

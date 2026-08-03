@@ -61,6 +61,11 @@ const postCollection = defineCollection({
     // Header photos are decorative: leaving this unset renders alt="" so
     // screen readers skip them.
     imageAlt: z.string().optional(),
+    // Rendered directly beneath the header image, inside the same <figure>, so a
+    // credit can never drift away from the picture it belongs to. Inline HTML
+    // rather than markdown: it is author-written frontmatter, and the alternative
+    // is a markdown processor for two links.
+    imageCredit: z.string().optional(),
 
     category: z.string().optional(),
     tags: z.array(z.string()).optional(),

@@ -75,18 +75,29 @@ const { post } = Astro.props;
 
       {
         post.image ? (
-          <Image
-            src={post.image}
-            class="max-w-full lg:max-w-225 mx-auto mb-6 sm:rounded-md bg-surface"
-            widths={[400, 900]}
-            sizes="(max-width: 900px) 400px, 900px"
-            alt={post.imageAlt ?? ''}
-            width={900}
-            height={506}
-            format="webp"
-            loading="eager"
-            decoding="async"
-          />
+          /* Image and credit share a <figure> so nothing can be rendered between
+             them. They were previously two siblings either side of the body
+             boundary, which put the post-wide disclaimer in the gap. */
+          <figure class="mb-6">
+            <Image
+              src={post.image}
+              class="max-w-full lg:max-w-225 mx-auto sm:rounded-md bg-surface"
+              widths={[400, 900]}
+              sizes="(max-width: 900px) 400px, 900px"
+              alt={post.imageAlt ?? ''}
+              width={900}
+              height={506}
+              format="webp"
+              loading="eager"
+              decoding="async"
+            />
+            {post.imageCredit && (
+              <figcaption
+                class="text-foreground-subtle [&_a]:text-primary mx-auto mt-3 max-w-225 px-6 text-sm italic"
+                set:html={post.imageCredit}
+              />
+            )}
+          </figure>
         ) : (
           <div class="measure">
             <div class="border-t border-surface" />
@@ -97,14 +108,14 @@ const { post } = Astro.props;
     <div
       class={`measure-wide max-w-300 post-wide prose lg:prose-xl prose-invert prose-headings:heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-header prose-li:my-0`}
     >
-      {/* Site-wide boilerplate, kept in the template rather than in each post so
-          it cannot be forgotten on a new one. Subdued on purpose: it is a
-          standing notice, not part of the argument. Tailwind Typography selects
-          with `:where()`, so these utilities override the prose defaults without
-          needing `!important`. */}
-      <p class="mt-0 mb-8 text-sm italic text-foreground-subtle">
-        Views expressed here are my own and do not necessarily reflect those of my employer.
-      </p>
+      {
+        /* Site-wide boilerplate, kept in the template rather than in each post so
+          it cannot be forgotten on a new one. Carries no type utilities on
+          purpose: it takes the prose size, colour and weight like any other
+          paragraph, leaving italics as the only thing marking it apart. It is
+          the author speaking, not a caption. */
+      }
+      <p class="italic">Views expressed here are my own and do not necessarily reflect those of my employer.</p>
       <slot />
     </div>
     <div class="measure mt-8">

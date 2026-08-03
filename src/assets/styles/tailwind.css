@@ -82,6 +82,18 @@
   @apply max-w-none;
 }
 
+/* A restrained breakout, for a post carrying many large figures rather than one.
+   At full width a run of screenshots and diagrams pushes the prose around; this
+   takes half the gain instead — the reading measure is 720 and a full breakout
+   fills 1152, so half of that 432px of headroom lands at 936.
+
+   Check the stack diagram before narrowing this further: it swaps to its
+   portrait layout below 860px of room, and it carries 21px of its own padding
+   and border, so anything under about 902px here flips it. */
+.post-wide > .breakout-narrow {
+  @apply max-w-234;
+}
+
 @utility icon-btn {
   @apply text-foreground-subtle hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg text-sm p-2.5 inline-flex items-center;
 }

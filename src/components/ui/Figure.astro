@@ -1,0 +1,101 @@
+---
+/**
+ * A figure for post bodies: a row of images plus a caption that can carry a
+ * source credit.
+ *
+ * `not-prose` is load-bearing — post bodies are `prose`, and Tailwind
+ * Typography would otherwise restyle the images and the caption.
+ * `breakout-narrow` opts the figure out of the reading measure without taking
+ * the whole container, which suits a post carrying several large screenshots;
+ * text around it stays at the reading measure.
+ *
+ * Images share the row evenly unless one is marked `fig-aside`, which pins it
+ * to a fixed narrow column — for a portrait screenshot standing next to a
+ * landscape one, where an even split would make the tall image tower over its
+ * neighbour.
+ *
+ * Images are styled through `:global()` because slot children render in the
+ * *parent's* scope rather than this component's, so a plain descendant
+ * selector here would never match them.
+ */
+interface Props {
+  /** Sentence describing the figure. Rendered before the credit. */
+  caption?: string;
+  /** Source attribution, e.g. a site name. */
+  credit?: string;
+  /** Makes the credit a link. */
+  creditHref?: string;
+}
+
+const { caption, credit, creditHref } = Astro.props;
+---
+
+<figure class="fig breakout-narrow not-prose">
+  <div class="fig-row">
+    <slot />
+  </div>
+  {
+    (caption || credit) && (
+      <figcaption>
+        {caption}
+        {caption && credit && ' '}
+        {credit && <span class="fig-credit">Source: {creditHref ? <a href={creditHref}>{credit}</a> : credit}</span>}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .fig {
+    margin-block: 2rem;
+  }
+
+  .fig-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .fig-row > :global(img) {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
+    height: auto;
+  }
+
+  /* 184px is not arbitrary: at the 936px breakout it leaves the landscape shot
+     732px, and the two images then stand at the same height. Change one and the
+     tops and bottoms stop lining up. */
+  .fig-row > :global(img.fig-aside) {
+    flex: 0 0 184px;
+    border-radius: 0.75rem;
+  }
+
+  /* Stacked, a portrait screenshot at full width runs about twice the height of
+     the text column beside it. Half width keeps it a figure rather than a
+     detour. */
+  @media (max-width: 700px) {
+    .fig-row {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .fig-row > :global(img.fig-aside) {
+      flex: 0 0 auto;
+      width: 50%;
+    }
+  }
+
+  figcaption {
+    margin-top: 0.875rem;
+    text-align: center;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-foreground-subtle);
+  }
+
+  .fig-credit a {
+    color: var(--color-primary);
+  }
+</style>
