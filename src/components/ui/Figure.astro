@@ -39,11 +39,7 @@ const { caption, credit, creditHref } = Astro.props;
       <figcaption>
         {caption}
         {caption && credit && ' '}
-        {credit && (
-          <span class="fig-credit">
-            Source: {creditHref ? <a href={creditHref}>{credit}</a> : credit}
-          </span>
-        )}
+        {credit && <span class="fig-credit">Source: {creditHref ? <a href={creditHref}>{credit}</a> : credit}</span>}
       </figcaption>
     )
   }

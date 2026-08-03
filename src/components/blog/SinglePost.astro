@@ -108,14 +108,14 @@ const { post } = Astro.props;
     <div
       class={`measure-wide max-w-300 post-wide prose lg:prose-xl prose-invert prose-headings:heading prose-headings:text-foreground prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-header prose-li:my-0`}
     >
-      {/* Site-wide boilerplate, kept in the template rather than in each post so
+      {
+        /* Site-wide boilerplate, kept in the template rather than in each post so
           it cannot be forgotten on a new one. Carries no type utilities on
           purpose: it takes the prose size, colour and weight like any other
           paragraph, leaving italics as the only thing marking it apart. It is
-          the author speaking, not a caption. */}
-      <p class="italic">
-        Views expressed here are my own and do not necessarily reflect those of my employer.
-      </p>
+          the author speaking, not a caption. */
+      }
+      <p class="italic">Views expressed here are my own and do not necessarily reflect those of my employer.</p>
       <slot />
     </div>
     <div class="measure mt-8">
