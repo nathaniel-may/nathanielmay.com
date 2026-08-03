@@ -33,7 +33,7 @@ I fire off workflows on top of tools that save my attention on several fronts: I
 
 <StackDiagram highlight="zed" />
 
-At first I used Zed as both my IDE and agent management hub. It's become a popular tool for multi-plexing across agents for a good reason, but it was doing too much with too little screenspace. I love using it to write and inspect code myself, but an agent-centric workflow needs a different layout than a code-centric workflow. Carefully toggling back and forth became a tiresome chore, and when I left the house my whole high velocity multi-agent workflow was stuck to my macbook while I sat doing nothing on the train. The solution was to split the two workflows into two tools: I still use Zed to write and inspect code myself, and I use Herdr for multiplexing agents.
+At first I used Zed as both my IDE and agent management hub. It's become a popular tool for multi-plexing across agents for a good reason, but it was doing too much with too little screenspace. I love using it to write and inspect code myself, but an agent-centric workflow needs a different layout than a code-centric workflow. Carefully toggling back and forth became a tiresome chore, and when I left the house my whole high velocity multi-agent workflow was stuck to my macbook while I sat doing nothing on the train. The solution was to split the two workflows into two tools: I still use Zed to read and write code by hand, and I use Herdr for multiplexing agents.
 
 With Zed in it's own Mac workspace, I pull what the agent pushes, test, make changes and push back. It feels extremely familiar since this is how I've always worked with collaborators. I get to keep using my favorite tools the way I always have, all while multiple agents from different families work with me.
 
@@ -45,7 +45,7 @@ Work is scoped to small meaningful changes that make progress on their own. Stan
 
 Within a single workstream, I use exactly two skills, `dev-workflow` and `pr-review`, to orchestrate development across any of my supported agents. Right now that's just Claude and Codex, but I plan to add open weight models using a [Pi](https://pi.dev/) or [OpenCode](https://opencode.ai/) harness in the future. There's nothing novel about my skills, but it automates something I used to do manually when I first started developing with agents: implementor - reviewer feedback loops. The idea is sound, but copy-pasting back and forth is a waste of my time. I may replace these with more widely shared skills like [superpowers](https://github.com/obra/superpowers) or keep the control and update my own with the good ideas I find in the open.
 
-Because my environments are ephemeral, I need my workflow to be resumable in a new enviroment. The point of truth for integration I've chosen is Github issues and PRs. This also means that when working with collaborators, we don't need our workflows to conform. Github as a boundary has always let people collaborate with different workflows and that's true for agents too.
+Because my environments are ephemeral, I need my workflow to be resumable in a fresh sandbox. The point of truth for integration I've chosen is Github issues and PRs. This also means that when working with collaborators, we don't need our workflows to conform. Github as a boundary has always let people collaborate with different workflows and that's true for agents too.
 
 Because I care about operating quickly without guzzling token limits or cash, I've crafted the skills to use different size models and reasoning levels for each task. Smaller models are used for large exporatory work with huge input loads, as well as longer work with large output loads. Bigger models are reserved for reviewing plans and diffs made by the smaller models as well as gating PRs with reviews. I've experimented with raising the model size and reasoning for these skills but the time spent grows with no measurable return.
 
@@ -65,7 +65,7 @@ This process only has one human input and one human gate right at the front. Onc
 
 My dev stack for agents keeps them each in their own Docker sbx sandbox. sbx is designed for agents and creates a microVM with great features like like credential substitution in the network proxy. What's in these sandboxes is determined by Docker sbx kits and what they can reach is determined by a network policy. Where I deviate from their operational model is that I make these environments ephemeral by construction. sbx gives you the tools to make them each a special snowflake, but state management is complex and annoying so I choose to eliminate it when I can.
 
-When spinning up sandboxes you have many choices to make. Every choice is very personal to the needs of each organization or developer and should be codified in an auditable way. I've concentrated all of the decisions that make up my security risk profile into a tool I wrote with the uninspiring name `sbx-new`. I'm not going to share it because I chose to collapse all the structure that would be required to express multiple people's security profiles and instead simply express what I am comfortable with. The transferable part is not the tool itself. It's that the tolerances live in one place, enforced by construction, instead of scattered across prompts, doc comments, and good intentions.
+When spinning up sandboxes you have many choices to make. Every choice is very personal to the needs of each organization or developer and should be codified in an auditable way. I've concentrated all of the decisions that make up my security risk profile into a tool I wrote with the uninspiring name `sbx-new`. I'm not going to share it because I chose to collapse all the structure that would be required to express multiple people's security profiles and instead simply encode what I alone am comfortable with. The transferable part is not the tool itself. It's that the tolerances live in one place, enforced by construction, instead of scattered across prompts, doc comments, and good intentions.
 
 The most important part of `sbx-new` are the key limitations it asserts: access to GitHub via a limited PAT for the one repo, read-only host mounts, and internet access via an explicit network allow list.
 
@@ -75,7 +75,7 @@ This creates the most important primitive of the whole workflow: One disposable 
 
 <StackDiagram highlight="herdr" />
 
-Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appealing is that it has a minimal ui footprint that lets your terminal tabs span multiple workspaces while detecting and displaying the status of each agent you've launched. The layout is designed for both desktop layouts _and_ mobile layouts.
+Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appealing is that it has a minimal ui footprint that lets your terminal tabs span multiple workspaces while detecting and displaying the status of each agent you've launched. Unlike most terminal UIs, the layout is designed for both desktop _and_ mobile screens.
 
 <Figure credit="herdr.dev" creditHref="https://herdr.dev">
   <Image
@@ -91,7 +91,7 @@ Each agent's sandbox is launched inside the Herdr UI. What makes Herdr so appeal
 
 Here's how this usually goes: I sit down with one or two big ideas I want to implement. Say write a new blog post on my AI workflow and add a new graph to my personal analytics BI. Analytics I split into "Add personal GitHub commits as a source" and "model commits by agent or human author over time through to BI." The blog post I split into a research task and a collaborative outline creation. Now I have two workstreams with blocking and subsequent tasks which is easy to keep in my head. I fire the first two off, and after working for a bit I realize there's some silly mac files creating token waste when my agents go to push, so I spin up a new agent in my dotfiles repo to investigate and make a fix. The agent from my github source project realizes my source freshness table only surfaces successful runs, but this agent was hoping to use it to detect failed runs as well- very reasonable. I spin up another to merge that first so my source work can rebase on top of it.
 
-To keep track of this growing dependency tree, I'm currently experimenting with using a little mermaid diagram for each day. I am currently using a POC that's not even vibe coded: it's a directory, justfile, and AGENTS.md to see how I like the workflow. After updating the graph with an agent a few times, I can request my state and view a little ascii chart right in my terminal.
+To keep track of this growing dependency tree, I'm currently experimenting with using a little mermaid diagram for each day. I made a POC that's less than vibe coded: it's a directory, justfile, and AGENTS.md to see how I like the workflow. After updating the graph with an agent a few times, I can request my state and view a little ascii chart right in my terminal.
 
 If I find value in using this, I'll code it up as a minimal Rust cli or a herdr extension and bake it into my workflow without the extra token usage. If it's not the right fit I may try using beads or another built-for purpose tracking system. But POCs like this take minutes to build, and I get to test the userflow before getting into the weeds of implementation.
 
@@ -105,7 +105,7 @@ With this construction it's safe to let agents work when you're not at the keybo
 
 When I leave the house, I turn on caffeine, shut off the screen, and walk out the door. I have Ubiquiti equipment at home so I can use [UniFi](https://ui.com/) Teleport to make my local network accessible to my phone. If you don't, Tailscale works just as well. I open up Termux, ssh into my laptop, type `herdr` and the whole herd is ready for me to take action. Between Herdr over ssh and the Github app I can do pretty much everything I can at home. The changes I might have pushed myself, I'll just ask the agent to do for me.
 
-Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping to fold [`mosh`](https://mosh.org) into the stack to protect against unnecessary disconnects. Unfortunately, until [this issue](https://github.com/mobile-shell/mosh/issues/1364) is resolved I'll have to live with occassional disconnections. In practice on my outings I get maybe one disconnect an hour which is tolerable.
+Unfortunately ssh isn't the most resilient to faulty networks, so I was hoping to fold [`mosh`](https://mosh.org) into the stack to protect against unnecessary disconnects. Until [this issue](https://github.com/mobile-shell/mosh/issues/1364) is resolved I'll have to live with occassional disconnections. In practice on my outings I get maybe one disconnect an hour which is tolerable.
 
 ## How I know this works
 
