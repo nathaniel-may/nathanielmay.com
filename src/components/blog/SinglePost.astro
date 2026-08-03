@@ -75,18 +75,29 @@ const { post } = Astro.props;
 
       {
         post.image ? (
-          <Image
-            src={post.image}
-            class="max-w-full lg:max-w-225 mx-auto mb-6 sm:rounded-md bg-surface"
-            widths={[400, 900]}
-            sizes="(max-width: 900px) 400px, 900px"
-            alt={post.imageAlt ?? ''}
-            width={900}
-            height={506}
-            format="webp"
-            loading="eager"
-            decoding="async"
-          />
+          /* Image and credit share a <figure> so nothing can be rendered between
+             them. They were previously two siblings either side of the body
+             boundary, which put the post-wide disclaimer in the gap. */
+          <figure class="mb-6">
+            <Image
+              src={post.image}
+              class="max-w-full lg:max-w-225 mx-auto sm:rounded-md bg-surface"
+              widths={[400, 900]}
+              sizes="(max-width: 900px) 400px, 900px"
+              alt={post.imageAlt ?? ''}
+              width={900}
+              height={506}
+              format="webp"
+              loading="eager"
+              decoding="async"
+            />
+            {post.imageCredit && (
+              <figcaption
+                class="text-foreground-subtle [&_a]:text-primary mx-auto mt-3 max-w-225 px-6 text-sm italic"
+                set:html={post.imageCredit}
+              />
+            )}
+          </figure>
         ) : (
           <div class="measure">
             <div class="border-t border-surface" />
