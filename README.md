@@ -28,6 +28,7 @@ npm run check:size
 - `src/assets/styles/tailwind.css` defines design tokens and shared utilities.
 - `src/config.yaml` contains site, metadata, blog, and analytics configuration.
 - `vendor/integration` exposes that configuration through the `astrowind:config` virtual module.
+- `public` contains static assets served as-is at the site root.
 
 The site is statically generated and deployed to Netlify.
 
